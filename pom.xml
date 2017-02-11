@@ -8,5 +8,14 @@
     <artifactId>todo</artifactId>
     <version>0.1</version>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>4.3.6.RELEASE</version>
+        </dependency>
+
+    </dependencies>
+
 
 </project>
