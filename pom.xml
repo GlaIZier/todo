@@ -11,11 +11,9 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
+            <artifactId>spring-webmvc</artifactId>
             <version>4.3.6.RELEASE</version>
         </dependency>
-
     </dependencies>
-
 
 </project>
