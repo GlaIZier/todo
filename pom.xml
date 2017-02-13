@@ -7,6 +7,82 @@
     <groupId>ru.glaizier</groupId>
     <artifactId>todo</artifactId>
     <version>0.1</version>
+    <description>Todo list application</description>
+    <packaging>war</packaging>
+
+    <properties>
+        <jdk.version>1.8</jdk.version>
+    </properties>
+    <!--TODO make embedded tomcat-->
+    <profiles>
+        <profile>
+            <id>local</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <profile.name>local</profile.name>
+                <glaizier.server>127.0.0.1</glaizier.server>
+                <glaizier.tomcat.path>${project.name}</glaizier.tomcat.path>
+                <glaizier.tomcat.port>8080</glaizier.tomcat.port>
+            </properties>
+        </profile>
+        <profile>
+            <id>docker</id>
+            <properties>
+                <profile.name>docker</profile.name>
+                <glaizier.server>127.0.0.1</glaizier.server>
+                <glaizier.tomcat.path>${project.name}</glaizier.tomcat.path>
+                <glaizier.tomcat.port>8888</glaizier.tomcat.port>
+            </properties>
+        </profile>
+    </profiles>
+
+    <build>
+        <filters>
+            <!--<filter>${project.basedir}/src/profiles/${profile.name}.properties</filter>-->
+            <filter>${project.basedir}/src/main/resources/profiles/${profile.name}.properties</filter>
+        </filters>
+        <finalName>${project.name}</finalName>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
+                    <compilerArgument>-proc:none</compilerArgument>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <goal>war:war</goal>
+                    <!-- Don't need it because of the java config usage instead -->
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <server>${glaizier.server}</server>
+                    <url>http://${glaizier.server}:${glaizier.tomcat.port}/manager/text</url>
+                    <path>/${glaizier.tomcat.path}</path>
+                </configuration>
+            </plugin>
+
+        </plugins>
+
+    </build>
+
 
     <dependencies>
         <dependency>
@@ -14,6 +90,23 @@
             <artifactId>spring-webmvc</artifactId>
             <version>4.3.6.RELEASE</version>
         </dependency>
+
+        <!-- compile only, deployed container will provide this -->
+        <!-- TodoInitializer depends on servlet api -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Jsp won't work without jstl library -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+
     </dependencies>
 
 </project>
