@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+>
+<head>
+    <!--TODO replace all links to Thymeleaf ones-->
+    <title>Todo</title>
+    <link rel="stylesheet"
+          type="text/css"
+          href="../../resources/css/bootstrap.min.css"/>
+    <link rel="stylesheet"
+          type="text/css"
+          href="../../resources/css/home.css"/>
+    <link rel="shortcut icon" href="../../resources/icons/favicon.ico">
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <!--TODO check if it is better to use fluid container-->
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-left" href="#">
+                <img alt="Todo" height="45px" src="../../resources/icons/done.png">
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="#todo">Tasks</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#login">Sign in</a></li>
+                <li><a href="#logon">Sign up</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<div class="jumbotron">
+    <div class="container">
+        <h1>Todo</h1>
+        <p>Welcome to the simple appication that helps you to organize your tasks</p>
+        <p><a href="#todo" class="btn btn-primary btn-lg" role="button">Go to tasks</a></p>
+    </div>
+</div>
+
+
+<!-- Worked just fine -->
+<!--<div class="container">-->
+<!--<div class="header">-->
+<!--<a href="#" class="navbar-left"><img height="45px" src="../../resources/icons/done.png"></a>-->
+<!--<a class="navbar-brand" href="#">Todo</a>-->
+<!--<div class="navbar-text navbar-right">-->
+<!--<a href="#">Sign up</a> or <a href="#">Sign in</a>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+
+<!--<div class="navbar navbar-fixed-top" role="navigation">-->
+<!--<div class="container">-->
+<!--<div class="navbar-header">-->
+<!--&lt;!&ndash;<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">&ndash;&gt;-->
+<!--&lt;!&ndash;<span class="sr-only">Toggle navigation</span>&ndash;&gt;-->
+<!--&lt;!&ndash;<span class="icon-bar"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;<span class="icon-bar"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;<span class="icon-bar"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;</button>&ndash;&gt;-->
+<!--<a class="navbar-brand" href="#"><img width="45px" src="../../resources/icons/done.png"/></a>-->
+<!--<a class="navbar-brand" href="#">Todo</a>-->
+<!--</div>-->
+<!--<div class="navbar-collapse collapse">-->
+<!--<form class="navbar-form navbar-right" role="form">-->
+<!--<div class="form-group">-->
+<!--<input type="text" placeholder="Email" class="form-control">-->
+<!--</div>-->
+<!--<div class="form-group">-->
+<!--<input type="password" placeholder="Password" class="form-control">-->
+<!--</div>-->
+<!--<button type="submit" class="btn btn-success">Sign in</button>-->
+<!--</form>-->
+<!--</div>&lt;!&ndash;/.navbar-collapse &ndash;&gt;-->
+<!--</div>-->
+<!--</div>-->
+
+<!--<nav class="navbar navbar-default">-->
+<!--<div class="container-fluid">-->
+<!--&lt;!&ndash; Collect the nav links, forms, and other content for toggling &ndash;&gt;-->
+<!--<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">-->
+<!--<ul class="nav navbar-nav navbar-right">-->
+<!--<li><a th:href="@{/login}">Sign in</a></li>-->
+<!--<li><a th:href="@{/register}">Sign up</a></li>-->
+<!--</ul>-->
+<!--</div>&lt;!&ndash; /.navbar-collapse &ndash;&gt;-->
+<!--</div>&lt;!&ndash; /.container-fluid &ndash;&gt;-->
+<!--</nav>-->
+<!--<div class="jumbotron">-->
+<!--<h1>Welcome to Todo Thymeleaf</h1>-->
+<!--<p>...</p>-->
+<!--<p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>-->
+<!--</div>-->
+<!--<a th:href="@{/spittles}">Spittles</a> -->
+<!--<a th:href="@{/spitter/register}">Register</a>-->
+
+<script src="../../resources/js/bootstrap/jquery.min.js"></script>
+<script src="../../resources/js/bootstrap/bootstrap.min.js"></script>
+</body>
