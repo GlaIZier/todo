@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!--TODO add thymeleaf namespace-->
+<head>
+    <!--TODO replace all links to Thymeleaf ones-->
+    <!--TODO include general navbar to all pages-->
+    <title>Todo</title>
+    <link rel="stylesheet"
+          type="text/css"
+          href="../../resources/css/bootstrap.min.css"/>
+    <link rel="stylesheet"
+          type="text/css"
+          href="../../resources/css/todo.css"/>
+    <link rel="shortcut icon" href="../../resources/icons/favicon.ico">
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <!--TODO check if it is better to use fluid container-->
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-left" href="#">
+                <img alt="Todo" height="45px" src="../../resources/icons/done.png">
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="#todo">Tasks</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#login">Sign in</a></li>
+                <li><a href="#logon">Sign up</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<div class="container">
+    <div class="react-app">
+        <header class="header">
+            <h2>Todo</h2>
+            <div class="todo-input-group input-group">
+                <input type="text" class="todo-input form-control" placeholder="What needs to be done?"
+                       aria-describedby="basic-addon">
+                <span class="todo-new clickable input-group-addon" id="basic-addon">New task</span>
+            </div>
+        </header>
+        <div class="todos">
+            <div class="todo well well-sm">
+                <span class="todo-text">Just do something</span>
+                <span class="todo-remove clickable glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </div>
+            <div class="todo well well-sm">
+                <span class="todo-text">Just do something else</span>
+                <span class="todo-remove clickable glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </div>
+            <div class="todo well well-sm">
+                <span class="todo-text">Just do something different and long long long long long long long ...</span>
+                <span class="todo-remove clickable glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </div>
+        </div>
+        <!--<section class="main" data-reactid=".0.1">-->
+        <!--<input class="toggle-all" type="checkbox" data-reactid=".0.1.0">-->
+        <!--<ul class="todo-list" data-reactid=".0.1.1">-->
+        <!--<li class="" data-reactid=".0.1.1.$6cf43c23-3cae-4f57-a419-73a4f7eea653">-->
+        <!--<div class="view" data-reactid=".0.1.1.$6cf43c23-3cae-4f57-a419-73a4f7eea653.0">-->
+        <!--<input class="toggle" type="checkbox" data-reactid=".0.1.1.$6cf43c23-3cae-4f57-a419-73a4f7eea653.0.0">-->
+        <!--<label data-reactid=".0.1.1.$6cf43c23-3cae-4f57-a419-73a4f7eea653.0.1">ff</label>-->
+        <!--<button class="destroy" data-reactid=".0.1.1.$6cf43c23-3cae-4f57-a419-73a4f7eea653.0.2"></button>-->
+        <!--</div>-->
+        <!--<input class="edit" value="ff" data-reactid=".0.1.1.$6cf43c23-3cae-4f57-a419-73a4f7eea653.1">-->
+        <!--</li>-->
+        <!--</ul>-->
+        <!--</section>-->
+    </div>
+</div>
+
+<script src="../../resources/js/bootstrap/jquery.min.js"></script>
+<script src="../../resources/js/bootstrap/bootstrap.min.js"></script>
+</body>
