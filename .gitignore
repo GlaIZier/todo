@@ -17,4 +17,4 @@ rebel*.xml
 repository/
 target/
 logs/
-key-value-cache/
+.DS_Store
