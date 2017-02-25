@@ -1,16 +1,44 @@
 body {
-    background-color: #eee;
+    text-align: center;
 }
 
-*[role="form"] {
-    max-width: 530px;
+.form-horizontal {
+    max-width: 440px;
     padding: 15px;
     margin: 0 auto;
-    background-color: #fff;
-    border-radius: 0.3em;
 }
 
-*[role="form"] h2 {
-    margin-left: 5em;
-    margin-bottom: 1em;
+.form-horizontal .form-horizontal-heading,
+.form-horizontal .checkbox {
+    margin-bottom: 10px;
+}
+
+.form-horizontal .checkbox {
+    font-weight: normal;
+}
+
+.form-horizontal .form-control {
+    position: relative;
+    height: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.form-horizontal .form-control:focus {
+    z-index: 2;
+}
+
+.form-horizontal input[type="text"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-horizontal input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }
