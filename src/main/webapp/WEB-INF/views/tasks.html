@@ -7,7 +7,7 @@
           th:href="@{/resources/css/bootstrap.min.css}"/>
     <link rel="stylesheet"
           type="text/css"
-          th:href="@{/resources/css/home.css}"/>
+          th:href="@{/resources/css/tasks.css}"/>
     <link rel="shortcut icon" th:href="@{/resources/icons/favicon.ico}">
 </head>
 <body>
@@ -39,11 +39,30 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
-<div class="jumbotron">
-    <div class="container">
-        <h1>Todo</h1>
-        <p>Welcome to the simple appication that helps you to organize your tasks</p>
-        <p><a th:href="@{/tasks}" class="btn btn-primary btn-lg" role="button">Go to tasks</a></p>
+<div class="container">
+    <div class="react-app">
+        <header class="header">
+            <h2>Todo</h2>
+            <div class="todo-input-group input-group">
+                <input type="text" class="todo-input form-control" placeholder="What needs to be done?"
+                       aria-describedby="basic-addon">
+                <span class="todo-new clickable input-group-addon" id="basic-addon">New task</span>
+            </div>
+        </header>
+        <div class="todos">
+            <div class="todo well well-sm">
+                <span class="todo-text">Just do something</span>
+                <span class="todo-remove clickable glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </div>
+            <div class="todo well well-sm">
+                <span class="todo-text">Just do something else</span>
+                <span class="todo-remove clickable glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </div>
+            <div class="todo well well-sm">
+                <span class="todo-text">Just do something different and long long long long long long long ...</span>
+                <span class="todo-remove clickable glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </div>
+        </div>
     </div>
 </div>
 

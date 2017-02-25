@@ -1,19 +1,19 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Todo</title>
     <link rel="stylesheet"
           type="text/css"
-          href="../../resources/css/bootstrap.min.css"/>
+          th:href="@{/resources/css/bootstrap.min.css}"/>
     <link rel="stylesheet"
           type="text/css"
-          href="../../resources/css/login.css"/>
-    <link rel="shortcut icon" href="../../resources/icons/favicon.ico">
+          th:href="@{/resources/css/login.css}"/>
+    <link rel="shortcut icon" th:href="@{/resources/icons/favicon.ico}">
 </head>
 <body>
 <div class="container">
     <form class="form-signin">
-        <a href="#/"><img alt="Todo" height="45px" src="../../resources/icons/todo.png"></a>
+        <a th:href="@{/}"><img alt="Todo" height="45px" th:src="@{/resources/icons/todo.png}"></a>
         <h2 class="form-signin-heading">Please sign in</h2>
         <label for="inputLogin" class="sr-only">Login</label>
         <input type="text" id="inputLogin" class="form-control" placeholder="Login" required autofocus>

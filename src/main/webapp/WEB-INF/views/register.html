@@ -7,7 +7,7 @@
           th:href="@{/resources/css/bootstrap.min.css}"/>
     <link rel="stylesheet"
           type="text/css"
-          th:href="@{/resources/css/home.css}"/>
+          th:href="@{/resources/css/register.css}"/>
     <link rel="shortcut icon" th:href="@{/resources/icons/favicon.ico}">
 </head>
 <body>
@@ -39,13 +39,29 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
-<div class="jumbotron">
-    <div class="container">
-        <h1>Todo</h1>
-        <p>Welcome to the simple appication that helps you to organize your tasks</p>
-        <p><a th:href="@{/tasks}" class="btn btn-primary btn-lg" role="button">Go to tasks</a></p>
-    </div>
-</div>
+<div class="container">
+    <form class="form-horizontal" role="form">
+        <h2>Please register</h2>
+        <div>
+            <label for="login" class="col-sm-3 control-label">Login</label>
+            <div class="col-sm-9">
+                <input type="text" id="login" placeholder="Login" class="form-control" autofocus>
+                <!--<span class="help-block">All letters are acceptable</span>-->
+            </div>
+        </div>
+        <div>
+            <label for="password" class="col-sm-3 control-label">Password</label>
+            <div class="col-sm-9">
+                <input type="password" id="password" placeholder="Password" class="form-control">
+            </div>
+        </div>
+        <div>
+            <div class="col-sm-9 col-sm-offset-3">
+                <button type="submit" class="btn btn-lg btn-primary btn-block">Register</button>
+            </div>
+        </div>
+    </form> <!-- /form -->
+</div> <!-- ./container -->
 
 <script th:src="@{/resources/js/bootstrap/jquery.min.js}"></script>
 <script th:src="@{/resources/js/bootstrap/bootstrap.min.js}"></script>
