@@ -1,13 +1,19 @@
 package ru.glaizier;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+import ru.glaizier.config.RootConfig;
+import ru.glaizier.config.SecurityConfig;
+import ru.glaizier.config.ServletConfig;
 
 // Add aop logging
-public class TodoInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class MvcWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[]{RootConfig.class, SecurityConfig.class};
+        return new Class<?>[]{
+                RootConfig.class,
+                SecurityConfig.class
+        };
     }
 
     @Override

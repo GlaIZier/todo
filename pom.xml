@@ -91,7 +91,7 @@
         </dependency>
 
         <!-- compile only, deployed container will provide this -->
-        <!-- TodoInitializer depends on servlet api -->
+        <!-- MvcWebAppInitializer depends on servlet api -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>

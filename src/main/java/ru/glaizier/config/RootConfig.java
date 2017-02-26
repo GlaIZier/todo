@@ -1,4 +1,4 @@
-package ru.glaizier;
+package ru.glaizier.config;
 
 import org.springframework.context.annotation.Configuration;
 
