@@ -67,6 +67,7 @@
                 </configuration>
             </plugin>
 
+            <!--TODO upgrade to Tomcat8?-->
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
@@ -107,6 +108,19 @@
             <groupId>org.thymeleaf</groupId>
             <artifactId>thymeleaf-spring4</artifactId>
             <version>3.0.3.RELEASE</version>
+        </dependency>
+
+        <!--All security configs-->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>4.2.1.RELEASE</version>
+        </dependency>
+        <!-- Need for AbstractSecurityWebApplicationInitializer-->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>4.2.1.RELEASE</version>
         </dependency>
 
 
