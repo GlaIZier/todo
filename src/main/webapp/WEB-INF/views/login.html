@@ -12,7 +12,7 @@
 </head>
 <body>
 <div class="container">
-    <form class="form-signin">
+    <form class="form-signin" th:action="@{/login}" method="POST">
         <a th:href="@{/}"><img alt="Todo" height="45px" th:src="@{/resources/icons/todo.png}"></a>
         <h2 class="form-signin-heading">Please sign in</h2>
         <label for="inputLogin" class="sr-only">Login</label>

@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    // TODO start with login page functionality to accept user with password
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 //        http
