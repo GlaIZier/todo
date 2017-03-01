@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class LoginController {
 
     @RequestMapping("/login")
+    // TODO start. Add here error login message. Use ModelAndView to return data to view
     public String login() {
         return "login";
     }

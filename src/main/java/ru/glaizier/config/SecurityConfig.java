@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    // TODO start with login page functionality to accept user with password
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 //        http
@@ -23,10 +22,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/tasks").hasRole("USER")
                 .antMatchers(HttpMethod.POST, "/tasks").hasRole("USER")
-                .anyRequest().permitAll()
+                .anyRequest().permitAll() //
                 .and()
                 .formLogin()
-                .loginPage("/login");
+                .loginPage("/login")
+                .usernameParameter("username")
+                .passwordParameter("password");
     }
 
     // TODO add database authentication

@@ -16,9 +16,9 @@
         <a th:href="@{/}"><img alt="Todo" height="45px" th:src="@{/resources/icons/todo.png}"></a>
         <h2 class="form-signin-heading">Please sign in</h2>
         <label for="inputLogin" class="sr-only">Login</label>
-        <input type="text" id="inputLogin" class="form-control" placeholder="Login" required autofocus>
+        <input name="username" type="text" id="inputLogin" class="form-control" placeholder="Login" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
         <div class="checkbox">
             <label>
                 <input type="checkbox" value="remember-me"> Remember me
