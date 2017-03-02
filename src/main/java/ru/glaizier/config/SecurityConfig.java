@@ -22,10 +22,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/tasks").hasRole("USER")
                 .antMatchers(HttpMethod.POST, "/tasks").hasRole("USER")
-                .anyRequest().permitAll() //
+                .anyRequest().permitAll()
                 .and()
                 .formLogin()
                 .loginPage("/login")
+                .failureUrl("/login?error")
                 .usernameParameter("username")
                 .passwordParameter("password");
     }
