@@ -12,22 +12,35 @@
 </head>
 <body>
 <div class="container">
-    <form class="form-signin" th:action="@{/login}" method="POST">
+    <form role="form" class="form-horizontal" th:action="@{/login}" method="POST">
         <a th:href="@{/}"><img alt="Todo" height="45px" th:src="@{/resources/icons/todo.png}"></a>
         <h2 class="form-signin-heading">Please sign in</h2>
 
         <div class="label label-danger" th:if="${error} != null" th:text="${error}"></div>
 
-        <label for="login" class="sr-only">Login</label>
-        <input name="login" type="text" id="login" class="form-control" placeholder="Login" required autofocus>
-        <label for="password" class="sr-only">Password</label>
-        <input name="password" type="password" id="password" class="form-control" placeholder="Password" required>
-        <div class="checkbox">
+        <div class="div-login" th:classappend="${error} ? has-error">
+            <label for="login" class="col-sm-3 control-label">Login</label>
+            <div class="col-sm-9">
+                <input name="login" type="text" id="login" placeholder="Login" class="form-control" autofocus>
+                <!--<span class="help-block">Auth failed</span>-->
+            </div>
+        </div>
+        <div th:classappend="${error} ? has-error">
+            <label for="password" class="col-sm-3 control-label">Password</label>
+            <div class="col-sm-9">
+                <input name="password" type="password" id="password" placeholder="Password" class="form-control">
+            </div>
+        </div>
+        <div class="checkbox col-sm-9 col-sm-offset-3">
             <label>
                 <input type="checkbox" value="remember-me"> Remember me
             </label>
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <div>
+            <div class="col-sm-9 col-sm-offset-3">
+                <button type="submit" class="btn btn-lg btn-primary btn-block">Sign in</button>
+            </div>
+        </div>
     </form>
 </div> <!-- /container -->
 </body>
