@@ -109,6 +109,13 @@
             <artifactId>thymeleaf-spring4</artifactId>
             <version>3.0.3.RELEASE</version>
         </dependency>
+        <!--Need this in order to use conditional /logout link when user has been authenticated-->
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity4</artifactId>
+            <version>3.0.1.RELEASE</version>
+        </dependency>
+
 
         <!--All security configs-->
         <dependency>

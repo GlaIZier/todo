@@ -19,6 +19,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .and()
 //                .formLogin().and()
 //                .httpBasic();
+        // todo Add https
+        // todo add remember me
         http.authorizeRequests()
                 .antMatchers("/tasks").hasRole("USER")
                 .antMatchers(HttpMethod.POST, "/tasks").hasRole("USER")
