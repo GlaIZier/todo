@@ -1,7 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec=
+              "http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <body>
+<!--todo add here logic to show logined user-->
 <nav th:fragment="menu" class="navbar navbar-default">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -31,4 +34,9 @@
     </div><!-- /.container-fluid -->
 </nav>
 </body>
+<footer>
+    <div sec:authorize="isAuthenticated()">
+        Hello <span sec:authentication="name">someone</span>
+    </div>
+</footer>
 </html>
