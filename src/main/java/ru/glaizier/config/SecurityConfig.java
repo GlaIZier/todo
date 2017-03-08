@@ -30,7 +30,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .failureUrl("/login?error")
                 .usernameParameter("login")
-                .passwordParameter("password");
+                .passwordParameter("password")
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .and()
+                .csrf() // todo enable csrf and create post logout
+                .disable();
     }
 
     // TODO add database authentication

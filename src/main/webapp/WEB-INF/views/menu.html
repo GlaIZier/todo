@@ -4,7 +4,6 @@
               "http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <body>
-<!--todo add here logic to show logined user-->
 <nav th:fragment="menu" class="navbar navbar-default">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -27,29 +26,15 @@
                 <li><a th:href="@{/tasks}">Tasks</a></li>
             </ul>
             <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
-                <li>Signed in as <span sec:authentication="name">someone</span></li>
+                <li class="navbar-text">Signed in as <span sec:authentication="name">someone</span></li>
                 <li><a th:href="@{/logout}">Sign out</a></li>
             </ul>
             <ul sec:authorize="!isAuthenticated()" class="nav navbar-nav navbar-right">
                 <li><a th:href="@{/login}">Sign in</a></li>
                 <li><a th:href="@{/register}">Sign up</a></li>
             </ul>
-            <!--<div sec:authorize="isAuthenticated()">-->
-            <!--Hello <span sec:authentication="name">someone</span>-->
-            <!--</div>-->
-            <!--<div sec:authorize="!isAuthenticated()">-->
-            <!--Hello <span>noone</span>-->
-            <!--</div>-->
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
 </body>
-<footer>
-    <div sec:authorize="isAuthenticated()">
-        Hello <span sec:authentication="name">someone</span>
-    </div>
-    <div sec:authorize="!isAuthenticated()">
-        Hello <span>noone</span>
-    </div>
-</footer>
 </html>

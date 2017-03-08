@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec=
-              "http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+>
 <head>
     <title>Todo</title>
     <link rel="stylesheet"
@@ -21,13 +20,6 @@
         <p><a th:href="@{/tasks}" class="btn btn-primary btn-lg" role="button">Go to tasks</a></p>
     </div>
 </div>
-
-<!--Todo remove this after test-->
-<footer>
-    <div sec:authorize="isAuthenticated()">
-        Hello <span sec:authentication="name">someone</span>
-    </div>
-</footer>
 
 <script th:src="@{/resources/js/bootstrap/jquery.min.js}"></script>
 <script th:src="@{/resources/js/bootstrap/bootstrap.min.js}"></script>
