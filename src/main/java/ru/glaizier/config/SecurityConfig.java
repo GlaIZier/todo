@@ -20,7 +20,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .formLogin().and()
 //                .httpBasic();
         // todo Add https
-        // todo add remember me
         http.authorizeRequests()
                 .antMatchers("/tasks").hasRole("USER")
                 .antMatchers(HttpMethod.POST, "/tasks").hasRole("USER")
@@ -35,6 +34,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
+                .and()
+                .rememberMe()
+                .key("todo-remember-me-key").
+                rememberMeParameter("remember-me").
+                rememberMeCookieName("todo-remember-me-cookie").
+                tokenValiditySeconds(2419200)
                 .and()
                 .csrf() // todo enable csrf and create post logout
                 .disable();
