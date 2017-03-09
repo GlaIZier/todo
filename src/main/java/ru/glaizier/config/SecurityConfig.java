@@ -13,33 +13,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeRequests()
-//                .anyRequest().authenticated()
-//                .and()
-//                .formLogin().and()
-//                .httpBasic();
-        // todo Add https
         http.authorizeRequests()
+                // secure /tasks
                 .antMatchers("/tasks").hasRole("USER")
                 .antMatchers(HttpMethod.POST, "/tasks").hasRole("USER")
                 .anyRequest().permitAll()
+                // login
                 .and()
                 .formLogin()
                 .loginPage("/login")
                 .failureUrl("/login?error")
                 .usernameParameter("login")
                 .passwordParameter("password")
+                // logout
                 .and()
                 .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
+                // remember me
                 .and()
                 .rememberMe()
                 .key("todo-remember-me-key").
                 rememberMeParameter("remember-me").
                 rememberMeCookieName("todo-remember-me-cookie").
                 tokenValiditySeconds(2419200)
+                // todo https for all web app. It will need to configure tomcat to resolve 8443 port. http://www.baeldung.com/spring-channel-security-https
+//                .and()
+//                .requiresChannel()
+//                .antMatchers("/")
+//                .requiresSecure()
+                // csrf
                 .and()
                 .csrf() // todo enable csrf and create post logout
                 .disable();
