@@ -10,6 +10,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/")
+// todo create rest architecture
+// todo create react
 public class TasksRestController {
 
     @RequestMapping(value = "/tasks", produces = MediaType.APPLICATION_JSON_VALUE)
