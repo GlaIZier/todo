@@ -5,10 +5,11 @@ import ru.glaizier.config.RootConfig;
 import ru.glaizier.config.SecurityConfig;
 import ru.glaizier.config.ServletConfig;
 
-// Add aop logging
+// todo add aop logging
 public class MvcWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override
+    // Register securityconfig in application context connected with the web application so it will be shared between all servlets
     protected Class<?>[] getRootConfigClasses() {
         return new Class<?>[]{
                 RootConfig.class,
@@ -17,8 +18,12 @@ public class MvcWebAppInitializer extends AbstractAnnotationConfigDispatcherServ
     }
 
     @Override
+    // Register configs for dispatcher servlets in web app. So we can have different dispatcher servlets and associated beans with them.
+    // These beans are not shared between each other. In this app we have only one dispatcher servlet.
     protected Class<?>[] getServletConfigClasses() {
-        return new Class<?>[]{ServletConfig.class};
+        return new Class<?>[]{
+                ServletConfig.class
+        };
     }
 
     @Override

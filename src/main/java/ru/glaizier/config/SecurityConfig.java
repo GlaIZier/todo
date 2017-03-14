@@ -15,6 +15,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 public class SecurityConfig {
 
     @Bean
+    // todo check how it works
     // TODO add database authentication
     public UserDetailsService userDetailsService() throws Exception {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
@@ -27,8 +28,7 @@ public class SecurityConfig {
     @Order(1)
     public static class ApiWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
         protected void configure(HttpSecurity http) throws Exception {
-            http
-                    .antMatcher("/api/**")
+            http.antMatcher("/api/**")
                     .authorizeRequests()
                     .anyRequest().hasRole("USER")
                     .and()
@@ -37,16 +37,14 @@ public class SecurityConfig {
     }
 
     @Configuration
-    @Order
     public static class FormLoginWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http
-                    .authorizeRequests()
+            http.authorizeRequests()
                     // secure /tasks
                     .antMatchers("/tasks").hasRole("USER")
-                    .antMatchers(HttpMethod.POST, "/tasks").hasRole("USER")
+                    .antMatchers(HttpMethod.POST, "/tasks").hasRole("USER") // todo remove it?
                     .anyRequest().permitAll()
                     // login
                     .and()
@@ -59,7 +57,7 @@ public class SecurityConfig {
                     .and()
                     .logout()
                     .logoutUrl("/logout")
-                    .logoutSuccessUrl("/")
+                    .logoutSuccessUrl("/") // todo add cookie clean
                     // remember me
                     .and()
                     .rememberMe()
@@ -79,48 +77,4 @@ public class SecurityConfig {
         }
     }
 
-    // todo remove after next commit
-   /* @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                // secure /tasks
-                .antMatchers("/tasks").hasRole("USER")
-                .antMatchers(HttpMethod.POST, "/tasks").hasRole("USER")
-                .anyRequest().permitAll()
-                // login
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .failureUrl("/login?error")
-                .usernameParameter("login")
-                .passwordParameter("password")
-                // logout
-                .and()
-                .logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
-                // remember me
-                .and()
-                .rememberMe()
-                .key("todo-remember-me-key").
-                rememberMeParameter("remember-me").
-                rememberMeCookieName("todo-remember-me-cookie").
-                tokenValiditySeconds(2419200)
-
-//                .and()
-//                .requiresChannel()
-//                .antMatchers("/")
-//                .requiresSecure()
-                // csrf
-                .and()
-                .csrf()
-                .disable();
-    }*/
-
-/*    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("user").password("password").roles("USER").and()
-                .withUser("admin").password("password").roles("USER", "ADMIN");
-    }*/
 }
