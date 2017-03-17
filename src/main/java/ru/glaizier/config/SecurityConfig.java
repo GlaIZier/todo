@@ -1,5 +1,6 @@
 package ru.glaizier.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -12,10 +13,18 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @EnableWebSecurity
+//@Import({
+//        ApiSecurityConfig.class,
+//        FormSecurityConfig.class
+//})
 public class SecurityConfig {
 
     @Bean
+    // Todo start here
     // todo check how it works
+    // Todo check how .userDetailService() works in http.
+    // Todo check how .userDetailService() works in rememberMe()
+    // Todo check if we can use static in @Configuration in @Bean
     // TODO add database authentication
     public UserDetailsService userDetailsService() throws Exception {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
@@ -27,6 +36,7 @@ public class SecurityConfig {
     @Configuration
     @Order(1)
     public static class ApiWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
+
         protected void configure(HttpSecurity http) throws Exception {
             http.antMatcher("/api/**")
                     .authorizeRequests()
@@ -38,6 +48,14 @@ public class SecurityConfig {
 
     @Configuration
     public static class FormLoginWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
+
+        private UserDetailsService userDetailsService;
+
+        @SuppressWarnings("SpringJavaAutowiringInspection") // autowired bean declared in SecurityConfig above
+        @Autowired
+        public FormLoginWebSecurityConfigurerAdapter(UserDetailsService userDetailsService) {
+            this.userDetailsService = userDetailsService;
+        }
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
@@ -54,17 +72,20 @@ public class SecurityConfig {
                     .usernameParameter("login")
                     .passwordParameter("password")
                     // logout
+                    // Session invalidation and remember-me-cookie are cleaned by default
                     .and()
                     .logout()
                     .logoutUrl("/logout")
-                    .logoutSuccessUrl("/") // todo add cookie clean
+                    .logoutSuccessUrl("/")
                     // remember me
                     .and()
                     .rememberMe()
-                    .key("todo-remember-me-key").
-                    rememberMeParameter("remember-me").
-                    rememberMeCookieName("todo-remember-me-cookie").
-                    tokenValiditySeconds(2419200)
+                    .key("remember-me-key")
+                    .rememberMeParameter("remember-me")
+                    .rememberMeCookieName("remember-me-cookie")
+                    .tokenValiditySeconds(2419200)
+                    .userDetailsService(userDetailsService) // remember me requires explicitly defined UserDetailsService,
+                    // when ApiWebSecurityConfigurationAdapter and FormWebSecurityConfigurationAdapter don't
                     // todo https for all web app. It will need to configure tomcat to resolve 8443 port. http://www.baeldung.com/spring-channel-security-https
 //                .and()
 //                .requiresChannel()
@@ -76,5 +97,4 @@ public class SecurityConfig {
                     .disable();
         }
     }
-
 }
