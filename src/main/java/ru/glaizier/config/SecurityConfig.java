@@ -13,18 +13,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @EnableWebSecurity
-//@Import({
-//        ApiSecurityConfig.class,
-//        FormSecurityConfig.class
-//})
+// Todo create tests for security
 public class SecurityConfig {
 
     @Bean
-    // Todo start here
-    // todo check how it works
-    // Todo check how .userDetailService() works in http.
-    // Todo check how .userDetailService() works in rememberMe()
-    // Todo check if we can use static in @Configuration in @Bean
     // TODO add database authentication
     public UserDetailsService userDetailsService() throws Exception {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
@@ -85,7 +77,7 @@ public class SecurityConfig {
                     .rememberMeCookieName("remember-me-cookie")
                     .tokenValiditySeconds(2419200)
                     .userDetailsService(userDetailsService) // remember me requires explicitly defined UserDetailsService,
-                    // when ApiWebSecurityConfigurationAdapter and FormWebSecurityConfigurationAdapter don't
+                    // when ApiWebSecurityConfigurationAdapter and FormWebSecurityConfigurationAdapter don't (still don't know why)
                     // todo https for all web app. It will need to configure tomcat to resolve 8443 port. http://www.baeldung.com/spring-channel-security-https
 //                .and()
 //                .requiresChannel()
