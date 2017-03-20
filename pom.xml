@@ -143,11 +143,11 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-        <!-- Need to test spring app -->
+        <!-- Need to test spring app itself and security particularly -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>4.3.6.RELEASE</version>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <version>4.0.4.RELEASE</version>
         </dependency>
 
 

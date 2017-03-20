@@ -13,9 +13,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @EnableWebSecurity
-// Todo create tests for security
 public class SecurityConfig {
 
+    // Todo start here check Factory autowiring work (WithUserDetailsSecurityContextFactory)
     @Bean
     // TODO add database authentication
     public UserDetailsService userDetailsService() throws Exception {
@@ -43,7 +43,7 @@ public class SecurityConfig {
 
         private UserDetailsService userDetailsService;
 
-        @SuppressWarnings("SpringJavaAutowiringInspection") // autowired bean declared in SecurityConfig above
+        // autowired bean declared in SecurityConfig above
         @Autowired
         public FormLoginWebSecurityConfigurerAdapter(UserDetailsService userDetailsService) {
             this.userDetailsService = userDetailsService;
