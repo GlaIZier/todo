@@ -15,7 +15,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // Todo start here check Factory autowiring work (WithUserDetailsSecurityContextFactory)
+    // Todo check Factory autowiring work (WithUserDetailsSecurityContextFactory)
     @Bean
     // TODO add database authentication
     public UserDetailsService userDetailsService() throws Exception {
