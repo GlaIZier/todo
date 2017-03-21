@@ -79,11 +79,4 @@ public class SecurityTest {
                 .andExpect(authenticated().withUsername("u"));
     }
 
-//    @Test
-//    public void shouldAvoidWrongPassword() throws Exception {
-//        mvc
-//                .perform(formLogin())
-//                .andExpect(authenticated());
-//    }
-
 }
