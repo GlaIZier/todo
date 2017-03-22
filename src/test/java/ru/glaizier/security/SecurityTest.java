@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -14,6 +15,7 @@ import ru.glaizier.config.SecurityConfig;
 import ru.glaizier.config.ServletConfig;
 
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.logout;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
@@ -24,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-// Todo start with understanding if i need servletConfig here and if why tests pass when securityconfig is empty
 // Todo start here understand how Spring Security Test works
 // Todo check how RequestPostProcessors work
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -48,6 +49,8 @@ public class SecurityTest {
     }
 
     @Test
+    // Todo add tests with wrong passwords for api and tasks with userdetails
+    // Todo add test for remember-me cookie
     public void getApiUnauthenticatedAndReturn401() throws Exception {
         mvc
                 .perform(get("/api/v1/tasks"))
@@ -96,15 +99,34 @@ public class SecurityTest {
                 .andExpect(unauthenticated());
     }
 
-    // Todo don't understand why it doesn't work. Looks like this context doesn't contain UserDetailsService. Try this work after enabling csrf
-//    @Test
-//    @WithMockUser
-//    public void testFormBasedAuthentication() throws Exception {
-//        mvc
-//                .perform(formLogin().user("admin").password("password"))
-//                .andDo(print())
-//                .andExpect(status().isFound())
-//                .andExpect(authenticated().withUsername("admin"));
-//    }
+    @Test
+    // inject UserDetailsService from SecurityConfig
+    @WithUserDetails
+    public void postLoginAuthenticatedAndRedirectToRoot() throws Exception {
+        mvc
+                .perform(formLogin().userParameter("login").user("user").password("password"))
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/"))
+                .andExpect(header().string("Location", equalTo("/")))
+                .andExpect(authenticated().withUsername("user"));
+    }
 
+    @Test
+    // inject UserDetailsService from SecurityConfig
+    @WithUserDetails
+    public void postLoginUnauthenticatedBecauseOfWrongPasswordOrLogin() throws Exception {
+        mvc
+                .perform(formLogin().userParameter("login").user("user").password("password1"))
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(unauthenticated());
+
+        mvc
+                .perform(formLogin().userParameter("login").user("user1").password("password"))
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(unauthenticated());
+
+    }
 }
