@@ -61,7 +61,7 @@ public class SecurityConfig {
                     .formLogin()
                     .loginPage("/login")
                     .failureUrl("/login?error")
-                    .usernameParameter("login")
+                    .usernameParameter("user")
                     .passwordParameter("password")
                     // logout
                     // Session invalidation and remember-me-cookie are cleaned by default

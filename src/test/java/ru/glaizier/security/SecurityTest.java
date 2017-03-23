@@ -17,11 +17,13 @@ import ru.glaizier.config.ServletConfig;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.logout;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -49,8 +51,6 @@ public class SecurityTest {
     }
 
     @Test
-    // Todo add tests with wrong passwords for api and tasks with userdetails
-    // Todo add test for remember-me cookie
     public void getApiUnauthenticatedAndReturn401() throws Exception {
         mvc
                 .perform(get("/api/v1/tasks"))
@@ -104,7 +104,7 @@ public class SecurityTest {
     @WithUserDetails
     public void postLoginAuthenticatedAndRedirectToRoot() throws Exception {
         mvc
-                .perform(formLogin().userParameter("login").user("user").password("password"))
+                .perform(formLogin().userParameter("user").user("user").password("password"))
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/"))
@@ -117,16 +117,30 @@ public class SecurityTest {
     @WithUserDetails
     public void postLoginUnauthenticatedBecauseOfWrongPasswordOrLogin() throws Exception {
         mvc
-                .perform(formLogin().userParameter("login").user("user").password("password1"))
+                .perform(formLogin().userParameter("user").user("user").password("password1"))
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(unauthenticated());
 
         mvc
-                .perform(formLogin().userParameter("login").user("user1").password("password"))
+                .perform(formLogin().userParameter("user").user("user1").password("password"))
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(unauthenticated());
+    }
 
+    @Test
+    // we can check if cookie is present even without providing user and password
+    public void postLoginAuthenticatedWithRememberMeCookieAndRedirectToRoot() throws Exception {
+        // use post() instead of formlogin() because formlogin() doesn't provide method to attach remember-me param
+        mvc
+                .perform(post("/login").param("user", "user").param("password", "password")
+                        .param("remember-me", "on").with(csrf()))
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/"))
+                .andExpect(header().string("Location", equalTo("/")))
+                .andExpect(authenticated().withUsername("user"))
+                .andExpect(cookie().exists("remember-me-cookie"));
     }
 }
