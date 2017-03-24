@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -17,7 +18,8 @@ import ru.glaizier.config.ServletConfig;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.logout;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -59,9 +61,10 @@ public class SecurityTest {
     }
 
     @Test
+    @WithMockUser(value = "fake")
     public void getApiAuthenticatedWhenFakeUserIsPresent() throws Exception {
         mvc
-                .perform(get("/api/v1/tasks").with(user("fake")))
+                .perform(get("/api/v1/tasks"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(authenticated().withUsername("fake"));
@@ -103,9 +106,10 @@ public class SecurityTest {
     }
 
     @Test
-    public void getTasksAuthenticatedWhenUserIsPresent() throws Exception {
+    @WithMockUser(value = "fake")
+    public void getTasksAuthenticatedWhenFakeUserIsPresent() throws Exception {
         mvc
-                .perform(get("/tasks").with(user("fake")))
+                .perform(get("/tasks"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(authenticated().withUsername("fake"));
