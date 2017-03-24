@@ -62,10 +62,10 @@ public class SecurityTest {
     @Test
     public void getApiAuthenticatedWhenUserIsPresent() throws Exception {
         mvc
-                .perform(get("/api/v1/tasks").with(user("u")))
+                .perform(get("/api/v1/tasks").with(user("fake")))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(authenticated().withUsername("u"));
+                .andExpect(authenticated().withUsername("fake"));
     }
 
     @Test
@@ -82,10 +82,10 @@ public class SecurityTest {
     @Test
     public void getTasksAuthenticatedWhenUserIsPresent() throws Exception {
         mvc
-                .perform(get("/tasks").with(user("u")))
+                .perform(get("/tasks").with(user("fake")))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(authenticated().withUsername("u"));
+                .andExpect(authenticated().withUsername("fake"));
     }
 
     @Test
@@ -100,30 +100,32 @@ public class SecurityTest {
     }
 
     @Test
-    // inject UserDetailsService from SecurityConfig
-    @WithUserDetails
+    // Spring security automatically inject UserDetailsService from SecurityConfig because
+    // WithUserDetailsSecurityContextFactory is annotated with @Autowired
+    @WithUserDetails(value = "u")
     public void postLoginAuthenticatedAndRedirectToRoot() throws Exception {
         mvc
-                .perform(formLogin().userParameter("user").user("user").password("password"))
+                .perform(formLogin().userParameter("user").user("u").password("p"))
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/"))
                 .andExpect(header().string("Location", equalTo("/")))
-                .andExpect(authenticated().withUsername("user"));
+                .andExpect(authenticated().withUsername("u"));
     }
 
     @Test
-    // inject UserDetailsService from SecurityConfig
-    @WithUserDetails
+    // Spring security automatically inject UserDetailsService from SecurityConfig because
+    // WithUserDetailsSecurityContextFactory is annotated with @Autowired
+    @WithUserDetails(value = "u")
     public void postLoginUnauthenticatedBecauseOfWrongPasswordOrLogin() throws Exception {
         mvc
-                .perform(formLogin().userParameter("user").user("user").password("password1"))
+                .perform(formLogin().userParameter("user").user("u").password("p1"))
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(unauthenticated());
 
         mvc
-                .perform(formLogin().userParameter("user").user("user1").password("password"))
+                .perform(formLogin().userParameter("user").user("u1").password("p"))
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(unauthenticated());
@@ -134,13 +136,13 @@ public class SecurityTest {
     public void postLoginAuthenticatedWithRememberMeCookieAndRedirectToRoot() throws Exception {
         // use post() instead of formlogin() because formlogin() doesn't provide method to attach remember-me param
         mvc
-                .perform(post("/login").param("user", "user").param("password", "password")
+                .perform(post("/login").param("user", "u").param("password", "p")
                         .param("remember-me", "on").with(csrf()))
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/"))
                 .andExpect(header().string("Location", equalTo("/")))
-                .andExpect(authenticated().withUsername("user"))
+                .andExpect(authenticated().withUsername("u"))
                 .andExpect(cookie().exists("remember-me-cookie"));
     }
 }

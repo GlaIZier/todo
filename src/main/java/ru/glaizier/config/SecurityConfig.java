@@ -15,13 +15,13 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // Todo check Factory autowiring work (WithUserDetailsSecurityContextFactory)
     @Bean
-    // TODO add database authentication
+    // TODO add database authentication and create inmemory dummy UserDetailsService for SecurityTest
+    // Todo add password encoding (hash + salt)
     public UserDetailsService userDetailsService() throws Exception {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withUsername("user").password("password").roles("USER").build());
-        manager.createUser(User.withUsername("admin").password("password").roles("USER", "ADMIN").build());
+        manager.createUser(User.withUsername("u").password("p").roles("USER").build());
+        manager.createUser(User.withUsername("a").password("p").roles("USER", "ADMIN").build());
         return manager;
     }
 
@@ -43,7 +43,7 @@ public class SecurityConfig {
 
         private UserDetailsService userDetailsService;
 
-        // autowired bean declared in SecurityConfig above
+        // autowired bean declared in SecurityConfig above for remember-me function
         @Autowired
         public FormLoginWebSecurityConfigurerAdapter(UserDetailsService userDetailsService) {
             this.userDetailsService = userDetailsService;
@@ -72,7 +72,7 @@ public class SecurityConfig {
                     // remember me
                     .and()
                     .rememberMe()
-                    .key("remember-me-key")
+                    .key("remember-me-key-random")
                     .rememberMeParameter("remember-me")
                     .rememberMeCookieName("remember-me-cookie")
                     .tokenValiditySeconds(2419200)
@@ -85,7 +85,7 @@ public class SecurityConfig {
 //                .requiresSecure()
                     // csrf
                     .and()
-                    .csrf() // todo enable csrf and create logout using POST http method
+                    .csrf() // todo enable csrf, add csrf to login and register page markup and create logout using POST http method
                     .disable();
         }
     }
