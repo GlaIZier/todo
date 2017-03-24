@@ -67,7 +67,7 @@ public class SecurityTest {
                 .perform(get("/api/v1/tasks"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(authenticated().withUsername("fake"));
+                .andExpect(authenticated().withUsername("fake").withRoles("USER"));
     }
 
     @Test
@@ -76,7 +76,16 @@ public class SecurityTest {
                 .perform(get("/api/v1/tasks").with(httpBasic("u", "p")))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(authenticated().withUsername("u"));
+                .andExpect(authenticated().withUsername("u").withRoles("USER"));
+    }
+
+    @Test
+    public void getApiAuthenticatedWhenRealAdminIsPresent() throws Exception {
+        mvc
+                .perform(get("/api/v1/tasks").with(httpBasic("a", "p")))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(authenticated().withUsername("a").withRoles("USER", "ADMIN"));
     }
 
     @Test
@@ -112,7 +121,7 @@ public class SecurityTest {
                 .perform(get("/tasks"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(authenticated().withUsername("fake"));
+                .andExpect(authenticated().withUsername("fake").withRoles("USER"));
     }
 
     @Test
@@ -137,7 +146,21 @@ public class SecurityTest {
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/"))
                 .andExpect(header().string("Location", equalTo("/")))
-                .andExpect(authenticated().withUsername("u"));
+                .andExpect(authenticated().withUsername("u").withRoles("USER"));
+    }
+
+    @Test
+    // Spring security automatically inject UserDetailsService from SecurityConfig because
+    // WithUserDetailsSecurityContextFactory is annotated with @Autowired
+    @WithUserDetails(value = "u")
+    public void postLoginAdminAuthenticatedAndRedirectToRoot() throws Exception {
+        mvc
+                .perform(formLogin().userParameter("user").user("a").password("p"))
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/"))
+                .andExpect(header().string("Location", equalTo("/")))
+                .andExpect(authenticated().withUsername("a").withRoles("USER", "ADMIN"));
     }
 
     @Test
@@ -169,7 +192,7 @@ public class SecurityTest {
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/"))
                 .andExpect(header().string("Location", equalTo("/")))
-                .andExpect(authenticated().withUsername("u"))
+                .andExpect(authenticated().withUsername("u").withRoles("USER"))
                 .andExpect(cookie().exists("remember-me-cookie"));
     }
 }
