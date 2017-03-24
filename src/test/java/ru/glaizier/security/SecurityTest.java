@@ -17,8 +17,7 @@ import ru.glaizier.config.ServletConfig;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.logout;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -60,13 +59,37 @@ public class SecurityTest {
     }
 
     @Test
-    public void getApiAuthenticatedWhenUserIsPresent() throws Exception {
+    public void getApiAuthenticatedWhenFakeUserIsPresent() throws Exception {
         mvc
                 .perform(get("/api/v1/tasks").with(user("fake")))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(authenticated().withUsername("fake"));
     }
+
+    @Test
+    public void getApiAuthenticatedWhenRealUserIsPresent() throws Exception {
+        mvc
+                .perform(get("/api/v1/tasks").with(httpBasic("u", "p")))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(authenticated().withUsername("u"));
+    }
+
+    @Test
+    public void getApiUnauthenticatedBecauseOfWrongPasswordOrLogin() throws Exception {
+
+        mvc
+                .perform(get("/api/v1/tasks").with(httpBasic("u", "p1")))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
+
+        mvc
+                .perform(get("/api/v1/tasks").with(httpBasic("u1", "p")))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
+    }
+
 
     @Test
     public void getTasksUnauthenticatedAndRedirectToLogin() throws Exception {
