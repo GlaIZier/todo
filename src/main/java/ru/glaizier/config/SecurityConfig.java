@@ -34,7 +34,10 @@ public class SecurityConfig {
                     .authorizeRequests()
                     .anyRequest().hasRole("USER")
                     .and()
-                    .httpBasic();
+                    .httpBasic()
+                    .and()
+                    .csrf()
+                    .disable();
         }
     }
 
