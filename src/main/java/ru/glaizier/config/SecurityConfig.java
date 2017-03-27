@@ -29,6 +29,7 @@ public class SecurityConfig {
     @Order(1)
     public static class ApiWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
 
+        // Todo add logout here because after /logout u can access here
         protected void configure(HttpSecurity http) throws Exception {
             http.antMatcher("/api/**")
                     .authorizeRequests()
@@ -72,13 +73,15 @@ public class SecurityConfig {
                     .logout()
                     .logoutUrl("/logout")
                     .logoutSuccessUrl("/")
+                    .invalidateHttpSession(true)
+                    .deleteCookies("remember-me-cookie")
                     // remember me
                     .and()
                     .rememberMe()
                     .key("remember-me-key-random")
                     .rememberMeParameter("remember-me")
                     .rememberMeCookieName("remember-me-cookie")
-                    .tokenValiditySeconds(2419200)
+                    .tokenValiditySeconds(180)
                     .userDetailsService(userDetailsService) // remember me requires explicitly defined UserDetailsService,
                     // when ApiWebSecurityConfigurationAdapter and FormWebSecurityConfigurationAdapter don't (still don't know why)
                     // todo https for all web app. It will need to configure tomcat to resolve 8443 port. http://www.baeldung.com/spring-channel-security-https

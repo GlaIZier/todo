@@ -31,8 +31,7 @@ public class TaskRestController {
 
     @RequestMapping(value = "/tasks", method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Task> tasks(Principal principal) {
-        principal.getName();
-        return taskDao.getTasks();
+        return taskDao.getTasks(principal.getName());
     }
 
 }

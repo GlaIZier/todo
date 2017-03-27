@@ -36,7 +36,7 @@ public interface TaskDao {
      * @param login of user to update Task for
      * @param id   of the task to update
      * @param todo value for the task to update
-     * @return updated Task or null if there is no task with this id or no such login
+     * @return previous Task or null if there is no task with this id or no such login
      */
     Task updateTask(String login, int id, String todo);
 
