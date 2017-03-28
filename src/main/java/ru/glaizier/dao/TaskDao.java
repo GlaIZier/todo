@@ -18,10 +18,10 @@ public interface TaskDao {
 
     /**
      * @param login of user to create Task for
-     * @param todo value for the task to create
+     * @param task to create
      * @return created Task or null if there is no user with such login
      */
-    Task createTask(String login, String todo);
+    Task createTask(String login, Task task);
 
     // specific task
 
@@ -34,15 +34,14 @@ public interface TaskDao {
 
     /**
      * @param login of user to update Task for
-     * @param id   of the task to update
-     * @param todo value for the task to update
+     * @param task  to update
      * @return previous Task or null if there is no task with this id or no such login
      */
-    Task updateTask(String login, int id, String todo);
+    Task updateTask(String login, Task task);
 
     /**
      * @param login of user to remove Task for
-     * @param id of task to delete
+     * @param id task id to delete
      * @return deleted Task or null if there is no task with this id or no such login
      */
     Task removeTask(String login, int id);

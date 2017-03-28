@@ -37,9 +37,9 @@ public class MemoryTaskDao implements TaskDao {
     }
 
     @Override
-    public Task createTask(String login, String todo) {
+    public Task createTask(String login, Task task) {
         Integer newId = getLastId(login).orElse(0) + 1;
-        Task newTask = new Task(newId, "todo" + newId, null);
+        Task newTask = new Task(newId, task.getTodo(), null);
 
         Map<Integer, Task> idToTask = loginToIdToTasks.get(login);
         if (idToTask == null)
@@ -56,13 +56,13 @@ public class MemoryTaskDao implements TaskDao {
     }
 
     @Override
-    public Task updateTask(String login, int id, String todo) {
+    public Task updateTask(String login, Task task) {
         if (loginToIdToTasks.get(login) == null)
             return null;
 
-        Task prevTask = loginToIdToTasks.get(login).get(id);
+        Task prevTask = loginToIdToTasks.get(login).get(task.getId());
         if (prevTask != null)
-            loginToIdToTasks.get(login).get(id).setTodo(todo);
+            loginToIdToTasks.get(login).get(task.getId()).setTodo(task.getTodo());
         return prevTask;
     }
 
@@ -78,30 +78,4 @@ public class MemoryTaskDao implements TaskDao {
         return loginToIdToTasks.containsKey(login);
     }
 
-   /* @Override
-    public Task createTask(String todo) {
-        Task task = new Task(lastId, "todo" + lastId, null);
-        idToTask.put(++lastId, task);
-        return task;
-    }
-
-    @Override
-    public Task getTask(int id) {
-        return idToTask.get(id);
-    }
-
-    @Override
-    public Task updateTask(int id, String todo) {
-        Task task = idToTask.get(id);
-        if (task == null)
-            return null;
-        task.setTodo(todo);
-        idToTask.put(id, task);
-        return task;
-    }
-
-    @Override
-    public Task removeTask(int id) {
-        return idToTask.remove(id);
-    }*/
 }
