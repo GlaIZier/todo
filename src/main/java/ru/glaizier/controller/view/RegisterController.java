@@ -1,4 +1,4 @@
-package ru.glaizier.controller;
+package ru.glaizier.controller.view;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

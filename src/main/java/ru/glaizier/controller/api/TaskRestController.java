@@ -1,4 +1,4 @@
-package ru.glaizier.controller;
+package ru.glaizier.controller.api;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
