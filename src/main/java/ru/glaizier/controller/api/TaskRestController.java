@@ -52,7 +52,7 @@ public class TaskRestController {
 
         HttpHeaders headers = new HttpHeaders();
         URI locationUri = UriComponentsBuilder.newInstance()
-                .path("/spittles/")
+                .path("/api/tasks/")
                 .path(String.valueOf(task.getId()))
                 .build()
                 .toUri();

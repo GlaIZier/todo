@@ -68,14 +68,56 @@
             </plugin>
 
             <!--TODO upgrade to Tomcat8?-->
+            <!--Tomcat deploy and run-->
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
+                    <!--http config-->
                     <server>${glaizier.server}</server>
                     <url>http://${glaizier.server}:${glaizier.tomcat.port}/manager/text</url>
                     <path>/${glaizier.tomcat.path}</path>
+                    <!--https config-->
+                    <httpsPort>8443</httpsPort>
+                    <keystoreFile>${project.build.directory}/tomcat7.keystore</keystoreFile>
+                    <keystorePass>p</keystorePass>
+                    <!--<path>/${glaizier.tomcat.path}</path>-->
+                    <!--<contextFile>${basedir}/context.xml</contextFile>-->
+                    <!--<httpsPort>8443</httpsPort>-->
+                    <!--<keystoreFile>${basedir}/certificates/keystore.jks</keystoreFile>-->
+                    <!--<keystorePass>password</keystorePass>-->
+                </configuration>
+            </plugin>
+
+            <!--Create keys for tomcat plugin-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>keytool-maven-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <id>clean</id>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <id>genkey</id>
+                        <goals>
+                            <goal>generateKeyPair</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <keystore>${basedir}/tomcat7.keystore</keystore>
+                    <dname>cn=localhost</dname>
+                    <keypass>p</keypass>
+                    <storepass>tomcat7</storepass>
+                    <alias>tomca7</alias>
+                    <keyalg>RSA</keyalg>
                 </configuration>
             </plugin>
 
