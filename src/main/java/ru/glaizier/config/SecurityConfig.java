@@ -84,11 +84,10 @@ public class SecurityConfig {
                     .tokenValiditySeconds(180)
                     .userDetailsService(userDetailsService) // remember me requires explicitly defined UserDetailsService,
                     // when ApiWebSecurityConfigurationAdapter and FormWebSecurityConfigurationAdapter don't (still don't know why)
-                    // todo https for all web app. It will need to configure tomcat to resolve 8443 port. http://www.baeldung.com/spring-channel-security-https
-//                .and()
-//                .requiresChannel()
-//                .antMatchers("/")
-//                .requiresSecure()
+                    .and()
+                    .requiresChannel()
+                    .antMatchers("/")
+                    .requiresSecure()
                     // csrf
                     .and()
                     .csrf() // todo enable csrf, add csrf to login and register page markup and create logout using POST http method
