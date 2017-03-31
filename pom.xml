@@ -80,13 +80,9 @@
                     <path>/${glaizier.tomcat.path}</path>
                     <!--https config-->
                     <httpsPort>8443</httpsPort>
+                    <!--Store in target-->
                     <keystoreFile>${project.build.directory}/tomcat7.keystore</keystoreFile>
-                    <keystorePass>p</keystorePass>
-                    <!--<path>/${glaizier.tomcat.path}</path>-->
-                    <!--<contextFile>${basedir}/context.xml</contextFile>-->
-                    <!--<httpsPort>8443</httpsPort>-->
-                    <!--<keystoreFile>${basedir}/certificates/keystore.jks</keystoreFile>-->
-                    <!--<keystorePass>password</keystorePass>-->
+                    <keystorePass>password</keystorePass>
                 </configuration>
             </plugin>
 
@@ -112,12 +108,13 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <keystore>${basedir}/tomcat7.keystore</keystore>
+                    <keystore>${project.build.directory}/tomcat7.keystore</keystore>
                     <dname>cn=localhost</dname>
-                    <keypass>p</keypass>
-                    <storepass>tomcat7</storepass>
+                    <keypass>password</keypass>
+                    <storepass>password</storepass>
                     <alias>tomca7</alias>
                     <keyalg>RSA</keyalg>
+                    <keysize>2048</keysize>
                 </configuration>
             </plugin>
 
@@ -191,7 +188,6 @@
             <artifactId>spring-security-test</artifactId>
             <version>4.0.4.RELEASE</version>
         </dependency>
-
 
     </dependencies>
 
