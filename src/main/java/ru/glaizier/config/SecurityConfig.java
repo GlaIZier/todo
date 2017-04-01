@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @EnableWebSecurity
 public class SecurityConfig {
@@ -47,10 +48,14 @@ public class SecurityConfig {
 
         private UserDetailsService userDetailsService;
 
+        private AuthenticationSuccessHandler authenticationSuccessHandler;
+
         // autowired bean declared in SecurityConfig above for remember-me function
         @Autowired
-        public FormLoginWebSecurityConfigurerAdapter(UserDetailsService userDetailsService) {
+        public FormLoginWebSecurityConfigurerAdapter(UserDetailsService userDetailsService,
+                                                     AuthenticationSuccessHandler authenticationSuccessHandler) {
             this.userDetailsService = userDetailsService;
+            this.authenticationSuccessHandler = authenticationSuccessHandler;
         }
 
         @Override
@@ -67,6 +72,7 @@ public class SecurityConfig {
                     .failureUrl("/login?error")
                     .usernameParameter("user")
                     .passwordParameter("password")
+//                    .successHandler(authenticationSuccessHandler)
                     // logout
                     // Session invalidation and remember-me-cookie are cleaned by default
                     .and()
@@ -74,13 +80,13 @@ public class SecurityConfig {
                     .logoutUrl("/logout")
                     .logoutSuccessUrl("/")
                     .invalidateHttpSession(true)
-                    .deleteCookies("remember-me-cookie")
+                    .deleteCookies("todo-remember-me-cookie", "todo-jwt-token-cookie")
                     // remember me
                     .and()
                     .rememberMe()
-                    .key("remember-me-key-random")
+                    .key("todo-remember-me-key-random")
                     .rememberMeParameter("remember-me")
-                    .rememberMeCookieName("remember-me-cookie")
+                    .rememberMeCookieName("todo-remember-me-cookie")
                     .tokenValiditySeconds(180)
                     .userDetailsService(userDetailsService) // remember me requires explicitly defined UserDetailsService,
                     // when ApiWebSecurityConfigurationAdapter and FormWebSecurityConfigurationAdapter don't (still don't know why)
