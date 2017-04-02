@@ -1,4 +1,4 @@
-package ru.glaizier.init;
+package ru.glaizier.todo.init;
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 

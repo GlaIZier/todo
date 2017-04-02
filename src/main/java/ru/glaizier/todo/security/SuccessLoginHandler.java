@@ -1,4 +1,4 @@
-package ru.glaizier.security;
+package ru.glaizier.todo.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;

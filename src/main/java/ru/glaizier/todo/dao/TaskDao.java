@@ -1,6 +1,6 @@
-package ru.glaizier.dao;
+package ru.glaizier.todo.dao;
 
-import ru.glaizier.domain.Task;
+import ru.glaizier.todo.domain.Task;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public interface TaskDao {
 
     /**
      * @param login of user to create Task for
-     * @param task to create
+     * @param task  to create
      * @return created Task or null if there is no user with such login
      */
     Task createTask(String login, Task task);
@@ -27,7 +27,7 @@ public interface TaskDao {
 
     /**
      * @param login of user to get Task for
-     * @param id of the task
+     * @param id    of the task
      * @return Task for that id or null if there is no task or no such login
      */
     Task getTask(String login, int id);
@@ -41,7 +41,7 @@ public interface TaskDao {
 
     /**
      * @param login of user to remove Task for
-     * @param id task id to delete
+     * @param id    task id to delete
      * @return deleted Task or null if there is no task with this id or no such login
      */
     Task removeTask(String login, int id);

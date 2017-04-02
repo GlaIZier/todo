@@ -1,4 +1,4 @@
-package ru.glaizier.config;
+package ru.glaizier.todo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,7 +17,7 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"ru.glaizier.controller"})
+@ComponentScan(basePackages = {"ru.glaizier.todo.controller"})
 public class ServletConfig extends WebMvcConfigurerAdapter {
 
     @Bean

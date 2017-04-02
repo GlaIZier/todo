@@ -1,7 +1,7 @@
-package ru.glaizier.dao;
+package ru.glaizier.todo.dao;
 
 import org.springframework.stereotype.Repository;
-import ru.glaizier.domain.Task;
+import ru.glaizier.todo.domain.Task;
 
 import javax.annotation.PostConstruct;
 import java.util.*;

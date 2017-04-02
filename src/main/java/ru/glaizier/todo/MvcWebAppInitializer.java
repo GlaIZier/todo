@@ -1,9 +1,9 @@
-package ru.glaizier;
+package ru.glaizier.todo;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
-import ru.glaizier.config.RootConfig;
-import ru.glaizier.config.SecurityConfig;
-import ru.glaizier.config.ServletConfig;
+import ru.glaizier.todo.config.RootConfig;
+import ru.glaizier.todo.config.SecurityConfig;
+import ru.glaizier.todo.config.ServletConfig;
 
 // todo add aop logging
 public class MvcWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {

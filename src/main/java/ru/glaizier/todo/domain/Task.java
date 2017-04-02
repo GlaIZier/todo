@@ -1,4 +1,4 @@
-package ru.glaizier.domain;
+package ru.glaizier.todo.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

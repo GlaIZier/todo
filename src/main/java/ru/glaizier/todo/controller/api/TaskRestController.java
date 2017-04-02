@@ -1,6 +1,4 @@
-package ru.glaizier.controller.api;
-
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+package ru.glaizier.todo.controller.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -12,12 +10,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
-import ru.glaizier.dao.TaskDao;
-import ru.glaizier.domain.Task;
+import ru.glaizier.todo.dao.TaskDao;
+import ru.glaizier.todo.domain.Task;
 
 import java.net.URI;
 import java.security.Principal;
 import java.util.List;
+
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
 @RequestMapping(value = {"/api/v1/tasks", "/api/tasks"})

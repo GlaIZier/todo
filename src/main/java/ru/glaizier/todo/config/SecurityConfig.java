@@ -1,4 +1,4 @@
-package ru.glaizier.config;
+package ru.glaizier.todo.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

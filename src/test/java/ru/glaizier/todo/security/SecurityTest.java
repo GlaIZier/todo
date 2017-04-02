@@ -1,4 +1,4 @@
-package ru.glaizier.security;
+package ru.glaizier.todo.security;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,8 +12,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import ru.glaizier.config.SecurityConfig;
-import ru.glaizier.config.ServletConfig;
+import ru.glaizier.todo.config.RootConfig;
+import ru.glaizier.todo.config.SecurityConfig;
+import ru.glaizier.todo.config.ServletConfig;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
@@ -33,11 +34,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 // Todo check how RequestPostProcessors work
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {
+        SecurityConfig.class,
         ServletConfig.class,
-        SecurityConfig.class
+        RootConfig.class
 })
 @WebAppConfiguration
 public class SecurityTest {
+
     @Autowired
     private WebApplicationContext context;
 
@@ -193,6 +196,6 @@ public class SecurityTest {
                 .andExpect(redirectedUrl("/"))
                 .andExpect(header().string("Location", equalTo("/")))
                 .andExpect(authenticated().withUsername("u").withRoles("USER"))
-                .andExpect(cookie().exists("remember-me-cookie"));
+                .andExpect(cookie().exists("todo-remember-me-cookie"));
     }
 }
