@@ -10,3 +10,12 @@ mvn clean tomcat7:redeploy -P local/docker
 ```
 mvn tomcat7:run
 ```
+and go to 
+```
+localhost:8080/todo
+```
+or
+```
+https://localhost:8443/todo
+```
+and skip the warning because no trust certificate is used in the application

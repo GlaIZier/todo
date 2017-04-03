@@ -72,7 +72,7 @@ public class SecurityConfig {
                     .failureUrl("/login?error")
                     .usernameParameter("user")
                     .passwordParameter("password")
-//                    .successHandler(authenticationSuccessHandler)
+//                    .successHandler(authenticationSuccessHandler) // Todo add here cookie and redirect to asked url or /
                     // logout
                     // Session invalidation and remember-me-cookie are cleaned by default
                     .and()
