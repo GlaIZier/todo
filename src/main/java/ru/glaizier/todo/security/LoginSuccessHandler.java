@@ -4,14 +4,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @Service
-public class SuccessLoginHandler implements AuthenticationSuccessHandler {
+public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
@@ -21,6 +22,7 @@ public class SuccessLoginHandler implements AuthenticationSuccessHandler {
         jwtTokenCookie.setPath("/api/");
         jwtTokenCookie.setMaxAge(180);
         httpServletResponse.addCookie(jwtTokenCookie);
+        httpServletResponse.sendRedirect(httpServletRequest.getHeader("Location"));
 //        httpServletResponse.sendRedirect("/");
     }
 

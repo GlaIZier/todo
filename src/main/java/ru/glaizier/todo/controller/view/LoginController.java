@@ -5,12 +5,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 public class LoginController {
 
     @RequestMapping("/login")
     public String login(@RequestParam(required = false) String error,
+                        HttpServletRequest httpServletRequest,
                         Model model) {
+        httpServletRequest.getSession().setAttribute("requested-uri", httpServletRequest.getRequestURI());
         if (error != null)
             model.addAttribute("error", "Invalid username or password");
         return "login";

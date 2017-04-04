@@ -46,6 +46,14 @@ public class SecurityConfig {
     @Configuration
     public static class FormLoginWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
+//        @Bean
+//        public AuthenticationSuccessHandler successHandler() {
+//            SimpleUrlAuthenticationSuccessHandler handler = new SimpleUrlAuthenticationSuccessHandler();
+//            handler.setUseReferer(true);
+//            handler.onAuthenticationSuccess(LoginSuccessHandler::onAuthenticationSuccess);
+//            return handler;
+//        }
+
         private UserDetailsService userDetailsService;
 
         private AuthenticationSuccessHandler authenticationSuccessHandler;
@@ -59,6 +67,7 @@ public class SecurityConfig {
         }
 
         @Override
+        // Forbid goto login page when logined
         protected void configure(HttpSecurity http) throws Exception {
             http.authorizeRequests()
                     // secure /tasks
@@ -72,7 +81,7 @@ public class SecurityConfig {
                     .failureUrl("/login?error")
                     .usernameParameter("user")
                     .passwordParameter("password")
-//                    .successHandler(authenticationSuccessHandler) // Todo add here cookie and redirect to asked url or /
+                    .successHandler(authenticationSuccessHandler) // Todo add here cookie and redirect to asked url or /
                     // logout
                     // Session invalidation and remember-me-cookie are cleaned by default
                     .and()
