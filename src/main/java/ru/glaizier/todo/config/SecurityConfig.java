@@ -50,6 +50,7 @@ public class SecurityConfig {
 //        public AuthenticationSuccessHandler successHandler() {
 //            SimpleUrlAuthenticationSuccessHandler handler = new SimpleUrlAuthenticationSuccessHandler();
 //            handler.setUseReferer(true);
+//            handler.
 //            handler.onAuthenticationSuccess(LoginSuccessHandler::onAuthenticationSuccess);
 //            return handler;
 //        }
@@ -83,13 +84,15 @@ public class SecurityConfig {
                     .passwordParameter("password")
                     .successHandler(authenticationSuccessHandler) // Todo add here cookie and redirect to asked url or /
                     // logout
-                    // Session invalidation and remember-me-cookie are cleaned by default
+
                     .and()
                     .logout()
                     .logoutUrl("/logout")
                     .logoutSuccessUrl("/")
                     .invalidateHttpSession(true)
-                    .deleteCookies("todo-remember-me-cookie", "todo-jwt-token-cookie")
+                    // Session invalidation is called by default. remember-me-cookie is removed by default.
+                    // If it is added here then set-cookie header appears twice
+                    .deleteCookies("todo-jwt-token-cookie")
                     // remember me
                     .and()
                     .rememberMe()
