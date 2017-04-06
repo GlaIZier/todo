@@ -16,7 +16,7 @@ public class LoginController {
                         Model model) {
         httpServletRequest.getSession().setAttribute("requested-uri", httpServletRequest.getRequestURI());
         if (error != null)
-            model.addAttribute("error", "Invalid username or password");
+            model.addAttribute("error", "Invalid login or password");
         return "login";
     }
 

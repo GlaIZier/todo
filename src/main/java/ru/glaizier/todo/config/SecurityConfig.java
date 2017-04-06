@@ -46,15 +46,6 @@ public class SecurityConfig {
     @Configuration
     public static class FormLoginWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
-//        @Bean
-//        public AuthenticationSuccessHandler successHandler() {
-//            SimpleUrlAuthenticationSuccessHandler handler = new SimpleUrlAuthenticationSuccessHandler();
-//            handler.setUseReferer(true);
-//            handler.
-//            handler.onAuthenticationSuccess(LoginSuccessHandler::onAuthenticationSuccess);
-//            return handler;
-//        }
-
         private UserDetailsService userDetailsService;
 
         private AuthenticationSuccessHandler authenticationSuccessHandler;
