@@ -129,7 +129,7 @@
             <version>4.3.6.RELEASE</version>
         </dependency>
 
-        <!-- compile only, deployed container will provide this -->
+        <!-- compile only, when deployed container provide this -->
         <!-- MvcWebAppInitializer depends on servlet api -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -175,6 +175,14 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.8.7</version>
         </dependency>
+
+        <!-- Jwt token Java implementation for api security -->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+
 
         <dependency>
             <groupId>junit</groupId>
