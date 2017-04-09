@@ -61,11 +61,12 @@ public class SecurityConfig {
         @Override
         // Forbid goto login page when logined
         protected void configure(HttpSecurity http) throws Exception {
-            http.authorizeRequests()
+            http.authorizeRequests() // Todo here add authentication Message provider
                     // secure /tasks
                     .antMatchers("/tasks").hasRole("USER")
                     .antMatchers(HttpMethod.POST, "/tasks").hasRole("USER") // todo remove it?
                     .anyRequest().permitAll()
+
                     // login
                     .and()
                     .formLogin()
@@ -74,8 +75,8 @@ public class SecurityConfig {
                     .usernameParameter("user")
                     .passwordParameter("password")
                     .successHandler(authenticationSuccessHandler) // Todo add here cookie and redirect to asked url or /
-                    // logout
 
+                    // logout
                     .and()
                     .logout()
                     .logoutUrl("/logout")
@@ -84,6 +85,7 @@ public class SecurityConfig {
                     // Session invalidation is called by default. remember-me-cookie is removed by default.
                     // If it is added here then set-cookie header appears twice
                     .deleteCookies("todo-jwt-token-cookie")
+
                     // remember me
                     .and()
                     .rememberMe()
@@ -92,11 +94,13 @@ public class SecurityConfig {
                     .rememberMeCookieName("todo-remember-me-cookie")
                     .tokenValiditySeconds(180)
                     .userDetailsService(userDetailsService) // remember me requires explicitly defined UserDetailsService,
+
                     // when ApiWebSecurityConfigurationAdapter and FormWebSecurityConfigurationAdapter don't (still don't know why)
                     .and()
                     .requiresChannel()
                     .antMatchers("/")
                     .requiresSecure()
+
                     // csrf
                     .and()
                     .csrf() // todo enable csrf, add csrf to login and register page markup and create logout using POST http method
