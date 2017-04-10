@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -50,12 +51,21 @@ public class SecurityConfig {
 
         private AuthenticationSuccessHandler authenticationSuccessHandler;
 
-        // autowired bean declared in SecurityConfig above for remember-me function
+        // Autowired bean declared in SecurityConfig above for remember-me function
         @Autowired
         public FormLoginWebSecurityConfigurerAdapter(UserDetailsService userDetailsService,
                                                      AuthenticationSuccessHandler authenticationSuccessHandler) {
             this.userDetailsService = userDetailsService;
             this.authenticationSuccessHandler = authenticationSuccessHandler;
+        }
+
+        @Override
+        // configure UserDetailsService
+        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+            auth.userDetailsService(userDetailsService);
+            System.out.println("auth.getDefaultUserDetailsService() = " + auth.getDefaultUserDetailsService());
+            System.out.println("auth.getDefaultUserDetailsService() = " + auth.getDefaultUserDetailsService().loadUserByUsername("u").getAuthorities());
+            auth.eraseCredentials(false);
         }
 
         @Override
