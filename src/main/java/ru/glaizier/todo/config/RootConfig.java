@@ -9,6 +9,6 @@ import org.springframework.context.annotation.PropertySource;
         "ru.glaizier.todo.dao",
         "ru.glaizier.todo.security"
 })
-@PropertySource("classpath:profiles/local.properties")
+@PropertySource("classpath:profiles/environment.properties")
 public class RootConfig {
 }

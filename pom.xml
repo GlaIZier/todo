@@ -68,7 +68,7 @@
             </plugin>
 
             <!--TODO upgrade to Tomcat8?-->
-            <!--Tomcat deploy and run-->
+            <!--Tomcat deploy and run plugin-->
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
@@ -86,7 +86,7 @@
                 </configuration>
             </plugin>
 
-            <!--Create keys for tomcat plugin-->
+            <!--Create keys for tomcat plugin needed for https-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>keytool-maven-plugin</artifactId>
@@ -118,6 +118,32 @@
                 </configuration>
             </plugin>
 
+            <!-- We have different profiles (properties files or environments). In RootConfig we ask to use
+            environment.properties file in classpath to inject values from there into classes. So using this plugin
+            we copy and rename current enabled maven profile (-P <name-of-profile> key in mvn command) to
+            environment.properties for Spring-->
+            <plugin>
+                <groupId>com.coderplus.maven.plugins</groupId>
+                <artifactId>copy-rename-maven-plugin</artifactId>
+                <version>1.0.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-file</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <sourceFile>
+                                ${project.build.outputDirectory}/profiles/${profile.name}.properties
+                            </sourceFile>
+                            <destinationFile>
+                                ${project.build.outputDirectory}/profiles/environment.properties
+                            </destinationFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -195,6 +221,7 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <version>4.0.4.RELEASE</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
