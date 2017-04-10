@@ -38,8 +38,8 @@
     </profiles>
 
     <build>
+        <!-- Enable placeholders for maven and property file-->
         <filters>
-            <!--<filter>${project.basedir}/src/profiles/${profile.name}.properties</filter>-->
             <filter>${project.basedir}/src/main/resources/profiles/${profile.name}.properties</filter>
         </filters>
         <finalName>${project.name}</finalName>

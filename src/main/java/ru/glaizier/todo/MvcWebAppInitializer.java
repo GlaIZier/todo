@@ -5,7 +5,8 @@ import ru.glaizier.todo.config.RootConfig;
 import ru.glaizier.todo.config.SecurityConfig;
 import ru.glaizier.todo.config.ServletConfig;
 
-// todo add aop logging
+// Todo add aop logging
+// Todo think about exception handling architecture
 public class MvcWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override

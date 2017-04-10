@@ -7,11 +7,12 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import org.springframework.stereotype.Service;
 import ru.glaizier.todo.security.token.TokenService;
 
+import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @Service
 // Todo read about SavedRequestAwareAuthenticationSuccessHandler and other extends
@@ -26,21 +27,24 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-                                        Authentication authentication) throws IOException, ServletException {
-        Object principal = authentication.getPrincipal();
-        if (principal instanceof UserDetails) {
-            String username = ((UserDetails) principal).getUsername();
-            String password = ((UserDetails) principal).getPassword();
-            System.out.println("username = " + username);
-            System.out.println("password = " + password);
-        }
-        System.out.println("authentication = " + authentication.getPrincipal());
-        System.out.println("authentication = " + authentication.getCredentials());
+                                        Authentication auth) throws IOException, ServletException {
+//        Object principal = auth.getPrincipal();
+//        if (principal instanceof UserDetails) {
+//            String username = ((UserDetails) principal).getUsername();
+//            String password = ((UserDetails) principal).getPassword();
+//            System.out.println("username = " + username);
+//            System.out.println("password = " + password);
+//        }
+//        System.out.println("auth = " + auth.getPrincipal());
+//        System.out.println("auth = " + auth.getCredentials());
+
+        System.out.println("tokenService = " + tokenService.createToken((UserDetails) auth.getPrincipal()));
+
         Cookie jwtTokenCookie = new Cookie("todo-jwt-token-cookie", "12345");
         jwtTokenCookie.setPath("/todo/");
         jwtTokenCookie.setMaxAge(180);
         httpServletResponse.addCookie(jwtTokenCookie);
-        super.onAuthenticationSuccess(httpServletRequest, httpServletResponse, authentication);
+        super.onAuthenticationSuccess(httpServletRequest, httpServletResponse, auth);
     }
 
 }
