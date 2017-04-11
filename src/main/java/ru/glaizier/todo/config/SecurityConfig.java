@@ -94,7 +94,7 @@ public class SecurityConfig {
                     .invalidateHttpSession(true)
                     // Session invalidation is called by default. remember-me-cookie is removed by default.
                     // If it is added here then set-cookie header appears twice
-                    .deleteCookies("todo-jwt-token-cookie")
+                    .deleteCookies("todo-api-token-cookie")
 
                     // remember me
                     .and()
