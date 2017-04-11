@@ -38,9 +38,11 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 //        System.out.println("auth = " + auth.getPrincipal());
 //        System.out.println("auth = " + auth.getCredentials());
 
-        System.out.println("tokenService = " + tokenService.createToken((UserDetails) auth.getPrincipal()));
+        String token = tokenService.createToken(((UserDetails) auth.getPrincipal()).getUsername());
 
-        Cookie jwtTokenCookie = new Cookie("todo-jwt-token-cookie", "12345");
+        System.out.println("token = " + token);
+
+        Cookie jwtTokenCookie = new Cookie("todo-jwt-token-cookie", token);
         jwtTokenCookie.setPath("/todo/");
         jwtTokenCookie.setMaxAge(180);
         httpServletResponse.addCookie(jwtTokenCookie);

@@ -7,6 +7,7 @@ import ru.glaizier.todo.config.ServletConfig;
 
 // Todo add aop logging
 // Todo add logger
+// Todo add continuous integration to run tests automatically
 // Todo think about exception handling architecture
 public class MvcWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
