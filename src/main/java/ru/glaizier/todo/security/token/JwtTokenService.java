@@ -23,25 +23,23 @@ public class JwtTokenService implements TokenService {
 
     private int expireDurationInSeconds;
 
-    private String signingKey;
-
     private Algorithm algorithm;
 
     public JwtTokenService(@Value("${api.token.expire.seconds}") int expireDurationInSeconds,
                            @Value("${api.token.signing.key}") String signingKey) {
+        if (StringUtils.isEmpty(signingKey))
+            throw new TokenServiceException("Signing key is undefined!");
+        if (expireDurationInSeconds <= 0)
+            throw new TokenServiceException(format("Expire duration in seconds have the wrong value: %d!",
+                    expireDurationInSeconds));
+
         this.expireDurationInSeconds = expireDurationInSeconds;
-        this.signingKey = signingKey;
         try {
             // Todo inject this when Security will be finished
             this.algorithm = Algorithm.HMAC512(signingKey);
         } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("Couldn't create algorithm to sign api tokens!", e);
+            throw new TokenServiceException("Couldn't create algorithm to sign api tokens!", e);
         }
-        if (StringUtils.isEmpty(signingKey))
-            throw new IllegalArgumentException("Signing key is undefined!");
-        if (expireDurationInSeconds <= 0)
-            throw new IllegalArgumentException(format("Expire duration in seconds have the wrong value: %d!",
-                    expireDurationInSeconds));
     }
 
     private Date getExpirationDate(Date from) {

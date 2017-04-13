@@ -2,7 +2,6 @@ package ru.glaizier.todo.security.handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Service;
 import ru.glaizier.todo.security.token.TokenService;
@@ -28,24 +27,13 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                                         Authentication auth) throws IOException, ServletException {
-//        Object principal = auth.getPrincipal();
-//        if (principal instanceof UserDetails) {
-//            String username = ((UserDetails) principal).getUsername();
-//            String password = ((UserDetails) principal).getPassword();
-//            System.out.println("username = " + username);
-//            System.out.println("password = " + password);
-//        }
-//        System.out.println("auth = " + auth.getPrincipal());
-//        System.out.println("auth = " + auth.getCredentials());
-
-        String token = tokenService.createToken(((UserDetails) auth.getPrincipal()).getUsername());
-
-        System.out.println("token = " + token);
+        String token = tokenService.createToken(auth.getName());
 
         Cookie jwtTokenCookie = new Cookie("todo-jwt-token-cookie", token);
         jwtTokenCookie.setPath("/todo/");
         jwtTokenCookie.setMaxAge(180);
         httpServletResponse.addCookie(jwtTokenCookie);
+
         super.onAuthenticationSuccess(httpServletRequest, httpServletResponse, auth);
     }
 
