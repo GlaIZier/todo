@@ -13,5 +13,4 @@ public interface TokenService {
      * @return login for whom token has been created or null if verification has been failed
      */
     String verifyToken(String token);
-
 }

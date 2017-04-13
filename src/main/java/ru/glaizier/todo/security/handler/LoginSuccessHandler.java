@@ -1,6 +1,7 @@
 package ru.glaizier.todo.security.handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,13 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 
     private final TokenService tokenService;
 
+    private final String tokenCookieName;
+
     @Autowired
-    public LoginSuccessHandler(TokenService tokenService) {
+    public LoginSuccessHandler(TokenService tokenService,
+                               @Value("${api.token.cookie.name}") String tokenCookieName) {
         this.tokenService = tokenService;
+        this.tokenCookieName = tokenCookieName;
     }
 
     @Override
@@ -29,11 +34,12 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
                                         Authentication auth) throws IOException, ServletException {
         String token = tokenService.createToken(auth.getName());
 
-        Cookie jwtTokenCookie = new Cookie("todo-jwt-token-cookie", token);
-        jwtTokenCookie.setPath("/todo/");
+        Cookie jwtTokenCookie = new Cookie(tokenCookieName, token);
+        jwtTokenCookie.setPath("/todo");
         jwtTokenCookie.setMaxAge(180);
         httpServletResponse.addCookie(jwtTokenCookie);
 
+        // Todo start here. Create filter to filter requests to api
         super.onAuthenticationSuccess(httpServletRequest, httpServletResponse, auth);
     }
 

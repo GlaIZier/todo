@@ -1,6 +1,7 @@
 package ru.glaizier.todo.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -47,9 +48,12 @@ public class SecurityConfig {
     @Configuration
     public static class FormLoginWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
-        private UserDetailsService userDetailsService;
+        private final UserDetailsService userDetailsService;
 
-        private AuthenticationSuccessHandler authenticationSuccessHandler;
+        private final AuthenticationSuccessHandler authenticationSuccessHandler;
+
+        @Value("${api.token.cookie.name}")
+        private String tokenCookieName;
 
         // Autowired bean declared in SecurityConfig above for remember-me function
         @Autowired
@@ -84,7 +88,7 @@ public class SecurityConfig {
                     .failureUrl("/login?error")
                     .usernameParameter("user")
                     .passwordParameter("password")
-                    .successHandler(authenticationSuccessHandler) // Todo add here cookie and redirect to asked url or /
+                    .successHandler(authenticationSuccessHandler)
 
                     // logout
                     .and()
@@ -94,7 +98,7 @@ public class SecurityConfig {
                     .invalidateHttpSession(true)
                     // Session invalidation is called by default. remember-me-cookie is removed by default.
                     // If it is added here then set-cookie header appears twice
-                    .deleteCookies("todo-api-token-cookie")
+                    .deleteCookies(tokenCookieName)
 
                     // remember me
                     .and()
