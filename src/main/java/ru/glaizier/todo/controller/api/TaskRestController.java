@@ -1,5 +1,7 @@
 package ru.glaizier.todo.controller.api;
 
+import static org.springframework.web.bind.annotation.RequestMethod.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,10 +19,8 @@ import java.net.URI;
 import java.security.Principal;
 import java.util.List;
 
-import static org.springframework.web.bind.annotation.RequestMethod.*;
-
 @RestController
-@RequestMapping(value = {"/api/v1/tasks", "/api/tasks"})
+@RequestMapping(value = {"/api/v1/me/tasks", "/api/me/tasks"})
 // todo create rest architecture
 // todo create react
 // Todo think about the best possible way for rest authentication
@@ -52,7 +52,7 @@ public class TaskRestController {
 
         HttpHeaders headers = new HttpHeaders();
         URI locationUri = UriComponentsBuilder.newInstance()
-                .path("/api/tasks/")
+                .path("/api/me/tasks/")
                 .path(String.valueOf(task.getId()))
                 .build()
                 .toUri();

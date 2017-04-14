@@ -1,4 +1,4 @@
-package ru.glaizier.todo.config;
+package ru.glaizier.todo.config.servlet;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

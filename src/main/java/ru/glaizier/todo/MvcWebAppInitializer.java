@@ -1,9 +1,8 @@
 package ru.glaizier.todo;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
-import ru.glaizier.todo.config.RootConfig;
-import ru.glaizier.todo.config.SecurityConfig;
-import ru.glaizier.todo.config.ServletConfig;
+import ru.glaizier.todo.config.root.RootConfig;
+import ru.glaizier.todo.config.servlet.ServletConfig;
 
 // Todo add aop logging
 // Todo add logger
@@ -13,17 +12,18 @@ import ru.glaizier.todo.config.ServletConfig;
 public class MvcWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override
-    // Register securityconfig in application context connected with the web application so it will be shared between all servlets
+    // Register in application context connected with the whole web application so it will be shared
+    // between all servlets
     protected Class<?>[] getRootConfigClasses() {
         return new Class<?>[]{
-                RootConfig.class,
-                SecurityConfig.class
+                RootConfig.class
         };
     }
 
     @Override
-    // Register configs for dispatcher servlets in web app. So we can have different dispatcher servlets and associated beans with them.
-    // These beans are not shared between each other. In this app we have only one dispatcher servlet.
+    // Register servlet configs for dispatcher servlets in web app, creating different servlet contexts.
+    // So we can have different dispatcher servlets, containers and associated beans with it.
+    // These beans are not shared between each other. In this app we have only one dispatcher servlet and one servlet container.
     protected Class<?>[] getServletConfigClasses() {
         return new Class<?>[]{
                 ServletConfig.class
