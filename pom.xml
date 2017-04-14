@@ -209,6 +209,14 @@
             <version>3.1.0</version>
         </dependency>
 
+        <!-- Getter, setter, builder... generation. We don't need this dependency in result jar so provided-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.16</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
