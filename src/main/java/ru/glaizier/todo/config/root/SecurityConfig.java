@@ -13,6 +13,10 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import ru.glaizier.todo.security.filter.ApiTokenAuthenticationFilter;
+
+import javax.servlet.Filter;
 
 @EnableWebSecurity
 @Configuration
@@ -23,10 +27,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${api.token.cookie.name}")
     private String tokenCookieName;
 
+    // Todo move here all beans from security package not autowired
     // Autowired bean declared in SecurityConfig above for remember-me function
     @Autowired
     public SecurityConfig(AuthenticationSuccessHandler authenticationSuccessHandler) {
         this.authenticationSuccessHandler = authenticationSuccessHandler;
+    }
+
+    @Bean
+    public Filter apiFilter() {
+        return new ApiTokenAuthenticationFilter();
     }
 
 
@@ -45,8 +55,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // configure UserDetailsService
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(inMemoryUserDetailsService());
-        System.out.println("auth.getDefaultUserDetailsService() = " + auth.getDefaultUserDetailsService());
-        System.out.println("auth.getDefaultUserDetailsService() = " + auth.getDefaultUserDetailsService().loadUserByUsername("u").getAuthorities());
         auth.eraseCredentials(false);
     }
 
@@ -97,5 +105,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf() // todo enable csrf, add csrf to login and register page markup and create logout using POST http method
                 .disable();
+
+        http.addFilterAfter(apiFilter(), BasicAuthenticationFilter.class); // not sure that it is needed to be inserted after BasicAuthenticationFilter
+
     }
 }
