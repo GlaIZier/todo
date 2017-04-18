@@ -4,11 +4,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
+import ru.glaizier.todo.config.root.security.SecurityConfig;
 
 @Configuration
 @ComponentScan(basePackages = {
-        "ru.glaizier.todo.dao",
-        "ru.glaizier.todo.security"
+        "ru.glaizier.todo.dao"
 })
 @PropertySource("classpath:profiles/environment.properties")
 // Register additional configs for root

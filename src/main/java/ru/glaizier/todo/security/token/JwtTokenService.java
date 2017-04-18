@@ -7,8 +7,6 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
@@ -16,7 +14,6 @@ import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-@Service
 public class JwtTokenService implements TokenService {
 
     private static final String TODO_API_TOKEN_JWT_ISSUER = "todo-api-token-jwt-issuer";
@@ -25,8 +22,7 @@ public class JwtTokenService implements TokenService {
 
     private Algorithm algorithm;
 
-    public JwtTokenService(@Value("${api.token.expire.seconds}") int expireDurationInSeconds,
-                           @Value("${api.token.signing.key}") String signingKey) {
+    public JwtTokenService(int expireDurationInSeconds, String signingKey) {
         if (StringUtils.isEmpty(signingKey))
             throw new TokenServiceException("Signing key is undefined!");
         if (expireDurationInSeconds <= 0)
