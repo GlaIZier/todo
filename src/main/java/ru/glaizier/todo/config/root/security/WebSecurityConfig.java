@@ -92,12 +92,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .rememberMeCookieName("todo-remember-me-cookie")
                 .tokenValiditySeconds(180)
                 .userDetailsService(inMemoryUserDetailsService()) // remember me requires explicitly defined UserDetailsService,
-
                 // when ApiWebSecurityConfigurationAdapter and FormWebSecurityConfigurationAdapter don't (still don't know why)
-                .and()
-                .requiresChannel()
-                .antMatchers("/")
-                .requiresSecure()
+
+                // Todo enable this force redirect to http after application will be done
+//                .and()
+//                .requiresChannel()
+//                .antMatchers("/")
+//                .requiresSecure()
 
                 // csrf
                 .and()
