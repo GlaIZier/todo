@@ -8,7 +8,8 @@ import ru.glaizier.todo.config.root.security.SecurityConfig;
 
 @Configuration
 @ComponentScan(basePackages = {
-        "ru.glaizier.todo.dao"
+        "ru.glaizier.todo.dao",
+        "ru.glaizier.todo.properties"
 })
 @PropertySource("classpath:profiles/environment.properties")
 // Register additional configs for root

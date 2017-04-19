@@ -1,6 +1,6 @@
 package ru.glaizier.todo.config.root.security;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import ru.glaizier.todo.properties.PropertiesService;
 import ru.glaizier.todo.security.handler.LoginSuccessHandler;
 import ru.glaizier.todo.security.token.JwtTokenService;
 import ru.glaizier.todo.security.token.TokenService;
@@ -20,23 +21,22 @@ import ru.glaizier.todo.security.token.TokenService;
 @Order(1)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Value("${api.token.cookie.name}")
-    private String apiTokenCookieName;
+    private PropertiesService propertiesService;
 
-    @Value("${api.token.expire.seconds}")
-    private int apiTokenExpireDurationInSeconds;
-
-    @Value("${api.token.signing.key}")
-    private String apiTokenSigningKey;
-
-    @Bean
-    public TokenService jwtTokenService() {
-        return new JwtTokenService(apiTokenExpireDurationInSeconds, apiTokenSigningKey);
+    @Autowired
+    public WebSecurityConfig(PropertiesService propertiesService) {
+        this.propertiesService = propertiesService;
     }
 
     @Bean
-    public AuthenticationSuccessHandler loginSuccessHandler(TokenService tokenService) {
-        return new LoginSuccessHandler(tokenService, apiTokenCookieName);
+    public TokenService jwtTokenService() {
+        return new JwtTokenService(propertiesService.getApiTokenExpireDurationInSeconds(),
+                propertiesService.getApiTokenSigningKey());
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler loginSuccessHandler() {
+        return new LoginSuccessHandler(jwtTokenService(), propertiesService.getApiTokenCookieName());
     }
 
     @Bean
@@ -72,7 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/login?error")
                 .usernameParameter("user")
                 .passwordParameter("password")
-                .successHandler(loginSuccessHandler(jwtTokenService()))
+                .successHandler(loginSuccessHandler())
 
                 // logout
                 .and()
@@ -82,7 +82,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 // Session invalidation is called by default. remember-me-cookie is removed by default.
                 // If it is added here then set-cookie header appears twice
-                .deleteCookies(apiTokenCookieName)
+                .deleteCookies(propertiesService.getApiTokenCookieName())
 
                 // remember me
                 .and()
