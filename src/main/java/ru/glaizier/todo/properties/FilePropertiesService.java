@@ -2,7 +2,6 @@ package ru.glaizier.todo.properties;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.ToString;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 @Service
 @EqualsAndHashCode
 @ToString
-@Getter
 @Builder
 public class FilePropertiesService implements PropertiesService {
 

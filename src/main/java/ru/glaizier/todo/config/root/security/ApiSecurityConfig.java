@@ -12,7 +12,8 @@ import ru.glaizier.todo.security.filter.ApiTokenAuthenticationFilter;
 import javax.servlet.Filter;
 
 @Configuration
-@Order(2)
+// Todo Start here describe why it wasn't work!!!Don't know why but if Order(2) here (after WebSecurityConfig) then
+@Order(1)
 public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
@@ -23,8 +24,7 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
     //Todo add custom filter after logout to invalidate token
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.antMatcher("/api/**")
-                .addFilterAfter(apiFilter(), BasicAuthenticationFilter.class); // Todo check after what filter add my
-        // not sure that it is needed to be inserted after BasicAuthenticationFilter
+        http.antMatcher("/api/**").addFilterBefore(apiFilter(), BasicAuthenticationFilter.class); // Todo check after
+        // what filter add my not sure that it is needed to be inserted after BasicAuthenticationFilter
     }
 }

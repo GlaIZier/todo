@@ -18,7 +18,7 @@ import ru.glaizier.todo.security.token.JwtTokenService;
 import ru.glaizier.todo.security.token.TokenService;
 
 @Configuration
-@Order(1)
+@Order(2)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private PropertiesService propertiesService;
@@ -29,14 +29,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public TokenService jwtTokenService() {
+    public TokenService tokenService() {
         return new JwtTokenService(propertiesService.getApiTokenExpireDurationInSeconds(),
                 propertiesService.getApiTokenSigningKey());
     }
 
     @Bean
-    public AuthenticationSuccessHandler loginSuccessHandler() {
-        return new LoginSuccessHandler(jwtTokenService(), propertiesService.getApiTokenCookieName());
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return new LoginSuccessHandler(tokenService(), propertiesService.getApiTokenCookieName());
     }
 
     @Bean
@@ -72,7 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/login?error")
                 .usernameParameter("user")
                 .passwordParameter("password")
-                .successHandler(loginSuccessHandler())
+                .successHandler(authenticationSuccessHandler())
 
                 // logout
                 .and()
