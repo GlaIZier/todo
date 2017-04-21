@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -58,11 +57,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     // Todo Forbid goto login page when logined
+    // Todo add custom filter after logout to invalidate token
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests() // Todo here add authentication Message provider
                 // secure /tasks
                 .antMatchers("/tasks").hasRole("USER")
-                .antMatchers(HttpMethod.POST, "/tasks").hasRole("USER") // todo remove it?
                 .anyRequest().permitAll()
 
                 // login
