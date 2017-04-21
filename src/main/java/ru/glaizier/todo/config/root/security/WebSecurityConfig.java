@@ -13,7 +13,6 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import ru.glaizier.todo.properties.PropertiesService;
 import ru.glaizier.todo.security.handler.LoginSuccessHandler;
-import ru.glaizier.todo.security.token.JwtTokenService;
 import ru.glaizier.todo.security.token.TokenService;
 
 @Configuration
@@ -22,20 +21,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private PropertiesService propertiesService;
 
-    @Autowired
-    public WebSecurityConfig(PropertiesService propertiesService) {
-        this.propertiesService = propertiesService;
-    }
+    private TokenService tokenService;
 
-    @Bean
-    public TokenService tokenService() {
-        return new JwtTokenService(propertiesService.getApiTokenExpireDurationInSeconds(),
-                propertiesService.getApiTokenSigningKey());
+    @Autowired
+    public WebSecurityConfig(TokenService tokenService, PropertiesService propertiesService) {
+        this.propertiesService = propertiesService;
+        this.tokenService = tokenService;
     }
 
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return new LoginSuccessHandler(tokenService(), propertiesService.getApiTokenCookieName());
+        return new LoginSuccessHandler(tokenService, propertiesService.getApiTokenCookieName());
     }
 
     @Bean

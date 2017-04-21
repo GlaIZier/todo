@@ -1,13 +1,16 @@
 package ru.glaizier.todo.config.root.security;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import ru.glaizier.todo.properties.PropertiesService;
 import ru.glaizier.todo.security.filter.ApiTokenAuthenticationFilter;
+import ru.glaizier.todo.security.token.TokenService;
 
 import javax.servlet.Filter;
 
@@ -20,9 +23,19 @@ import javax.servlet.Filter;
 @Order(1)
 public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private TokenService tokenService;
+
+    private PropertiesService propertiesService;
+
+    @Autowired
+    public ApiSecurityConfig(TokenService tokenService, PropertiesService propertiesService) {
+        this.tokenService = tokenService;
+        this.propertiesService = propertiesService;
+    }
+
     @Bean
     public Filter apiFilter() {
-        return new ApiTokenAuthenticationFilter();
+        return new ApiTokenAuthenticationFilter(tokenService, propertiesService);
     }
 
     @Override
