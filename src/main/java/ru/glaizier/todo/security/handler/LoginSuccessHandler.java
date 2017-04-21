@@ -1,5 +1,6 @@
 package ru.glaizier.todo.security.handler;
 
+import lombok.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import ru.glaizier.todo.security.token.TokenService;
@@ -14,8 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 // Todo read about SavedRequestAwareAuthenticationSuccessHandler and other extends
 public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
+    @NonNull
     private final TokenService tokenService;
 
+    @NonNull
     private final String tokenCookieName;
 
     public LoginSuccessHandler(TokenService tokenService,

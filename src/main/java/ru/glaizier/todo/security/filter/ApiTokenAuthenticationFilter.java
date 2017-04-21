@@ -17,9 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 
 public class ApiTokenAuthenticationFilter extends GenericFilterBean {
 
-    private PropertiesService propertiesService;
+    private final PropertiesService propertiesService;
 
-    private TokenService tokenService;
+    private final TokenService tokenService;
 
     public ApiTokenAuthenticationFilter(TokenService tokenService, PropertiesService propertiesService) {
         this.tokenService = tokenService;

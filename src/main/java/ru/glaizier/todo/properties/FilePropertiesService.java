@@ -17,15 +17,17 @@ import org.springframework.stereotype.Service;
 public class FilePropertiesService implements PropertiesService {
 
     @NonNull
-    private final String apiTokenCookieName;
+    private String apiTokenCookieName;
 
     @NonNull
-    private final int apiTokenExpireDurationInSeconds;
+    private int apiTokenExpireDurationInSeconds;
 
     @NonNull
-    private final String apiTokenSigningKey;
+    private String apiTokenSigningKey;
 
     // Say this spring to inject values through this constructor
+    // Can't inject do field injection because of the lombok's @Builder. It creates constructor but without @Value
+    // on the fields
     @Autowired
     private FilePropertiesService(
             @Value("${api.token.cookie.name}") String apiTokenCookieName,
