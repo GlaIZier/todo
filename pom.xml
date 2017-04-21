@@ -53,7 +53,11 @@
                 <configuration>
                     <source>${jdk.version}</source>
                     <target>${jdk.version}</target>
-                    <compilerArgument>-proc:none</compilerArgument>
+                    <!--Controls whether annotation processing and/or compilation is done. -proc:none means that
+                    compilation takes place without annotation processing. -proc:only means that only annotation
+                    processing is done, without any subsequent compilation.-->
+                    <!--Can't use -proc:none because we use lombok that generate code using annotations-->
+                    <!--<compilerArgument>-proc:none</compilerArgument>-->
                 </configuration>
             </plugin>
 
@@ -113,7 +117,7 @@
                     <dname>cn=localhost</dname>
                     <keypass>password</keypass>
                     <storepass>password</storepass>
-                    <alias>tomca7</alias>
+                    <alias>tomcat7</alias>
                     <keyalg>RSA</keyalg>
                     <keysize>2048</keysize>
                 </configuration>
@@ -231,5 +235,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>

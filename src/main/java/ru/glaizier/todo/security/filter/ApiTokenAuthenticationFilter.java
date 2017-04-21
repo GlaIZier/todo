@@ -27,22 +27,26 @@ public class ApiTokenAuthenticationFilter extends GenericFilterBean {
     }
 
     @Override
-    // Throw checked exceptions further with lombok
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
             ServletException {
         final HttpServletRequest req = (HttpServletRequest) request;
         final HttpServletResponse resp = (HttpServletResponse) response;
 
-        findTokenCookie(req).ifPresent((tokenCookie) -> {
-            System.out.println("tokenCookie.getValue() = " + tokenCookie.getValue());
-            try {
-                chain.doFilter(request, response);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
+        Optional<Cookie> optionalTokenCookie = findTokenCookie(req);
+        if (!findTokenCookie(req).isPresent()) {
+            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
 
-        resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        Cookie tokenCookie = optionalTokenCookie.get();
+        System.out.println("tokenCookie.getValue() = " + tokenCookie.getValue());
+        chain.doFilter(request, response);
+
+//        findTokenCookie(req).ifPresent((tokenCookie) -> {
+//            System.out.println("tokenCookie.getValue() = " + tokenCookie.getValue());
+//            chain.doFilter(request, response);
+//        });
+
 
 //        System.out.println("tokenCookie.getName() = " + tokenCookie..getName());
         //        final String authHeaderVal = req.getHeader(authHeader);
@@ -70,7 +74,7 @@ public class ApiTokenAuthenticationFilter extends GenericFilterBean {
     private Optional<Cookie> findTokenCookie(HttpServletRequest req) {
         for (Cookie c : req.getCookies()) {
             if (c.getName().equals(propertiesService.getApiTokenCookieName())) {
-                return Optional.ofNullable(c);
+                return Optional.of(c);
             }
         }
         return Optional.empty();

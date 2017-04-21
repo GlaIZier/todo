@@ -2,44 +2,37 @@ package ru.glaizier.todo.properties;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 @EqualsAndHashCode
 @ToString
-@Builder
+@Getter
+@Builder(toBuilder = true)
 public class FilePropertiesService implements PropertiesService {
 
-    @Value("${api.token.cookie.name}")
-    private String apiTokenCookieName;
+    @NonNull
+    private final String apiTokenCookieName;
 
-    @Value("${api.token.expire.seconds}")
-    private int apiTokenExpireDurationInSeconds;
+    @NonNull
+    private final int apiTokenExpireDurationInSeconds;
 
-    @Value("${api.token.signing.key}")
-    private String apiTokenSigningKey;
+    @NonNull
+    private final String apiTokenSigningKey;
 
-    public String getApiTokenCookieName() {
-        return this.apiTokenCookieName;
+    // Say this spring to inject values through this constructor
+    @Autowired
+    private FilePropertiesService(
+            @Value("${api.token.cookie.name}") String apiTokenCookieName,
+            @Value("${api.token.expire.seconds}") int apiTokenExpireDurationInSeconds,
+            @Value("${api.token.signing.key}") String apiTokenSigningKey) {
+        this.apiTokenCookieName = apiTokenCookieName;
+        this.apiTokenExpireDurationInSeconds = apiTokenExpireDurationInSeconds;
+        this.apiTokenSigningKey = apiTokenSigningKey;
     }
-
-    public int getApiTokenExpireDurationInSeconds() {
-        return this.apiTokenExpireDurationInSeconds;
-    }
-
-    public String getApiTokenSigningKey() {
-        return this.apiTokenSigningKey;
-    }
-
-//    private FilePropertiesService(
-//            @Value("${api.token.cookie.name}") String apiTokenCookieName,
-//            @Value("${api.token.expire.seconds}") int apiTokenExpireDurationInSeconds,
-//            @Value("${api.token.signing.key}") String apiTokenSigningKey) {
-//        this.apiTokenCookieName = apiTokenCookieName;
-//        this.apiTokenExpireDurationInSeconds = apiTokenExpireDurationInSeconds;
-//        this.apiTokenSigningKey = apiTokenSigningKey;
-//    }
-
 }
