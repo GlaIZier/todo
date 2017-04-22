@@ -11,6 +11,7 @@ import ru.glaizier.todo.config.root.security.SecurityConfig;
         "ru.glaizier.todo.dao",
         "ru.glaizier.todo.properties"
 })
+// This also enables PropertyPlaceholderBFPP
 @PropertySource("classpath:profiles/environment.properties")
 // Register additional configs for root
 @Import({

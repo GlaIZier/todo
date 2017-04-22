@@ -1,10 +1,6 @@
 package ru.glaizier.todo.properties;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,15 +13,16 @@ import org.springframework.stereotype.Service;
 public class FilePropertiesService implements PropertiesService {
 
     @NonNull
-    private String apiTokenCookieName;
+    private final String apiTokenCookieName;
 
     @NonNull
-    private int apiTokenExpireDurationInSeconds;
+    private final int apiTokenExpireDurationInSeconds;
 
     @NonNull
-    private String apiTokenSigningKey;
+    private final String apiTokenSigningKey;
 
-    // Say this spring to inject values through this constructor
+    // Say this spring to inject values through this constructor, because spring injects through defaults constructor
+    // by default
     // Can't inject do field injection because of the lombok's @Builder. It creates constructor but without @Value
     // on the fields
     @Autowired
