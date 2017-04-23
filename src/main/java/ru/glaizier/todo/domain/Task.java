@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-// Todo migrate to lombok
+// Todo migrate to lombok and make immutable
+// Todo do we need container for rest response with task field before task and error
 public class Task {
 
     private int id;

@@ -1,11 +1,10 @@
 package ru.glaizier.todo.security.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.filter.GenericFilterBean;
+import ru.glaizier.todo.domain.Error;
 import ru.glaizier.todo.properties.PropertiesService;
 import ru.glaizier.todo.security.token.TokenService;
-
-import java.io.IOException;
-import java.util.Optional;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -14,6 +13,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Optional;
 
 public class ApiTokenAuthenticationFilter extends GenericFilterBean {
 
@@ -29,12 +30,14 @@ public class ApiTokenAuthenticationFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
             ServletException {
+        ObjectMapper mapper = new ObjectMapper();
         final HttpServletRequest req = (HttpServletRequest) request;
         final HttpServletResponse resp = (HttpServletResponse) response;
 
         Optional<Cookie> optionalTokenCookie = findTokenCookie(req);
         if (!findTokenCookie(req).isPresent()) {
             resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            resp.getWriter().write(mapper.writeValueAsString(Error.DefinedError.UNAUTHORIZED));
             return;
         }
 
