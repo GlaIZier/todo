@@ -17,6 +17,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+// Todo add tests for api filtering process
 public class ApiTokenAuthenticationFilter extends GenericFilterBean {
 
     private final PropertiesService propertiesService;
@@ -31,48 +32,17 @@ public class ApiTokenAuthenticationFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
             ServletException {
-        ObjectMapper mapper = new ObjectMapper();
         final HttpServletRequest req = (HttpServletRequest) request;
         final HttpServletResponse resp = (HttpServletResponse) response;
 
         Optional<Cookie> optionalTokenCookie = findTokenCookie(req);
-        if (!findTokenCookie(req).isPresent()) {
-            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            resp.getWriter().write(mapper.writeValueAsString(ApiError.UNAUTHORIZED));
+        if (!findTokenCookie(req).isPresent() ||
+                tokenService.verifyToken(optionalTokenCookie.get().getValue()) == null) {
+            writeUnauthorizedErrorToResponse(resp);
             return;
         }
 
-        Cookie tokenCookie = optionalTokenCookie.get();
-        System.out.println("tokenCookie.getValue() = " + tokenCookie.getValue());
         chain.doFilter(request, response);
-
-//        findTokenCookie(req).ifPresent((tokenCookie) -> {
-//            System.out.println("tokenCookie.getValue() = " + tokenCookie.getValue());
-//            chain.doFilter(request, response);
-//        });
-
-
-//        System.out.println("tokenCookie.getName() = " + tokenCookie..getName());
-        //        final String authHeaderVal = req.getHeader(authHeader);
-//
-//        if (null==authHeaderVal)
-//        {
-//            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//            return;
-//        }
-//
-//        try
-//        {
-//            JwtUser jwtUser = jwtTokenService.getUser(authHeaderVal);
-//            req.setAttribute("jwtUser", jwtUser);
-//        }
-//        catch(JwtException e)
-//        {
-//            resp.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
-//            return;
-//        }
-//
-//        chain.doFilter(req, resp);
     }
 
     private Optional<Cookie> findTokenCookie(HttpServletRequest req) {
@@ -82,5 +52,11 @@ public class ApiTokenAuthenticationFilter extends GenericFilterBean {
             }
         }
         return Optional.empty();
+    }
+
+    private void writeUnauthorizedErrorToResponse(HttpServletResponse resp) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        resp.getWriter().write(mapper.writeValueAsString(ApiError.UNAUTHORIZED));
     }
 }

@@ -41,11 +41,6 @@ public class TaskRestController {
     }
 
     //Todo add exception handling for null and other stuff
-//    @RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-//    public ResponseEntity<List<Task>> getTasks(Principal principal) {
-//        return new ResponseEntity<>(taskDao.getTasks(principal.getName()), null, HttpStatus.OK);
-//    }
-
     @RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<ApiData<List<Task>>> getTasks(Principal principal) {
         return new ResponseEntity<>(new ApiData<>(taskDao.getTasks(principal.getName())), null, HttpStatus.OK);
