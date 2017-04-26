@@ -14,6 +14,7 @@
         <jdk.version>1.8</jdk.version>
     </properties>
     <profiles>
+        <!--Todo move location to properties file-->
         <profile>
             <id>local</id>
             <activation>

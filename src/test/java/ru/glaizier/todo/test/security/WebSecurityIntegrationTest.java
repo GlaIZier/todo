@@ -34,7 +34,6 @@ import ru.glaizier.todo.config.servlet.ServletConfig;
 // Todo start here understand how Spring Security Test works
 // Todo check how RequestPostProcessors work
 @RunWith(SpringJUnit4ClassRunner.class)
-// Todo try here webappinitializer
 @ContextConfiguration(classes = {
         ServletConfig.class,
         RootConfig.class
