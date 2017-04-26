@@ -1,4 +1,4 @@
-package ru.glaizier.todo.test.config;
+package ru.glaizier.todo.test.security;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
@@ -10,7 +10,10 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +41,7 @@ import ru.glaizier.todo.config.servlet.ServletConfig;
 })
 @WebAppConfiguration
 // Todo fix tests for api after api will be done
-public class SecurityConfigIntegrationTest {
+public class WebSecurityIntegrationTest {
 
     @Autowired
     private WebApplicationContext context;
