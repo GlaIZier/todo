@@ -2,7 +2,6 @@ package ru.glaizier.todo.domain.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Value;
-import ru.glaizier.todo.domain.Error;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Value

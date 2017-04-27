@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 // Todo migrate to lombok and make immutable
+// Todo separate api model from rest model
 public class Task {
 
     private int id;

@@ -1,4 +1,4 @@
-package ru.glaizier.todo.domain;
+package ru.glaizier.todo.domain.api;
 
 import lombok.Value;
 
