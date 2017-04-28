@@ -18,10 +18,13 @@ import org.springframework.web.util.UriComponentsBuilder;
 import ru.glaizier.todo.dao.TaskDao;
 import ru.glaizier.todo.domain.Task;
 import ru.glaizier.todo.domain.api.ApiData;
+import ru.glaizier.todo.domain.api.Link;
 
 import java.net.URI;
 import java.security.Principal;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(value = {"/api/v1/me/tasks", "/api/me/tasks"})
@@ -41,16 +44,18 @@ public class TaskRestController {
     }
 
     //Todo add exception handling for null and other stuff
+    // Todo remove hardcode using session and get username from there
     @RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ApiData<List<Task>>> getTasks(Principal principal) {
-        return new ResponseEntity<>(new ApiData<>(taskDao.getTasks(principal.getName())), null, HttpStatus.OK);
+    public ResponseEntity<ApiData<List<Task>>> getTasks(HttpServletRequest req) {
+        List<Task> tasks = taskDao.getTasks("u");
+        ApiData<List<Task>> apiData = new ApiData<>(tasks, new Link("http"));
+        return new ResponseEntity<>(apiData, null, HttpStatus.OK);
     }
 
     @RequestMapping(method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ApiData<Task>> createTask(Principal principal,
-                                                    @RequestBody Task task) {
-        task = taskDao.createTask(principal.getName(), task);
+    public ResponseEntity<ApiData<Task>> createTask(@RequestBody Task task) {
+        task = taskDao.createTask("u", task);
         if (task == null)
             throw new RuntimeException();
 
@@ -62,27 +67,28 @@ public class TaskRestController {
                 .toUri();
         headers.setLocation(locationUri);
 
-        return new ResponseEntity<>(new ApiData<>(task), headers, HttpStatus.CREATED);
+        ApiData<Task> apiData = new ApiData<>(task, new Link("http"))
+        return new ResponseEntity<>(apiData, headers, HttpStatus.CREATED);
     }
 
+    // Todo add here Response Entity
     @RequestMapping(value = "/{id}", method = GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ApiData<Task> getTask(Principal principal,
-                                 @PathVariable int id) {
-        Task task = taskDao.getTask(principal.getName(), id);
+    public ApiData<Task> getTask(@PathVariable int id) {
+        Task task = taskDao.getTask("u", id);
         if (task == null)
             throw new RuntimeException();
-        return new ApiData<>(task);
+
+        return new ApiData<>(task, new Link("http"));
     }
 
     @RequestMapping(value = "/{id}", method = PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ApiData<Task> updateTask(Principal principal,
-                                    @PathVariable int id,
+    public ApiData<Task> updateTask(@PathVariable int id,
                                     @RequestBody Task task) {
-        task.setId(id);
-        if (taskDao.updateTask(principal.getName(), task) == null)
+        Task updatedTask = new Task(id, "todo" + id);
+        if (taskDao.updateTask("u", task) == null)
             throw new RuntimeException();
-        return new ApiData<>(task);
+        return new ApiData<>(updatedTask, new Link("http"));
     }
 
     @RequestMapping(value = "/{id}", method = DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -91,7 +97,7 @@ public class TaskRestController {
         Task task = taskDao.removeTask(principal.getName(), id);
         if (task == null)
             throw new RuntimeException();
-        return new ApiData<>(task);
+        return new ApiData<>(task, new Link("http"));
     }
 
 }

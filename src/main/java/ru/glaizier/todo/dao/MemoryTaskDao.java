@@ -3,8 +3,13 @@ package ru.glaizier.todo.dao;
 import org.springframework.stereotype.Repository;
 import ru.glaizier.todo.domain.Task;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import javax.annotation.PostConstruct;
-import java.util.*;
 
 @Repository
 public class MemoryTaskDao implements TaskDao {
@@ -16,12 +21,12 @@ public class MemoryTaskDao implements TaskDao {
     @PostConstruct
     private void init() {
         Map<Integer, Task> idToTask = new HashMap<>();
-        idToTask.put(1, new Task(1, "todo1", null));
-        idToTask.put(2, new Task(2, "todo2", null));
+        idToTask.put(1, new Task(1, "todo1"));
+        idToTask.put(2, new Task(2, "todo2"));
         loginToIdToTasks.put("u", idToTask);
 
         idToTask = new HashMap<>();
-        idToTask.put(1, new Task(1, "todo1", null));
+        idToTask.put(1, new Task(1, "todo1"));
         loginToIdToTasks.put("a", idToTask);
     }
 
@@ -39,7 +44,7 @@ public class MemoryTaskDao implements TaskDao {
     @Override
     public Task createTask(String login, Task task) {
         Integer newId = getLastId(login).orElse(0) + 1;
-        Task newTask = new Task(newId, task.getTodo(), null);
+        Task newTask = new Task(newId, task.getTodo());
 
         Map<Integer, Task> idToTask = loginToIdToTasks.get(login);
         if (idToTask == null)
@@ -61,6 +66,7 @@ public class MemoryTaskDao implements TaskDao {
             return null;
 
         Task prevTask = loginToIdToTasks.get(login).get(task.getId());
+        // Todo add here new object because of immutability
         if (prevTask != null)
             loginToIdToTasks.get(login).get(task.getId()).setTodo(task.getTodo());
         return prevTask;
