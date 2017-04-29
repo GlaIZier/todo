@@ -3,20 +3,13 @@ package ru.glaizier.todo.dao;
 import org.springframework.stereotype.Repository;
 import ru.glaizier.todo.domain.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import javax.annotation.PostConstruct;
+import java.util.*;
 
 @Repository
 public class MemoryTaskDao implements TaskDao {
 
     private final Map<String, Map<Integer, Task>> loginToIdToTasks = new HashMap<>();
-
-    private final Map<String, Integer> loginToLastId = new HashMap<>();
 
     @PostConstruct
     private void init() {
@@ -66,9 +59,11 @@ public class MemoryTaskDao implements TaskDao {
             return null;
 
         Task prevTask = loginToIdToTasks.get(login).get(task.getId());
-        // Todo add here new object because of immutability
-        if (prevTask != null)
-            loginToIdToTasks.get(login).get(task.getId()).setTodo(task.getTodo());
+        if (prevTask != null) {
+            Task updatedTask = new Task(task.getId(), task.getTodo());
+            Map<Integer, Task> updatedMap = loginToIdToTasks.get(login);
+            updatedMap.put(updatedTask.getId(), updatedTask);
+        }
         return prevTask;
     }
 

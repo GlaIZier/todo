@@ -1,10 +1,5 @@
 package ru.glaizier.todo.controller.api;
 
-import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static org.springframework.web.bind.annotation.RequestMethod.PUT;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,11 +15,12 @@ import ru.glaizier.todo.domain.Task;
 import ru.glaizier.todo.domain.api.ApiData;
 import ru.glaizier.todo.domain.api.Link;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.security.Principal;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
 @RequestMapping(value = {"/api/v1/me/tasks", "/api/me/tasks"})
@@ -43,7 +39,7 @@ public class TaskRestController {
         this.taskDao = taskDao;
     }
 
-    //Todo add exception handling for null and other stuff
+    // Todo add exception handling for null and other stuff
     // Todo remove hardcode using session and get username from there
     @RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<ApiData<List<Task>>> getTasks(HttpServletRequest req) {
@@ -67,7 +63,7 @@ public class TaskRestController {
                 .toUri();
         headers.setLocation(locationUri);
 
-        ApiData<Task> apiData = new ApiData<>(task, new Link("http"))
+        ApiData<Task> apiData = new ApiData<>(task, new Link("http"));
         return new ResponseEntity<>(apiData, headers, HttpStatus.CREATED);
     }
 
