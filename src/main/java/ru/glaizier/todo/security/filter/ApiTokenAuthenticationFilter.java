@@ -1,13 +1,12 @@
 package ru.glaizier.todo.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.filter.GenericFilterBean;
 import ru.glaizier.todo.domain.api.ApiError;
 import ru.glaizier.todo.properties.PropertiesService;
+import ru.glaizier.todo.security.token.TokenDecodingException;
 import ru.glaizier.todo.security.token.TokenService;
-
-import java.io.IOException;
-import java.util.Optional;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -16,6 +15,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Optional;
 
 // Todo add tests for api filtering process
 public class ApiTokenAuthenticationFilter extends GenericFilterBean {
@@ -36,9 +37,25 @@ public class ApiTokenAuthenticationFilter extends GenericFilterBean {
         final HttpServletResponse resp = (HttpServletResponse) response;
 
         Optional<Cookie> optionalTokenCookie = findTokenCookie(req);
-        if (!findTokenCookie(req).isPresent() ||
-                tokenService.verifyToken(optionalTokenCookie.get().getValue()) == null) {
-            writeUnauthorizedErrorToResponse(resp);
+        if (!findTokenCookie(req).isPresent()) {
+            writeErrorToResponse(resp, HttpStatus.UNAUTHORIZED, ApiError.UNAUTHORIZED);
+            return;
+        }
+        String login;
+        try {
+            login = tokenService.verifyToken(optionalTokenCookie.get().getValue());
+
+        } catch (TokenDecodingException e) {
+            // Todo add logging
+            e.printStackTrace();
+            writeErrorToResponse(resp, HttpStatus.BAD_REQUEST, ApiError.BAD_REQUEST);
+            return;
+        }
+
+        if (login != null) {
+            // Todo get session and add here info
+        } else {
+            writeErrorToResponse(resp, HttpStatus.UNAUTHORIZED, ApiError.UNAUTHORIZED);
             return;
         }
 
@@ -54,9 +71,11 @@ public class ApiTokenAuthenticationFilter extends GenericFilterBean {
         return Optional.empty();
     }
 
-    private void writeUnauthorizedErrorToResponse(HttpServletResponse resp) throws IOException {
+    private void writeErrorToResponse(HttpServletResponse resp,
+                                      HttpStatus httpStatus,
+                                      ApiError error) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        resp.getWriter().write(mapper.writeValueAsString(ApiError.UNAUTHORIZED));
+        resp.setStatus(httpStatus.value());
+        resp.getWriter().write(mapper.writeValueAsString(error));
     }
 }

@@ -1,10 +1,9 @@
 package ru.glaizier.todo.security.token;
 
-import static java.lang.String.format;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.NonNull;
@@ -13,6 +12,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+
+import static java.lang.String.format;
 
 public class JwtTokenService implements TokenService {
 
@@ -25,7 +26,7 @@ public class JwtTokenService implements TokenService {
 
     public JwtTokenService(int expireDurationInSeconds, @NonNull String signingKey) {
         if (expireDurationInSeconds <= 0)
-            throw new TokenServiceException(format("Expire duration in seconds have the wrong value: %d!",
+            throw new TokenDecodingException(format("Expire duration in seconds have the wrong value: %d!",
                     expireDurationInSeconds));
 
         this.expireDurationInSeconds = expireDurationInSeconds;
@@ -33,7 +34,7 @@ public class JwtTokenService implements TokenService {
             // Todo inject this when Security will be finished
             this.algorithm = Algorithm.HMAC512(signingKey);
         } catch (UnsupportedEncodingException e) {
-            throw new TokenServiceException("Couldn't create algorithm to sign api tokens!", e);
+            throw new TokenDecodingException("Couldn't create algorithm to sign api tokens!", e);
         }
     }
 
@@ -54,13 +55,15 @@ public class JwtTokenService implements TokenService {
     }
 
     @Override
-    public String verifyToken(String token) {
+    public String verifyToken(String token) throws TokenDecodingException {
         JWTVerifier verifier = JWT.require(algorithm)
                 .withIssuer(TODO_API_TOKEN_JWT_ISSUER)
                 .build();
         try {
             DecodedJWT verify = verifier.verify(token);
             return verify.getSubject();
+        } catch (JWTDecodeException e) {
+            throw new TokenDecodingException("Token decoding failed!", e);
         } catch (JWTVerificationException e) {
             // Todo log here
             e.printStackTrace();

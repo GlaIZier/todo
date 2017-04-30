@@ -12,5 +12,5 @@ public interface TokenService {
      * @param token token to check
      * @return login for whom token has been created or null if verification has been failed
      */
-    String verifyToken(String token);
+    String verifyToken(String token) throws TokenDecodingException;
 }
