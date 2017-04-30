@@ -10,6 +10,7 @@ import lombok.NonNull;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -55,19 +56,19 @@ public class JwtTokenService implements TokenService {
     }
 
     @Override
-    public String verifyToken(String token) throws TokenDecodingException {
+    public Optional<String> verifyToken(String token) throws TokenDecodingException {
         JWTVerifier verifier = JWT.require(algorithm)
                 .withIssuer(TODO_API_TOKEN_JWT_ISSUER)
                 .build();
         try {
             DecodedJWT verify = verifier.verify(token);
-            return verify.getSubject();
+            return Optional.of(verify.getSubject());
         } catch (JWTDecodeException e) {
             throw new TokenDecodingException("Token decoding failed!", e);
         } catch (JWTVerificationException e) {
             // Todo log here
             e.printStackTrace();
-            return null;
+            return Optional.empty();
         }
     }
 }

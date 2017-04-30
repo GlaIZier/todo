@@ -41,21 +41,18 @@ public class ApiTokenAuthenticationFilter extends GenericFilterBean {
             writeErrorToResponse(resp, HttpStatus.UNAUTHORIZED, ApiError.UNAUTHORIZED);
             return;
         }
-        String login;
         try {
-            login = tokenService.verifyToken(optionalTokenCookie.get().getValue());
+            if (tokenService.verifyToken(optionalTokenCookie.get().getValue()).isPresent()) {
+                // Todo get session and add here info
+            } else {
+                writeErrorToResponse(resp, HttpStatus.UNAUTHORIZED, ApiError.UNAUTHORIZED);
+                return;
+            }
 
         } catch (TokenDecodingException e) {
             // Todo add logging
             e.printStackTrace();
             writeErrorToResponse(resp, HttpStatus.BAD_REQUEST, ApiError.BAD_REQUEST);
-            return;
-        }
-
-        if (login != null) {
-            // Todo get session and add here info
-        } else {
-            writeErrorToResponse(resp, HttpStatus.UNAUTHORIZED, ApiError.UNAUTHORIZED);
             return;
         }
 
