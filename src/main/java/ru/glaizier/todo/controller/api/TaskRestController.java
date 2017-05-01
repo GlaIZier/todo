@@ -31,6 +31,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 // Todo add method security
 // Todo add different views for rest (html+json)?
 // Todo add exception handling for null and other stuff
+// Todo add swagger for rest api
+// Todo add tests for rest controller
 
 // ide shows error but this works
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -51,7 +53,7 @@ public class TaskRestController {
     public ResponseEntity<ApiData<List<Task>>> getTasks(HttpServletRequest req) {
         List<Task> tasks = taskDao.getTasks(getLogin(req));
         ApiData<List<Task>> apiData = new ApiData<>(tasks, new Link("http"));
-        return new ResponseEntity<>(apiData, null, HttpStatus.OK);
+        return new ResponseEntity<>(apiData, HttpStatus.OK);
     }
 
     @RequestMapping(method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
@@ -76,33 +78,38 @@ public class TaskRestController {
 
     // Todo add here Response Entity
     @RequestMapping(value = "/{id}", method = GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ApiData<Task> getTask(HttpServletRequest req,
-                                 @PathVariable int id) {
+    public ResponseEntity<ApiData<Task>> getTask(HttpServletRequest req,
+                                                 @PathVariable int id) {
         Task task = taskDao.getTask(getLogin(req), id);
         if (task == null)
-            throw new RuntimeException();
+            throw new RestControllerNotFoundException("Task with id " + id + " hasn't been found!");
 
-        return new ApiData<>(task, new Link("http"));
+        ApiData<Task> apiData = new ApiData<>(task, new Link("http"));
+        return new ResponseEntity<>(apiData, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ApiData<Task> updateTask(HttpServletRequest req,
-                                    @PathVariable int id,
-                                    @RequestBody Task task) {
+    public ResponseEntity<ApiData<Task>> updateTask(HttpServletRequest req,
+                                                    @PathVariable int id,
+                                                    @RequestBody Task task) {
         Task updatedTask = new Task(id, "todo" + id);
         if (taskDao.updateTask(getLogin(req), task) == null)
-            throw new RuntimeException();
-        return new ApiData<>(updatedTask, new Link("http"));
+            throw new RestControllerNotFoundException("Task with id " + id + " hasn't been found!");
+
+        ApiData<Task> apiData = new ApiData<>(updatedTask, new Link("http"));
+        return new ResponseEntity<>(apiData, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ApiData<Task> deleteTask(HttpServletRequest req,
-                                    @PathVariable int id) {
+    public ResponseEntity<ApiData<Task>> deleteTask(HttpServletRequest req,
+                                                    @PathVariable int id) {
         Task task = taskDao.removeTask(getLogin(req), id);
         if (task == null)
-            throw new RuntimeException();
-        return new ApiData<>(task, new Link("http"));
+            throw new RestControllerNotFoundException("Task with id " + id + " hasn't been found!");
+
+        ApiData<Task> apiData = new ApiData<>(task, new Link("http"));
+        return new ResponseEntity<>(apiData, HttpStatus.OK);
     }
 
     private String getLogin(HttpServletRequest req) {
