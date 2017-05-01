@@ -6,4 +6,6 @@ public interface PropertiesService {
     int getApiTokenExpireDurationInSeconds();
 
     String getApiTokenSigningKey();
+
+    String getApiTokenSessionAttributeName();
 }

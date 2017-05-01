@@ -1,9 +1,13 @@
 package ru.glaizier.todo.test.security;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 import ru.glaizier.todo.security.token.JwtTokenService;
+
+import java.util.Optional;
+
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertThat;
 
 public class JwtTokenServiceTest {
 
@@ -14,7 +18,7 @@ public class JwtTokenServiceTest {
     @Test
     public void tokenIsValidForUserForWhomItWasCreatedFor() {
         String token = jwtTokenService.createToken(dummyLogin);
-        assertEquals(dummyLogin, jwtTokenService.verifyToken(token));
+        assertThat(jwtTokenService.verifyToken(token), is(Optional.of(dummyLogin)));
     }
 
     @Test
@@ -25,7 +29,7 @@ public class JwtTokenServiceTest {
         char prevLast = token.charAt(token.length() - 2);
         token = token.substring(0, token.length() - 2);
         token = token + last + prevLast;
-        assertNull(jwtTokenService.verifyToken(token));
+        assertThat(jwtTokenService.verifyToken(token), is(Optional.empty()));
     }
 
     @Test
@@ -38,7 +42,7 @@ public class JwtTokenServiceTest {
         JwtTokenService jwtTokenService = new JwtTokenService(1, "secret");
         String token = jwtTokenService.createToken(dummyLogin);
         Thread.sleep(2000);
-        assertNull(jwtTokenService.verifyToken(token));
+        assertThat(jwtTokenService.verifyToken(token), is(Optional.empty()));
     }
 
 }

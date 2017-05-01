@@ -42,9 +42,10 @@ public class ApiTokenAuthenticationFilter extends GenericFilterBean {
             return;
         }
         try {
-            if (tokenService.verifyToken(optionalTokenCookie.get().getValue()).isPresent()) {
-                // Todo get session and add here info
-            } else {
+            Optional<String> login = tokenService.verifyToken(optionalTokenCookie.get().getValue());
+            if (login.isPresent())
+                req.getSession().setAttribute(propertiesService.getApiTokenSessionAttributeName(), login.get());
+            else {
                 writeErrorToResponse(resp, HttpStatus.UNAUTHORIZED, ApiError.UNAUTHORIZED);
                 return;
             }
@@ -60,6 +61,8 @@ public class ApiTokenAuthenticationFilter extends GenericFilterBean {
     }
 
     private Optional<Cookie> findTokenCookie(HttpServletRequest req) {
+        if (req.getCookies() == null)
+            return Optional.empty();
         for (Cookie c : req.getCookies()) {
             if (c.getName().equals(propertiesService.getApiTokenCookieName())) {
                 return Optional.of(c);
