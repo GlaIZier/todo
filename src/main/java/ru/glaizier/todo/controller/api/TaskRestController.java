@@ -1,5 +1,10 @@
 package ru.glaizier.todo.controller.api;
 
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -17,17 +22,14 @@ import ru.glaizier.todo.domain.api.ApiData;
 import ru.glaizier.todo.domain.api.Link;
 import ru.glaizier.todo.properties.PropertiesService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.List;
 
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(value = {"/api/v1/me/tasks", "/api/me/tasks"})
-// todo create rest architecture
 // todo create react
-// Todo think about the best possible way for rest authentication
 // Todo add method security
 // Todo add different views for rest (html+json)?
 // Todo add exception handling for null and other stuff
@@ -35,7 +37,9 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 // Todo add tests for rest controller
 
 // ide shows error but this works
-@RequiredArgsConstructor(onConstructor_ = {@Autowired})
+@RequiredArgsConstructor(onConstructor_ = {
+        @Autowired
+})
 public class TaskRestController {
 
     // Todo crete TaskService that will hold Dao and TaskLinkCreator (or autogenerate this instead) Service
@@ -47,6 +51,7 @@ public class TaskRestController {
 //    public TaskRestController(TaskDao taskDao,
 //                              PropertiesService propertiesService) {
 //        this.taskDao = taskDao;
+//        this.propertiesService = propertiesService;
 //    }
 
     @RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

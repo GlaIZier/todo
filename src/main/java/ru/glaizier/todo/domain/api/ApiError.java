@@ -10,6 +10,5 @@ public class ApiError {
     public static final ApiError UNAUTHORIZED = new ApiError(new Error(401, "Unauthorized!"));
     public static final ApiError NOT_FOUND = new ApiError(new Error(404, "Data hasn't been found!"));
 
-
     private final Error error;
 }

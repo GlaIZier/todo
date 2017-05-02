@@ -1,12 +1,22 @@
 package ru.glaizier.todo.security.filter;
 
+import static ru.glaizier.todo.log.MdcConstants.LOGIN;
+import static ru.glaizier.todo.log.MdcConstants.TOKEN;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.filter.GenericFilterBean;
 import ru.glaizier.todo.domain.api.ApiError;
 import ru.glaizier.todo.properties.PropertiesService;
 import ru.glaizier.todo.security.token.TokenDecodingException;
 import ru.glaizier.todo.security.token.TokenService;
+
+import java.io.IOException;
+import java.lang.invoke.MethodHandles;
+import java.util.Optional;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -15,11 +25,11 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Optional;
 
 // Todo add tests for api filtering process
 public class ApiTokenAuthenticationFilter extends GenericFilterBean {
+
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final PropertiesService propertiesService;
 
@@ -38,22 +48,32 @@ public class ApiTokenAuthenticationFilter extends GenericFilterBean {
 
         Optional<Cookie> optionalTokenCookie = findTokenCookie(req);
         if (!findTokenCookie(req).isPresent()) {
-            writeErrorToResponse(resp, HttpStatus.UNAUTHORIZED, ApiError.UNAUTHORIZED);
+            writeErrorToResponse(null, resp, HttpStatus.UNAUTHORIZED, ApiError.UNAUTHORIZED);
             return;
         }
         try {
             Optional<String> login = tokenService.verifyToken(optionalTokenCookie.get().getValue());
-            if (login.isPresent())
+            if (login.isPresent()) {
                 req.getSession().setAttribute(propertiesService.getApiTokenSessionAttributeName(), login.get());
+                // Todo move to aspect
+                try {
+                    MDC.put(LOGIN, login.get());
+                    MDC.put(TOKEN, optionalTokenCookie.get().getValue());
+                    log.info("Authentication success!");
+                } finally {
+                    MDC.clear();
+                }
+            }
             else {
-                writeErrorToResponse(resp, HttpStatus.UNAUTHORIZED, ApiError.UNAUTHORIZED);
+                writeErrorToResponse(optionalTokenCookie.get().getValue(),
+                        resp, HttpStatus.UNAUTHORIZED, ApiError.UNAUTHORIZED);
                 return;
             }
 
         } catch (TokenDecodingException e) {
-            // Todo add logging
-            e.printStackTrace();
-            writeErrorToResponse(resp, HttpStatus.BAD_REQUEST, ApiError.BAD_REQUEST);
+            log.error("Token decoding failed: " + e.getMessage(), e);
+            writeErrorToResponse(optionalTokenCookie.get().getValue(),
+                    resp, HttpStatus.BAD_REQUEST, ApiError.BAD_REQUEST);
             return;
         }
 
@@ -71,11 +91,20 @@ public class ApiTokenAuthenticationFilter extends GenericFilterBean {
         return Optional.empty();
     }
 
-    private void writeErrorToResponse(HttpServletResponse resp,
+    private void writeErrorToResponse(String token, HttpServletResponse resp,
                                       HttpStatus httpStatus,
                                       ApiError error) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        resp.setStatus(httpStatus.value());
-        resp.getWriter().write(mapper.writeValueAsString(error));
+        try {
+            // Todo move to aspect
+            MDC.put(TOKEN, token);
+            log.error("Authentication failed with HTTP status {}!", httpStatus);
+
+            ObjectMapper mapper = new ObjectMapper();
+            resp.setStatus(httpStatus.value());
+            resp.getWriter().write(mapper.writeValueAsString(error));
+        } finally {
+            MDC.clear();
+        }
+
     }
 }
