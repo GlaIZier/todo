@@ -25,9 +25,11 @@
     </appender>
 
     <logger name="ru.glaizier.todo" level="DEBUG"/>
-    <logger name="org.eclipse" level="INFO"/>
-    <logger name="org.apache" level="INFO"/>
-    <logger name="org.thymeleaf" level="ERROR"/>
+    <logger name="org.springframework" level="INFO"/>
+    <!-- Uncomment if u need to understand what't happening in spring -->
+    <!--<logger name="org.springframework" level="DEBUG"/>-->
+    <logger name="org" level="INFO"/>
+    <logger name="com" level="INFO"/>
 
     <root>
         <appender-ref ref="console"/>
