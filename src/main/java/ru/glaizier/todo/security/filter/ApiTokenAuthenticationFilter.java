@@ -59,7 +59,7 @@ public class ApiTokenAuthenticationFilter extends GenericFilterBean {
                 try {
                     MDC.put(LOGIN, login.get());
                     MDC.put(TOKEN, optionalTokenCookie.get().getValue());
-                    log.info("Authentication success!");
+                    log.info("Api authentication success!");
                 } finally {
                     MDC.clear();
                 }
@@ -71,7 +71,7 @@ public class ApiTokenAuthenticationFilter extends GenericFilterBean {
             }
 
         } catch (TokenDecodingException e) {
-            log.error("Token decoding failed: " + e.getMessage(), e);
+            log.error("Api authentication token decoding failed: " + e.getMessage(), e);
             writeErrorToResponse(optionalTokenCookie.get().getValue(),
                     resp, HttpStatus.BAD_REQUEST, ApiError.BAD_REQUEST);
             return;
@@ -97,7 +97,7 @@ public class ApiTokenAuthenticationFilter extends GenericFilterBean {
         try {
             // Todo move to aspect
             MDC.put(TOKEN, token);
-            log.error("Authentication failed with HTTP status {}!", httpStatus);
+            log.error("Api authentication failed with HTTP status {}!", httpStatus);
 
             ObjectMapper mapper = new ObjectMapper();
             resp.setStatus(httpStatus.value());

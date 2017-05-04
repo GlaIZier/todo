@@ -1,4 +1,4 @@
-package ru.glaizier.todo.controller.api;
+package ru.glaizier.todo.controller.api.task;
 
 public class RestControllerException extends RuntimeException {
 
