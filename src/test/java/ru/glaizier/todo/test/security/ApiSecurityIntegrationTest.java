@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +65,7 @@ public class ApiSecurityIntegrationTest {
     @Test
     public void get401WhenTokenSignatureIsInvalid() throws Exception {
         String token = tokenService.createToken("dummyLogin");
+        // exchange prelast and preprelast chars, because last char is =
         String invalidToken = token.substring(0, token.length() - 3);
         invalidToken = invalidToken + token.charAt(token.length() - 2) + token.charAt(token.length() - 1) +
                 token.charAt(token.length() - 1);
@@ -75,30 +75,13 @@ public class ApiSecurityIntegrationTest {
                 .andExpect(status().isUnauthorized());
     }
 
-    //    @Test
-//    public void get400WhenTokenIsCorrupted() {
-//        String token = agentJWTEncoder.encodeSystemAgent("testId", "testMnemonicId");
-//        // corrupted token because we replace last = with prev symbol
-//        String corruptedToken = token.substring(0, token.length() - 2);
-//        corruptedToken = corruptedToken + token.charAt(token.length() - 1) + token.charAt(token.length() - 2);
-//
-//        ClientHttpRequestInterceptor interceptor = new ApiClientHeaderAdder(apiAuthTokenHeaderName, corruptedToken);
-//        restTemplate.getRestTemplate().setInterceptors(Collections.singletonList(interceptor));
-//
-//        ResponseEntity<String> deliveryResponse = restTemplate.getForEntity(
-//                DELIVERY_LICENSES_OBOOK_ONIX_LICENSE_ID_URL, String.class);
-//        assertThat(deliveryResponse.getStatusCode(), is(HttpStatus.BAD_REQUEST));
-//    }
-//
     @Test
-    @Ignore
-    // Add mockito amd avoid NPE in taskDao
     public void get200WhenTokenIsOk() throws Exception {
+        // We can get empty list but it's OK 200 for rest get collection
         String token = tokenService.createToken("dummyLogin");
 
         mvc.perform(get(testUri).cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
-
 }

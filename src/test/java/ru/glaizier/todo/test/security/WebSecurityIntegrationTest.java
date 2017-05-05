@@ -55,58 +55,6 @@ public class WebSecurityIntegrationTest {
                 .build();
     }
 
-//    @Test
-//    public void getApiUnauthenticatedAndReturn401() throws Exception {
-//        mvc
-//                .perform(get("/api/v1/tasks"))
-//                .andDo(print())
-//                .andExpect(status().isUnauthorized())
-//                .andExpect(unauthenticated());
-//    }
-//
-//    @Test
-//    @WithMockUser(value = "fake")
-//    public void getApiAuthenticatedWhenFakeUserIsPresent() throws Exception {
-//        mvc
-//                .perform(get("/api/v1/tasks"))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(authenticated().withUsername("fake").withRoles("USER"));
-//    }
-//
-//    @Test
-//    public void getApiAuthenticatedWhenRealUserIsPresent() throws Exception {
-//        mvc
-//                .perform(get("/api/v1/tasks").with(httpBasic("u", "p")))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(authenticated().withUsername("u").withRoles("USER"));
-//    }
-//
-//    @Test
-//    public void getApiAuthenticatedWhenRealAdminIsPresent() throws Exception {
-//        mvc
-//                .perform(get("/api/v1/tasks").with(httpBasic("a", "p")))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(authenticated().withUsername("a").withRoles("USER", "ADMIN"));
-//    }
-//
-//    @Test
-//    public void getApiUnauthenticatedBecauseOfWrongPasswordOrLogin() throws Exception {
-//
-//        mvc
-//                .perform(get("/api/v1/tasks").with(httpBasic("u", "p1")))
-//                .andDo(print())
-//                .andExpect(status().isUnauthorized());
-//
-//        mvc
-//                .perform(get("/api/v1/tasks").with(httpBasic("u1", "p")))
-//                .andDo(print())
-//                .andExpect(status().isUnauthorized());
-//    }
-
-
     @Test
     public void getTasksUnauthenticatedAndRedirectToLogin() throws Exception {
         mvc
