@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/GlaIZier/todo.svg?branch=master)](https://travis-ci.org/GlaIZier/todo)
+
 ## Todo
 Spring mvc todo list app
 
