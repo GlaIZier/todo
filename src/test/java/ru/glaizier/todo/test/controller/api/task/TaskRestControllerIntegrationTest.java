@@ -1,14 +1,18 @@
-package ru.glaizier.todo.test.security;
+package ru.glaizier.todo.test.controller.api.task;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -18,6 +22,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
+import ru.glaizier.todo.domain.Task;
 import ru.glaizier.todo.properties.PropertiesService;
 import ru.glaizier.todo.security.token.TokenService;
 
@@ -30,7 +35,7 @@ import javax.servlet.http.Cookie;
         RootConfig.class
 })
 @WebAppConfiguration
-public class ApiSecurityIntegrationTest {
+public class TaskRestControllerIntegrationTest {
 
     private static final String testUri = "/api/me/tasks";
 
@@ -54,34 +59,28 @@ public class ApiSecurityIntegrationTest {
     }
 
     @Test
-    public void get401WhenTokenCookieIsMissing() throws Exception {
-        // need to provide dummy cookie or we will get NullPointerException while getting cookies in filter:
-        // req.getCookies
-        mvc.perform(get(testUri).cookie(new Cookie("dummy", "dummy")))
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    public void get401WhenTokenSignatureIsInvalid() throws Exception {
-        String token = tokenService.createToken("dummyLogin");
-        // exchange prelast and preprelast chars, because last char is =
-        String invalidToken = token.substring(0, token.length() - 3);
-        invalidToken = invalidToken + token.charAt(token.length() - 2) + token.charAt(token.length() - 1) +
-                token.charAt(token.length() - 1);
-
-        mvc.perform(get(testUri).cookie(new Cookie(propertiesService.getApiTokenCookieName(), invalidToken)))
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    public void get200WhenTokenIsOk() throws Exception {
+    public void get200WhenGetTasks() throws Exception {
         // We can get empty list but it's OK 200 for rest get collection
         String token = tokenService.createToken("dummyLogin");
 
-        mvc.perform(get(testUri).cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
+        mvc.perform(get("/api/me/tasks").cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
+
+    @Test
+    public void get400WhenCreateTaskForUnknownUser() throws Exception {
+        // We can get empty list but it's OK 200 for rest get collection
+        String token = tokenService.createToken("dummyLogin");
+
+        mvc.perform(post("/api/me/tasks")
+                .content(new ObjectMapper().writeValueAsString(new Task(1, "todo1")))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .with(csrf())
+                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+
 }

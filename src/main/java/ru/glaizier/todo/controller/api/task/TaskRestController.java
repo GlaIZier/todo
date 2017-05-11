@@ -1,5 +1,10 @@
 package ru.glaizier.todo.controller.api.task;
 
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +13,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.glaizier.todo.dao.TaskDao;
 import ru.glaizier.todo.domain.Task;
@@ -18,12 +27,11 @@ import ru.glaizier.todo.domain.api.Error;
 import ru.glaizier.todo.domain.api.Link;
 import ru.glaizier.todo.properties.PropertiesService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
 import java.util.List;
 
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(value = {"/api/v1/me/tasks", "/api/me/tasks"})
@@ -57,9 +65,9 @@ public class TaskRestController {
         return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(RestControllerBadRequesException.class)
+    @ExceptionHandler(RestControllerBadRequestException.class)
     public ResponseEntity<ApiError> handleBadRequestException(
-            RestControllerBadRequesException e) {
+            RestControllerBadRequestException e) {
         log.error("Request to task rest controller failed: " + e.getMessage(), e);
 
         ApiError apiError = new ApiError(new Error(ApiError.BAD_REQUEST.getError().getCode(), e.getMessage()));
@@ -88,7 +96,7 @@ public class TaskRestController {
                                                     @RequestBody Task task) {
         task = taskDao.createTask(getLogin(req), task);
         if (task == null)
-            throw new RestControllerBadRequesException("Task creation failed! Login hasn't been found to create task for!");
+            throw new RestControllerBadRequestException("Task creation failed! Login hasn't been found to create task for!");
 
         HttpHeaders headers = new HttpHeaders();
         URI locationUri = UriComponentsBuilder.newInstance()
@@ -144,7 +152,7 @@ public class TaskRestController {
     private String getLogin(HttpServletRequest req) {
         String login = (String) req.getSession().getAttribute(propertiesService.getApiTokenSessionAttributeName());
         if (login == null)
-            throw new RestControllerBadRequesException("Couldn't get login from Http session!");
+            throw new RestControllerBadRequestException("Couldn't get login from Http session!");
         return login;
     }
 

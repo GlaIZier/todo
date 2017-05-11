@@ -37,7 +37,6 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
         jwtTokenCookie.setMaxAge(180);
         httpServletResponse.addCookie(jwtTokenCookie);
 
-        //Todo Read about filters and create filter to api
         super.onAuthenticationSuccess(httpServletRequest, httpServletResponse, auth);
     }
 

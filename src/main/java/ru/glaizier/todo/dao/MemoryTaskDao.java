@@ -3,8 +3,13 @@ package ru.glaizier.todo.dao;
 import org.springframework.stereotype.Repository;
 import ru.glaizier.todo.domain.Task;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import javax.annotation.PostConstruct;
-import java.util.*;
 
 @Repository
 public class MemoryTaskDao implements TaskDao {
@@ -36,6 +41,9 @@ public class MemoryTaskDao implements TaskDao {
 
     @Override
     public Task createTask(String login, Task task) {
+        if (!containsLogin(login))
+            return null;
+
         Integer newId = getLastId(login).orElse(0) + 1;
         Task newTask = new Task(newId, task.getTodo());
 
