@@ -40,12 +40,12 @@ public class MemoryTaskDao implements TaskDao {
     }
 
     @Override
-    public Task createTask(String login, Task task) {
+    public Task createTask(String login, String todo) {
         if (!containsLogin(login))
             return null;
 
         Integer newId = getLastId(login).orElse(0) + 1;
-        Task newTask = new Task(newId, task.getTodo());
+        Task newTask = new Task(newId, todo);
 
         Map<Integer, Task> idToTask = loginToIdToTasks.get(login);
         if (idToTask == null)

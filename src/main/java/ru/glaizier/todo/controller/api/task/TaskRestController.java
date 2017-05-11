@@ -55,6 +55,9 @@ public class TaskRestController {
 
     private final PropertiesService propertiesService;
 
+    /**
+     * Exceptions
+     */
     // Todo add mdc and logging aspects here to handle exceptionHandlers?
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleException(
@@ -83,6 +86,9 @@ public class TaskRestController {
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Methods
+     */
     @RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<ApiData<List<Task>>> getTasks(HttpServletRequest req) {
         List<Task> tasks = taskDao.getTasks(getLogin(req));
@@ -93,8 +99,8 @@ public class TaskRestController {
     @RequestMapping(method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ApiData<Task>> createTask(HttpServletRequest req,
-                                                    @RequestBody Task task) {
-        task = taskDao.createTask(getLogin(req), task);
+                                                    @RequestBody String todo) {
+        Task task = taskDao.createTask(getLogin(req), todo);
         if (task == null)
             throw new RestControllerBadRequestException("Task creation failed! Login hasn't been found to create task for!");
 

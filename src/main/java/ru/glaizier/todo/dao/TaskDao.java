@@ -19,10 +19,10 @@ public interface TaskDao {
 
     /**
      * @param login of user to create Task for
-     * @param task  to create
+     * @param todo to create Task with
      * @return created Task or null if there is no user with such login
      */
-    Task createTask(String login, Task task);
+    Task createTask(String login, String todo);
 
     // specific task
 
