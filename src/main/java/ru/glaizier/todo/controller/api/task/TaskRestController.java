@@ -1,5 +1,6 @@
 package ru.glaizier.todo.controller.api.task;
 
+import static java.lang.String.format;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -96,13 +97,15 @@ public class TaskRestController {
         return new ResponseEntity<>(apiData, HttpStatus.OK);
     }
 
-    @RequestMapping(method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
-            consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE
+            /*consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_JSON_VALUE}*/)
     public ResponseEntity<ApiData<Task>> createTask(HttpServletRequest req,
                                                     @RequestBody String todo) {
-        Task task = taskDao.createTask(getLogin(req), todo);
+        String login = getLogin(req);
+        Task task = taskDao.createTask(login, todo);
         if (task == null)
-            throw new RestControllerBadRequestException("Task creation failed! Login hasn't been found to create task for!");
+            throw new RestControllerNotFoundException(format("Task creation failed! " +
+                    "Login %s hasn't been found to create task for!", login));
 
         HttpHeaders headers = new HttpHeaders();
         URI locationUri = UriComponentsBuilder.newInstance()
@@ -129,14 +132,14 @@ public class TaskRestController {
         return new ResponseEntity<>(apiData, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{id}", method = PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
-            consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value = "/{id}", method = PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE
+            /*consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_JSON_VALUE}*/)
     public ResponseEntity<ApiData<Task>> updateTask(HttpServletRequest req,
                                                     @PathVariable int id,
-                                                    @RequestBody Task task) {
-        Task updatedTask = new Task(id, "todo" + id);
+                                                    @RequestBody String todo) {
+        Task updatedTask = new Task(id, todo);
         String login = getLogin(req);
-        if (taskDao.updateTask(login, task) == null)
+        if (taskDao.updateTask(login, updatedTask) == null)
             throw new RestControllerNotFoundException(login, id);
 
         ApiData<Task> apiData = new ApiData<>(updatedTask, new Link("http"));

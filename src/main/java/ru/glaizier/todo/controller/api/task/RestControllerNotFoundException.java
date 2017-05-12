@@ -4,21 +4,21 @@ import static java.lang.String.format;
 
 public class RestControllerNotFoundException extends RestControllerException {
 
-    private final static String msgToFormat = "Task for user %s with id %d hasn't been found!";
-
-    private final String login;
-
-    private final int id;
+    public final static String TASK_NOT_FOUND_FORMAT_MESSAGE = "Task for user %s with id %d hasn't been found!";
 
     public RestControllerNotFoundException(String login, int id) {
-        super(format(msgToFormat, login, id));
-        this.login = login;
-        this.id = id;
+        super(format(TASK_NOT_FOUND_FORMAT_MESSAGE, login, id));
     }
 
     public RestControllerNotFoundException(String login, int id, Throwable cause) {
-        super(format(msgToFormat, login, id), cause);
-        this.login = login;
-        this.id = id;
+        super(format(TASK_NOT_FOUND_FORMAT_MESSAGE, login, id), cause);
+    }
+
+    public RestControllerNotFoundException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public RestControllerNotFoundException(String message) {
+        super(message);
     }
 }
