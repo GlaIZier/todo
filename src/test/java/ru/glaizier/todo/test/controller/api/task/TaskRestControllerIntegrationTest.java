@@ -93,6 +93,7 @@ public class TaskRestControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", "/api/me/tasks/3"));
+        throw new RuntimeException();
     }
 
 }
