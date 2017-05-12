@@ -3,5 +3,7 @@ jdk: oraclejdk8
 script: mvn clean verify
 notifications:
   email:
+    recipients:
+      - kh.mv@bk.ru
     on_success: never
     on_failure: always
