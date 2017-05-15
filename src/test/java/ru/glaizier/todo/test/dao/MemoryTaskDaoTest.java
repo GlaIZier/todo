@@ -1,5 +1,10 @@
 package ru.glaizier.todo.test.dao;
 
+import static junit.framework.TestCase.assertNull;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +15,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
 import ru.glaizier.todo.dao.TaskDao;
-import ru.glaizier.todo.properties.PropertiesService;
-
-import static junit.framework.TestCase.assertNull;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
+import ru.glaizier.todo.domain.Task;
 
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -25,9 +25,6 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER
 })
 @WebAppConfiguration
 public class MemoryTaskDaoTest {
-
-    @Autowired
-    private PropertiesService propertiesService;
 
     @Autowired
     private TaskDao memoryTaskDao;
@@ -42,68 +39,72 @@ public class MemoryTaskDaoTest {
         assertNull(memoryTaskDao.getTasks("dummyLogin"));
     }
 
-//    @Test
-//    public void get2TasksOnGetTasks() {
-//        assertThat(memoryTaskDao.getTasks("u").size(), is(2));
-//    }
-//
-//    @Test
-//    public void get2TasksOnGetTasks() {
-//        assertThat(memoryTaskDao.getTasks("u").size(), is(2));
-//    }
-//
-//    @Test
-//    public void get2TasksOnGetTasks() {
-//        assertThat(memoryTaskDao.getTasks("u").size(), is(2));
-//    }
-//
-//    @Test
-//    public void get2TasksOnGetTasks() {
-//        assertThat(memoryTaskDao.getTasks("u").size(), is(2));
-//    }
-//
-//    @Test
-//    public void get2TasksOnGetTasks() {
-//        assertThat(memoryTaskDao.getTasks("u").size(), is(2));
-//    }
+    @Test
+    public void getTheSameTaskAsCreatedOnCreateTask() {
+        Task task = new Task(3, "created todo100");
+        assertThat(memoryTaskDao.createTask("u", task.getTodo()), is(task));
+    }
 
+    @Test
+    public void getNullOnCreateTaskForUnknownUser() {
+        assertNull(memoryTaskDao.createTask("dummyLogin", "created todo100"));
+    }
 
+    @Test
+    public void getTaskOnGetTask() {
+        assertThat(memoryTaskDao.getTask("u", 1),
+                is(new Task(1, "todo1")));
+    }
+
+    @Test
+    public void getNullOnGetTaskForUnknownId() {
+        assertNull(memoryTaskDao.getTask("u", 3));
+    }
+
+    @Test
+    public void getNullOnGetTaskForUnknownUser() {
+        assertNull(memoryTaskDao.getTask("dummyLogin", 1));
+    }
+
+    @Test
+    public void getPreviousTaskOnUpdateTask() {
+        assertThat(memoryTaskDao.updateTask("u", new Task(1, "updated todo100")),
+                is(new Task(1, "todo1")));
+    }
+
+    @Test
+    public void getNullOnUpdateTaskForUnknownId() {
+        assertNull(memoryTaskDao.updateTask("u", new Task(3, "created todo100")));
+    }
+
+    @Test
+    public void getNullOnUpdateTaskForUnknownUser() {
+        assertNull(memoryTaskDao.updateTask("dummyLogin", new Task(1, "created todo100")));
+    }
+
+    @Test
+    public void getRemovedTaskOnRemoveTask() {
+        assertThat(memoryTaskDao.removeTask("u", 1),
+                is(new Task(1, "todo1")));
+    }
+
+    @Test
+    public void getNullOnRemoveTaskForUnknownId() {
+        assertNull(memoryTaskDao.removeTask("u", 3));
+    }
+
+    @Test
+    public void getNullOnRemoveTaskForUnknownUser() {
+        assertNull(memoryTaskDao.removeTask("dummyLogin", 1));
+    }
+
+    @Test
+    public void getTrueOnContainsUser() {
+        assertThat(memoryTaskDao.containsLogin("u"), is(true));
+    }
+
+    @Test
+    public void getFalseOnContainsUserUnknownUser() {
+        assertThat(memoryTaskDao.containsLogin("dummyLogin"), is(false));
+    }
 }
-
-//    /**
-//     * @param login of user to create Task for
-//     * @param todo to create Task with
-//     * @return created Task or null if there is no user with such login
-//     */
-//    Task createTask(String login, String todo);
-//
-//    // specific task
-//
-//    /**
-//     * @param login of user to get Task for
-//     * @param id    of the task
-//     * @return Task for that id or null if there is no task or no such login
-//     */
-//    Task getTask(String login, int id);
-//
-//    /**
-//     * @param login of user to update Task for
-//     * @param task  to update
-//     * @return previous Task or null if there is no task with this id or no such login
-//     */
-//    Task updateTask(String login, Task task);
-//
-//    /**
-//     * @param login of user to remove Task for
-//     * @param id    task id to delete
-//     * @return deleted Task or null if there is no task with this id or no such login
-//     */
-//    Task removeTask(String login, int id);
-//
-//    /**
-//     * Use this method to understand what means null in other methods return (no login or another)
-//     *
-//     * @param login of user
-//     * @return true if there is such login or false otherwise
-//     */
-//    boolean containsLogin(String login);
