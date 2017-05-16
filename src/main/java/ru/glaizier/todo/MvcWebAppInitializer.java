@@ -5,9 +5,7 @@ import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
 
 // Todo add aop logging
-// Todo add continuous integration to run tests automatically
 // Todo think about exception handling architecture
-// Todo move all config constants to properties file and think about creating class (service) with all this values injected
 public class MvcWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override

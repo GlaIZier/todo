@@ -26,7 +26,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-// Todo add tests for api filtering process
 public class ApiTokenAuthenticationFilter extends GenericFilterBean {
 
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -59,7 +58,7 @@ public class ApiTokenAuthenticationFilter extends GenericFilterBean {
                 try {
                     MDC.put(LOGIN, login.get());
                     MDC.put(TOKEN, optionalTokenCookie.get().getValue());
-                    log.info("Api authentication success!");
+                    log.debug("Api authentication success!");
                 } finally {
                     MDC.clear();
                 }

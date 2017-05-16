@@ -39,7 +39,6 @@ import ru.glaizier.todo.config.servlet.ServletConfig;
         RootConfig.class
 })
 @WebAppConfiguration
-// Todo fix tests for api after api will be done
 public class WebSecurityIntegrationTest {
 
     @Autowired

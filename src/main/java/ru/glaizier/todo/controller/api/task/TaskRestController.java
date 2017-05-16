@@ -40,7 +40,6 @@ import javax.servlet.http.HttpServletRequest;
 // Todo add method security
 // Todo add different views for rest (html+json)?
 // Todo add swagger for rest api
-// Todo add tests for rest controller
 // Todo add AuthRestController to authenticate user via rest
 
 // Ide shows error but this works
