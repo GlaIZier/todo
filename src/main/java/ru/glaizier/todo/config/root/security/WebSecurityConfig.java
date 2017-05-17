@@ -48,6 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // configure UserDetailsService
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(inMemoryUserDetailsService());
+        // Don't erase password after authentication
         auth.eraseCredentials(false);
     }
 

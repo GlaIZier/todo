@@ -1,6 +1,7 @@
-package ru.glaizier.todo.dao;
+package ru.glaizier.todo.dao.memory;
 
 import org.springframework.stereotype.Repository;
+import ru.glaizier.todo.dao.TaskDao;
 import ru.glaizier.todo.domain.Task;
 
 import java.util.ArrayList;
