@@ -30,7 +30,7 @@ import ru.glaizier.todo.properties.PropertiesService;
 
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
-import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -90,9 +90,9 @@ public class TaskRestController {
      * Methods
      */
     @RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ApiData<List<Task>>> getTasks(HttpServletRequest req) {
-        List<Task> tasks = taskDao.getTasks(getLogin(req));
-        ApiData<List<Task>> apiData = new ApiData<>(tasks, new Link("http"));
+    public ResponseEntity<ApiData<Set<Task>>> getTasks(HttpServletRequest req) {
+        Set<Task> tasks = taskDao.getTasks(getLogin(req));
+        ApiData<Set<Task>> apiData = new ApiData<>(tasks, new Link("http"));
         return new ResponseEntity<>(apiData, HttpStatus.OK);
     }
 

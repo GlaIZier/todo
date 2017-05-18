@@ -1,91 +1,51 @@
 package ru.glaizier.todo.dao.memory;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import ru.glaizier.todo.dao.Db;
 import ru.glaizier.todo.dao.TaskDao;
 import ru.glaizier.todo.domain.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import javax.annotation.PostConstruct;
+import java.util.Set;
 
 @Repository
 public class MemoryTaskDao implements TaskDao {
 
-    private final Map<String, Map<Integer, Task>> loginToIdToTasks = new HashMap<>();
+    private final Db db;
 
-    @PostConstruct
-    private void init() {
-        Map<Integer, Task> idToTask = new HashMap<>();
-        idToTask.put(1, new Task(1, "todo1"));
-        idToTask.put(2, new Task(2, "todo2"));
-        loginToIdToTasks.put("u", idToTask);
-
-        idToTask = new HashMap<>();
-        idToTask.put(1, new Task(1, "todo1"));
-        loginToIdToTasks.put("a", idToTask);
-    }
-
-    private Optional<Integer> getLastId(String login) {
-        return loginToIdToTasks.get(login).keySet().stream().max(Integer::compareTo);
+    @Autowired
+    public MemoryTaskDao(Db db) {
+        this.db = db;
     }
 
     @Override
-    public List<Task> getTasks(String login) {
-        if (loginToIdToTasks.get(login) == null)
-            return null;
-        return new ArrayList<>(loginToIdToTasks.get(login).values());
+    public Set<Task> getTasks(String login) {
+        return db.getTasks(login);
     }
 
     @Override
     public Task createTask(String login, String todo) {
-        if (!containsLogin(login))
-            return null;
-
-        Integer newId = getLastId(login).orElse(0) + 1;
-        Task newTask = new Task(newId, todo);
-
-        Map<Integer, Task> idToTask = loginToIdToTasks.get(login);
-        if (idToTask == null)
-            idToTask = new HashMap<>();
-        idToTask.put(newId, newTask);
-        loginToIdToTasks.put(login, idToTask);
-
-        return newTask;
+        return db.createTask(login, todo);
     }
 
     @Override
     public Task getTask(String login, int id) {
-        return (loginToIdToTasks.get(login) == null) ? null : loginToIdToTasks.get(login).get(id);
+        return db.getTask(login, id);
     }
 
     @Override
     public Task updateTask(String login, Task task) {
-        if (loginToIdToTasks.get(login) == null)
-            return null;
-
-        Task prevTask = loginToIdToTasks.get(login).get(task.getId());
-        if (prevTask != null) {
-            Task updatedTask = new Task(task.getId(), task.getTodo());
-            Map<Integer, Task> updatedMap = loginToIdToTasks.get(login);
-            updatedMap.put(updatedTask.getId(), updatedTask);
-        }
-        return prevTask;
+        return db.updateTask(login, task);
     }
 
     @Override
     public Task removeTask(String login, int id) {
-        if (loginToIdToTasks.get(login) == null)
-            return null;
-        return loginToIdToTasks.get(login).remove(id);
+        return db.removeTask(login, id);
     }
 
     @Override
     public boolean containsLogin(String login) {
-        return loginToIdToTasks.containsKey(login);
+        return db.containsLogin(login);
     }
 
 }

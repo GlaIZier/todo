@@ -2,7 +2,7 @@ package ru.glaizier.todo.dao;
 
 import ru.glaizier.todo.domain.Task;
 
-import java.util.List;
+import java.util.Set;
 
 // Todo add spring JPA interface
 // Todo move to repository pattern instead of Dao?
@@ -15,7 +15,7 @@ public interface TaskDao {
      * @param login of user to get Tasks for
      * @return List of Tasks or null if there is no tasks for this login or no such login
      */
-    List<Task> getTasks(String login);
+    Set<Task> getTasks(String login);
 
     /**
      * @param login of user to create Task for
