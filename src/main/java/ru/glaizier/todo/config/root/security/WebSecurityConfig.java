@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import ru.glaizier.todo.dao.UserDao;
 import ru.glaizier.todo.properties.PropertiesService;
 import ru.glaizier.todo.security.handler.LoginSuccessHandler;
 import ru.glaizier.todo.security.token.TokenService;
@@ -19,14 +20,20 @@ import ru.glaizier.todo.security.token.TokenService;
 @Order(2)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private PropertiesService propertiesService;
+    private final PropertiesService propertiesService;
 
-    private TokenService tokenService;
+    private final TokenService tokenService;
+
+    private final UserDao userDao;
 
     @Autowired
-    public WebSecurityConfig(TokenService tokenService, PropertiesService propertiesService) {
+    public WebSecurityConfig(
+            TokenService tokenService,
+            PropertiesService propertiesService,
+            UserDao userDao) {
         this.propertiesService = propertiesService;
         this.tokenService = tokenService;
+        this.userDao = userDao;
     }
 
     @Bean
@@ -39,8 +46,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // Todo add password encoding (hash + salt)
     public UserDetailsService inMemoryUserDetailsService() throws Exception {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withUsername("u").password("p").roles("USER").build());
-        manager.createUser(User.withUsername("a").password("p").roles("USER", "ADMIN").build());
+        // Todo!!! add all roles here
+        userDao.getUsers().forEach(user -> {
+            manager.createUser(User.withUsername(user.getLogin()).password(String.valueOf(user.getPassword()))
+                    .roles(user.getRoles().get(0).toString()).build());
+        });
+//        manager.createUser(User.withUsername("u").password("p").roles("USER").build());
+//        manager.createUser(User.withUsername("a").password("p").roles("USER", "ADMIN").build());
         return manager;
     }
 
