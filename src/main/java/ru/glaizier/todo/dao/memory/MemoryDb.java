@@ -46,6 +46,11 @@ public class MemoryDb implements Db {
     }
 
     @Override
+    public User getUser(String login) {
+        return loginToUser.get(login);
+    }
+
+    @Override
     public User removeUser(String login) {
         loginToIdToTask.remove(login);
         return loginToUser.remove(login);

@@ -6,7 +6,10 @@ import ru.glaizier.todo.domain.User;
 import java.util.Set;
 
 public interface Db {
+
     void addUser(User user);
+
+    User getUser(String login);
 
     User removeUser(String login);
 

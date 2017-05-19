@@ -23,6 +23,11 @@ public class MemoryUserDao implements UserDao {
     }
 
     @Override
+    public User getUser(String login) {
+        return db.getUser(login);
+    }
+
+    @Override
     public User removeUser(String login) {
         return db.removeUser(login);
     }
