@@ -12,9 +12,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import ru.glaizier.todo.dao.UserDao;
+import ru.glaizier.todo.domain.Role;
 import ru.glaizier.todo.properties.PropertiesService;
 import ru.glaizier.todo.security.handler.LoginSuccessHandler;
 import ru.glaizier.todo.security.token.TokenService;
+
+import java.util.stream.Collectors;
 
 @Configuration
 @Order(2)
@@ -37,6 +40,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    // Todo play with injecting configs in method beans directly without Autowired
+    // Todo start here!!!
+    /*
+    @Autowired beans sequence. When is init methods called? after all beans are created? Or one created -> init method
+    one created -> init method. @Autowired beans sequence?
+    Context init sequence?
+     */
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
         return new LoginSuccessHandler(tokenService, propertiesService.getApiTokenCookieName());
     }
@@ -46,10 +56,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // Todo add password encoding (hash + salt)
     public UserDetailsService inMemoryUserDetailsService() throws Exception {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        // Todo!!! add all roles here
         userDao.getUsers().forEach(user -> {
-            manager.createUser(User.withUsername(user.getLogin()).password(String.valueOf(user.getPassword()))
-                    .roles(user.getRoles().get(0).toString()).build());
+            manager.createUser(
+                    User.withUsername(user.getLogin()).password(String.valueOf(user.getPassword()))
+                            // Roles -> (to) Strings -> List of strings -> array of strings
+                            .roles(user.getRoles().stream().map(Role::toString).collect(Collectors.toList())
+                                    .toArray(new String[user.getRoles().size()]))
+                            .build());
         });
 //        manager.createUser(User.withUsername("u").password("p").roles("USER").build());
 //        manager.createUser(User.withUsername("a").password("p").roles("USER", "ADMIN").build());
