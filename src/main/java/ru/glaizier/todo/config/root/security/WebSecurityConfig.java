@@ -40,13 +40,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    // Todo play with injecting configs in method beans directly without Autowired
-    // Todo start here!!!
-    /*
-    @Autowired beans sequence. When is init methods called? after all beans are created? Or one created -> init method
-    one created -> init method. @Autowired beans sequence?
-    Context init sequence?
-     */
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
         return new LoginSuccessHandler(tokenService, propertiesService.getApiTokenCookieName());
     }
@@ -56,14 +49,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // Todo add password encoding (hash + salt)
     public UserDetailsService inMemoryUserDetailsService() throws Exception {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        userDao.getUsers().forEach(user -> {
+        userDao.getUsers().forEach(user ->
             manager.createUser(
                     User.withUsername(user.getLogin()).password(String.valueOf(user.getPassword()))
-                            // Roles -> (to) Strings -> List of strings -> array of strings
+                            // Roles -> (to) Strings -> List of Strings -> array of Strings
                             .roles(user.getRoles().stream().map(Role::toString).collect(Collectors.toList())
                                     .toArray(new String[user.getRoles().size()]))
-                            .build());
-        });
+                            .build())
+        );
 //        manager.createUser(User.withUsername("u").password("p").roles("USER").build());
 //        manager.createUser(User.withUsername("a").password("p").roles("USER", "ADMIN").build());
         return manager;
