@@ -15,6 +15,14 @@ public interface UserDao {
     User getUser(String login);
 
     /**
+     * @param login    for User to get
+     * @param password for User to get
+     * @return User with such login and password or null if there is no User with such login or password in incorrect.
+     * Use getUser(String login) to ensure that User is present
+     */
+    User getUserWithPassword(String login, char[] password);
+
+    /**
      * @param login to remove
      * @return removed User or null if there is no User with such login
      */

@@ -61,6 +61,22 @@ public class MemoryUserDaoTest {
     }
 
     @Test
+    public void getExistUserOnGetUserWithPassword() {
+        assertThat(memoryUserDao.getUserWithPassword(dummyInitUser.getLogin(), dummyInitUser.getPassword()),
+                is(dummyInitUser));
+    }
+
+    @Test
+    public void getNullForWrongPasswordOnGetUserWithPassword() {
+        assertNull(memoryUserDao.getUserWithPassword(dummyInitUser.getLogin(), "wrongPassword".toCharArray()));
+    }
+
+    @Test
+    public void getNullForNonExistUserOnGetUserWithPassword() {
+        assertNull(memoryUserDao.getUser("NonExistLogin"));
+    }
+
+    @Test
     public void getRemovedUserOnRemoveUser() {
         assertThat(memoryUserDao.removeUser(dummyInitUser.getLogin()), is(dummyInitUser));
     }

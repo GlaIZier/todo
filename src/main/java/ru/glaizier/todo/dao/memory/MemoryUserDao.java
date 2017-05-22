@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import ru.glaizier.todo.dao.UserDao;
 import ru.glaizier.todo.domain.User;
 
+import java.util.Arrays;
 import java.util.Set;
 
 @Repository
@@ -25,6 +26,12 @@ public class MemoryUserDao implements UserDao {
     @Override
     public User getUser(String login) {
         return db.getUser(login);
+    }
+
+    @Override
+    public User getUserWithPassword(String login, char[] password) {
+        User user = getUser(login);
+        return Arrays.equals(user.getPassword(), password) ? user : null;
     }
 
     @Override
