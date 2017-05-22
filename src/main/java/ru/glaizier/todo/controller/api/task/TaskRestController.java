@@ -14,12 +14,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
+import ru.glaizier.todo.controller.api.exception.ApiBadRequestException;
+import ru.glaizier.todo.controller.api.exception.ApiNotFoundException;
+import ru.glaizier.todo.controller.api.exception.ApiTaskNotFoundException;
 import ru.glaizier.todo.dao.TaskDao;
 import ru.glaizier.todo.domain.Task;
 import ru.glaizier.todo.domain.api.ApiData;
@@ -68,18 +72,18 @@ public class TaskRestController {
         return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(RestControllerBadRequestException.class)
+    @ExceptionHandler(ApiBadRequestException.class)
     public ResponseEntity<ApiError> handleBadRequestException(
-            RestControllerBadRequestException e) {
+            ApiBadRequestException e) {
         log.error("Request to task rest controller failed: " + e.getMessage(), e);
 
         ApiError apiError = new ApiError(new Error(ApiError.BAD_REQUEST.getError().getCode(), e.getMessage()));
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(RestControllerNotFoundException.class)
+    @ExceptionHandler({ApiNotFoundException.class, ApiTaskNotFoundException.class})
     public ResponseEntity<ApiError> handleNotFoundException(
-            RestControllerNotFoundException e) {
+            ApiNotFoundException e) {
         log.error("Request to task rest controller failed: " + e.getMessage(), e);
 
         ApiError apiError = new ApiError(new Error(ApiError.NOT_FOUND.getError().getCode(), e.getMessage()));
@@ -100,10 +104,11 @@ public class TaskRestController {
             /*consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_JSON_VALUE}*/)
     public ResponseEntity<ApiData<Task>> createTask(HttpServletRequest req,
                                                     @RequestBody String todo) {
+        checkTodoIsNotEmpty(todo);
         String login = getLogin(req);
         Task task = taskDao.createTask(login, todo);
         if (task == null)
-            throw new RestControllerNotFoundException(format("Task creation failed! " +
+            throw new ApiNotFoundException(format("Task creation failed! " +
                     "Login %s hasn't been found to create task for!", login));
 
         HttpHeaders headers = new HttpHeaders();
@@ -118,14 +123,13 @@ public class TaskRestController {
         return new ResponseEntity<>(apiData, headers, HttpStatus.CREATED);
     }
 
-    // Todo add here Response Entity
     @RequestMapping(value = "/{id}", method = GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<ApiData<Task>> getTask(HttpServletRequest req,
                                                  @PathVariable int id) {
         String login = getLogin(req);
         Task task = taskDao.getTask(login, id);
         if (task == null)
-            throw new RestControllerNotFoundException(login, id);
+            throw new ApiTaskNotFoundException(login, id);
 
         ApiData<Task> apiData = new ApiData<>(task, new Link("http"));
         return new ResponseEntity<>(apiData, HttpStatus.OK);
@@ -139,7 +143,7 @@ public class TaskRestController {
         Task updatedTask = new Task(id, todo);
         String login = getLogin(req);
         if (taskDao.updateTask(login, updatedTask) == null)
-            throw new RestControllerNotFoundException(login, id);
+            throw new ApiTaskNotFoundException(login, id);
 
         ApiData<Task> apiData = new ApiData<>(updatedTask, new Link("http"));
         return new ResponseEntity<>(apiData, HttpStatus.OK);
@@ -151,7 +155,7 @@ public class TaskRestController {
         String login = getLogin(req);
         Task task = taskDao.removeTask(login, id);
         if (task == null)
-            throw new RestControllerNotFoundException(login, id);
+            throw new ApiTaskNotFoundException(login, id);
 
         ApiData<Task> apiData = new ApiData<>(task, new Link("http"));
         return new ResponseEntity<>(apiData, HttpStatus.OK);
@@ -160,8 +164,13 @@ public class TaskRestController {
     private String getLogin(HttpServletRequest req) {
         String login = (String) req.getSession().getAttribute(propertiesService.getApiTokenSessionAttributeName());
         if (login == null)
-            throw new RestControllerBadRequestException("Couldn't get login from Http session!");
+            throw new ApiBadRequestException("Couldn't get login from Http session!");
         return login;
+    }
+
+    private void checkTodoIsNotEmpty(String todo) {
+        if (StringUtils.isEmpty(StringUtils.trimWhitespace(todo)))
+            throw new ApiBadRequestException("Provided todo is empty or null!");
     }
 
 }
