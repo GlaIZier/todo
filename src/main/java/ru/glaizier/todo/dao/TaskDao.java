@@ -6,7 +6,7 @@ import java.util.Set;
 
 // Todo add spring JPA interface
 // Todo move to repository pattern instead of Dao?
-// Todo create method to control logins like create, remove?
+// Todo add memory and prod db and profiles for that
 public interface TaskDao {
 
     // collection

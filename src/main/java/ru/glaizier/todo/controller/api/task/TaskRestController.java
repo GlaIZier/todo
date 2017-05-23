@@ -45,6 +45,7 @@ import javax.servlet.http.HttpServletRequest;
 // Todo add different views for rest (html+json)?
 // Todo add swagger for rest api
 // Todo add AuthRestController to authenticate user via rest
+// Todo consume all in json? not in xxx form url encoded
 
 // Ide shows error but this works
 @RequiredArgsConstructor(onConstructor_ = {

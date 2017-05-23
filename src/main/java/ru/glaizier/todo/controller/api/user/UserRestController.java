@@ -12,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.glaizier.todo.controller.api.exception.ApiBadRequestException;
@@ -67,9 +66,9 @@ public class UserRestController {
      * Methods
      */
 
-    @RequestMapping(method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE
-            /*consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_JSON_VALUE}*/)
-    public ResponseEntity<ApiData<String>> registerUser(@RequestBody InputUser inputUser) {
+    @RequestMapping(method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+    public ResponseEntity<ApiData<String>> registerUser(InputUser inputUser) {
         checkUserIsNotEmpty(inputUser);
         User createdUser = User.builder().login(inputUser.getLogin()).password(inputUser.getPassword())
                 .roles(Collections.singletonList(USER)).build();

@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class InputUser {
-    private final String login;
-    private final char[] password;
+    private String login;
+    private char[] password;
 }
