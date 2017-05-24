@@ -43,4 +43,9 @@ public class MemoryUserDao implements UserDao {
     public Set<User> getUsers() {
         return db.getUsers();
     }
+
+    @Override
+    public boolean containsUser(String login) {
+        return getUser(login) != null;
+    }
 }

@@ -30,4 +30,6 @@ public interface UserDao {
 
     Set<User> getUsers();
 
+    boolean containsUser(String login);
+
 }

@@ -90,4 +90,14 @@ public class MemoryUserDaoTest {
     public void getSetSizeMoreOrEqual1OnGetUsers() {
         assertThat(memoryUserDao.getUsers().size(), greaterThan(1));
     }
+
+    @Test
+    public void getTrueOnContainsUser() {
+        assertThat(memoryUserDao.containsUser(dummyInitUser.getLogin()), is(true));
+    }
+
+    @Test
+    public void getFalseWhenUserNotExistsOnContainsUser() {
+        assertThat(memoryUserDao.containsUser("NonExistLogin"), is(false));
+    }
 }

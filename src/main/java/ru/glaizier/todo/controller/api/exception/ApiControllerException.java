@@ -1,5 +1,6 @@
 package ru.glaizier.todo.controller.api.exception;
 
+// Todo import status code here?
 public class ApiControllerException extends RuntimeException {
 
     public ApiControllerException(String message, Throwable cause) {
