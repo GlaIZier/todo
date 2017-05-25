@@ -22,8 +22,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
-import ru.glaizier.todo.properties.PropertiesService;
-import ru.glaizier.todo.security.token.TokenService;
 
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -36,12 +34,6 @@ public class UserRestControllerIntegrationTest {
 
     @Autowired
     private WebApplicationContext context;
-
-    @Autowired
-    private TokenService tokenService;
-
-    @Autowired
-    private PropertiesService propertiesService;
 
     private MockMvc mvc;
 

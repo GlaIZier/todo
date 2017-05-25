@@ -65,13 +65,31 @@ public class AuthRestController {
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ApiNotFoundException.class)
+    public ResponseEntity<ApiError> handleNotFoundException(
+            ApiNotFoundException e) {
+        log.error("Request to rest controller failed: " + e.getMessage(), e);
+
+        ApiError apiError = new ApiError(new Error(ApiError.NOT_FOUND.getError().getCode(), e.getMessage()));
+        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ApiUnauthorizedException.class)
+    public ResponseEntity<ApiError> handleNotFoundException(
+            ApiUnauthorizedException e) {
+        log.error("Request to rest controller failed: " + e.getMessage(), e);
+
+        ApiError apiError = new ApiError(new Error(ApiError.UNAUTHORIZED.getError().getCode(), e.getMessage()));
+        return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
+    }
+
     @RequestMapping(method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     public ResponseEntity<ApiData<OutputUser>> authenticateUser(InputUser inputUser) {
         checkUserIsNotEmpty(inputUser);
 
         if (!userDao.containsUser(inputUser.getLogin()))
-            throw new ApiNotFoundException(format("User with login wan't found %s!", inputUser.getLogin()));
+            throw new ApiNotFoundException(format("User with login %s wasn't found!", inputUser.getLogin()));
 
         if (userDao.getUserWithPassword(inputUser.getLogin(), inputUser.getPassword()) == null)
             throw new ApiUnauthorizedException("Wrong credentials were provided!");
