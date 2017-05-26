@@ -26,10 +26,10 @@ import ru.glaizier.todo.controller.api.exception.ApiNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ApiTaskNotFoundException;
 import ru.glaizier.todo.dao.TaskDao;
 import ru.glaizier.todo.domain.Task;
-import ru.glaizier.todo.domain.api.ApiData;
-import ru.glaizier.todo.domain.api.ApiError;
 import ru.glaizier.todo.domain.api.Error;
 import ru.glaizier.todo.domain.api.Link;
+import ru.glaizier.todo.domain.api.output.OutputData;
+import ru.glaizier.todo.domain.api.output.OutputError;
 import ru.glaizier.todo.properties.PropertiesService;
 
 import java.lang.invoke.MethodHandles;
@@ -65,46 +65,46 @@ public class TaskRestController {
      */
     // Todo add mdc and logging aspects here to handle exceptionHandlers?
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleException(
+    public ResponseEntity<OutputError> handleException(
             Exception e) {
         log.error("Request to task rest controller failed with unexpected error: " + e.getMessage(), e);
 
-        ApiError apiError = new ApiError(new Error(ApiError.INTERNAL_SERVER_ERROR.getError().getCode(), e.getMessage()));
-        return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
+        OutputError outputError = new OutputError(new Error(OutputError.INTERNAL_SERVER_ERROR.getError().getCode(), e.getMessage()));
+        return new ResponseEntity<>(outputError, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(ApiBadRequestException.class)
-    public ResponseEntity<ApiError> handleBadRequestException(
+    public ResponseEntity<OutputError> handleBadRequestException(
             ApiBadRequestException e) {
         log.error("Request to task rest controller failed: " + e.getMessage(), e);
 
-        ApiError apiError = new ApiError(new Error(ApiError.BAD_REQUEST.getError().getCode(), e.getMessage()));
-        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+        OutputError outputError = new OutputError(new Error(OutputError.BAD_REQUEST.getError().getCode(), e.getMessage()));
+        return new ResponseEntity<>(outputError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({ApiNotFoundException.class, ApiTaskNotFoundException.class})
-    public ResponseEntity<ApiError> handleNotFoundException(
+    public ResponseEntity<OutputError> handleNotFoundException(
             ApiNotFoundException e) {
         log.error("Request to task rest controller failed: " + e.getMessage(), e);
 
-        ApiError apiError = new ApiError(new Error(ApiError.NOT_FOUND.getError().getCode(), e.getMessage()));
-        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+        OutputError outputError = new OutputError(new Error(OutputError.NOT_FOUND.getError().getCode(), e.getMessage()));
+        return new ResponseEntity<>(outputError, HttpStatus.NOT_FOUND);
     }
 
     /**
      * Methods
      */
     @RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ApiData<Set<Task>>> getTasks(HttpServletRequest req) {
+    public ResponseEntity<OutputData<Set<Task>>> getTasks(HttpServletRequest req) {
         Set<Task> tasks = taskDao.getTasks(getLogin(req));
-        ApiData<Set<Task>> apiData = new ApiData<>(tasks, new Link("http"));
-        return new ResponseEntity<>(apiData, HttpStatus.OK);
+        OutputData<Set<Task>> outputData = new OutputData<>(tasks, new Link("http"));
+        return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 
     @RequestMapping(method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE
             /*consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_JSON_VALUE}*/)
-    public ResponseEntity<ApiData<Task>> createTask(HttpServletRequest req,
-                                                    @RequestBody String todo) {
+    public ResponseEntity<OutputData<Task>> createTask(HttpServletRequest req,
+                                                       @RequestBody String todo) {
         checkTodoIsNotEmpty(todo);
         String login = getLogin(req);
         Task task = taskDao.createTask(login, todo);
@@ -120,46 +120,46 @@ public class TaskRestController {
                 .toUri();
         headers.setLocation(locationUri);
 
-        ApiData<Task> apiData = new ApiData<>(task, new Link("http"));
-        return new ResponseEntity<>(apiData, headers, HttpStatus.CREATED);
+        OutputData<Task> outputData = new OutputData<>(task, new Link("http"));
+        return new ResponseEntity<>(outputData, headers, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/{id}", method = GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ApiData<Task>> getTask(HttpServletRequest req,
-                                                 @PathVariable int id) {
+    public ResponseEntity<OutputData<Task>> getTask(HttpServletRequest req,
+                                                    @PathVariable int id) {
         String login = getLogin(req);
         Task task = taskDao.getTask(login, id);
         if (task == null)
             throw new ApiTaskNotFoundException(login, id);
 
-        ApiData<Task> apiData = new ApiData<>(task, new Link("http"));
-        return new ResponseEntity<>(apiData, HttpStatus.OK);
+        OutputData<Task> outputData = new OutputData<>(task, new Link("http"));
+        return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE
             /*consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_JSON_VALUE}*/)
-    public ResponseEntity<ApiData<Task>> updateTask(HttpServletRequest req,
-                                                    @PathVariable int id,
-                                                    @RequestBody String todo) {
+    public ResponseEntity<OutputData<Task>> updateTask(HttpServletRequest req,
+                                                       @PathVariable int id,
+                                                       @RequestBody String todo) {
         Task updatedTask = new Task(id, todo);
         String login = getLogin(req);
         if (taskDao.updateTask(login, updatedTask) == null)
             throw new ApiTaskNotFoundException(login, id);
 
-        ApiData<Task> apiData = new ApiData<>(updatedTask, new Link("http"));
-        return new ResponseEntity<>(apiData, HttpStatus.OK);
+        OutputData<Task> outputData = new OutputData<>(updatedTask, new Link("http"));
+        return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ApiData<Task>> deleteTask(HttpServletRequest req,
-                                                    @PathVariable int id) {
+    public ResponseEntity<OutputData<Task>> deleteTask(HttpServletRequest req,
+                                                       @PathVariable int id) {
         String login = getLogin(req);
         Task task = taskDao.removeTask(login, id);
         if (task == null)
             throw new ApiTaskNotFoundException(login, id);
 
-        ApiData<Task> apiData = new ApiData<>(task, new Link("http"));
-        return new ResponseEntity<>(apiData, HttpStatus.OK);
+        OutputData<Task> outputData = new OutputData<>(task, new Link("http"));
+        return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 
     private String getLogin(HttpServletRequest req) {

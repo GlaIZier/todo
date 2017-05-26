@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.filter.GenericFilterBean;
-import ru.glaizier.todo.domain.api.ApiError;
+import ru.glaizier.todo.domain.api.output.OutputError;
 import ru.glaizier.todo.properties.PropertiesService;
 import ru.glaizier.todo.security.token.TokenDecodingException;
 import ru.glaizier.todo.security.token.TokenService;
@@ -47,7 +47,7 @@ public class ApiTokenAuthenticationFilter extends GenericFilterBean {
 
         Optional<Cookie> optionalTokenCookie = findTokenCookie(req);
         if (!findTokenCookie(req).isPresent()) {
-            writeErrorToResponse(null, resp, HttpStatus.UNAUTHORIZED, ApiError.UNAUTHORIZED);
+            writeErrorToResponse(null, resp, HttpStatus.UNAUTHORIZED, OutputError.UNAUTHORIZED);
             return;
         }
         try {
@@ -65,14 +65,14 @@ public class ApiTokenAuthenticationFilter extends GenericFilterBean {
             }
             else {
                 writeErrorToResponse(optionalTokenCookie.get().getValue(),
-                        resp, HttpStatus.UNAUTHORIZED, ApiError.UNAUTHORIZED);
+                        resp, HttpStatus.UNAUTHORIZED, OutputError.UNAUTHORIZED);
                 return;
             }
 
         } catch (TokenDecodingException e) {
             log.error("Api authentication token decoding failed: " + e.getMessage(), e);
             writeErrorToResponse(optionalTokenCookie.get().getValue(),
-                    resp, HttpStatus.BAD_REQUEST, ApiError.BAD_REQUEST);
+                    resp, HttpStatus.BAD_REQUEST, OutputError.BAD_REQUEST);
             return;
         }
 
@@ -92,7 +92,7 @@ public class ApiTokenAuthenticationFilter extends GenericFilterBean {
 
     private void writeErrorToResponse(String token, HttpServletResponse resp,
                                       HttpStatus httpStatus,
-                                      ApiError error) throws IOException {
+                                      OutputError error) throws IOException {
         try {
             // Todo move to aspect
             MDC.put(TOKEN, token);

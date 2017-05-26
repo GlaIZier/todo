@@ -18,10 +18,10 @@ import ru.glaizier.todo.controller.api.exception.ApiBadRequestException;
 import ru.glaizier.todo.controller.api.exception.ApiNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ApiUnauthorizedException;
 import ru.glaizier.todo.dao.UserDao;
-import ru.glaizier.todo.domain.api.ApiData;
-import ru.glaizier.todo.domain.api.ApiError;
 import ru.glaizier.todo.domain.api.Error;
 import ru.glaizier.todo.domain.api.input.InputUser;
+import ru.glaizier.todo.domain.api.output.OutputData;
+import ru.glaizier.todo.domain.api.output.OutputError;
 import ru.glaizier.todo.domain.api.output.OutputUser;
 import ru.glaizier.todo.security.token.TokenService;
 
@@ -49,43 +49,43 @@ public class AuthRestController {
      */
     // Todo add mdc and logging aspects here to handle exceptionHandlers?
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleException(Exception e) {
+    public ResponseEntity<OutputError> handleException(Exception e) {
         log.error("Request to rest controller failed with unexpected error: " + e.getMessage(), e);
 
-        ApiError apiError = new ApiError(new Error(ApiError.INTERNAL_SERVER_ERROR.getError().getCode(), e.getMessage()));
-        return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
+        OutputError outputError = new OutputError(new Error(OutputError.INTERNAL_SERVER_ERROR.getError().getCode(), e.getMessage()));
+        return new ResponseEntity<>(outputError, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(ApiBadRequestException.class)
-    public ResponseEntity<ApiError> handleBadRequestException(
+    public ResponseEntity<OutputError> handleBadRequestException(
             ApiBadRequestException e) {
         log.error("Request to rest controller failed: " + e.getMessage(), e);
 
-        ApiError apiError = new ApiError(new Error(ApiError.BAD_REQUEST.getError().getCode(), e.getMessage()));
-        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+        OutputError outputError = new OutputError(new Error(OutputError.BAD_REQUEST.getError().getCode(), e.getMessage()));
+        return new ResponseEntity<>(outputError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ApiNotFoundException.class)
-    public ResponseEntity<ApiError> handleNotFoundException(
+    public ResponseEntity<OutputError> handleNotFoundException(
             ApiNotFoundException e) {
         log.error("Request to rest controller failed: " + e.getMessage(), e);
 
-        ApiError apiError = new ApiError(new Error(ApiError.NOT_FOUND.getError().getCode(), e.getMessage()));
-        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+        OutputError outputError = new OutputError(new Error(OutputError.NOT_FOUND.getError().getCode(), e.getMessage()));
+        return new ResponseEntity<>(outputError, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ApiUnauthorizedException.class)
-    public ResponseEntity<ApiError> handleNotFoundException(
+    public ResponseEntity<OutputError> handleNotFoundException(
             ApiUnauthorizedException e) {
         log.error("Request to rest controller failed: " + e.getMessage(), e);
 
-        ApiError apiError = new ApiError(new Error(ApiError.UNAUTHORIZED.getError().getCode(), e.getMessage()));
-        return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
+        OutputError outputError = new OutputError(new Error(OutputError.UNAUTHORIZED.getError().getCode(), e.getMessage()));
+        return new ResponseEntity<>(outputError, HttpStatus.UNAUTHORIZED);
     }
 
     @RequestMapping(method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public ResponseEntity<ApiData<OutputUser>> authenticateUser(InputUser inputUser) {
+    public ResponseEntity<OutputData<OutputUser>> authenticateUser(InputUser inputUser) {
         checkUserIsNotEmpty(inputUser);
 
         if (!userDao.containsUser(inputUser.getLogin()))
@@ -96,8 +96,8 @@ public class AuthRestController {
 
         String token = tokenService.createToken(inputUser.getLogin());
 
-        ApiData<OutputUser> apiData = new ApiData<>(new OutputUser(inputUser.getLogin(), token), null);
-        return new ResponseEntity<>(apiData, HttpStatus.OK);
+        OutputData<OutputUser> outputData = new OutputData<>(new OutputUser(inputUser.getLogin(), token), null);
+        return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 
     private void checkUserIsNotEmpty(InputUser inputUser) {

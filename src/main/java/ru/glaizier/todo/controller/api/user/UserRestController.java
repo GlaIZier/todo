@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.glaizier.todo.controller.api.exception.ApiBadRequestException;
 import ru.glaizier.todo.dao.UserDao;
 import ru.glaizier.todo.domain.User;
-import ru.glaizier.todo.domain.api.ApiData;
-import ru.glaizier.todo.domain.api.ApiError;
 import ru.glaizier.todo.domain.api.Error;
 import ru.glaizier.todo.domain.api.input.InputUser;
+import ru.glaizier.todo.domain.api.output.OutputData;
+import ru.glaizier.todo.domain.api.output.OutputError;
 
 import java.lang.invoke.MethodHandles;
 import java.util.Collections;
@@ -46,20 +46,20 @@ public class UserRestController {
     // Todo add mdc and logging aspects here to handle exceptionHandlers?
     // Todo make BaseController class and move general exceptions handlers there
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleException(Exception e) {
+    public ResponseEntity<OutputError> handleException(Exception e) {
         log.error("Request to rest controller failed with unexpected error: " + e.getMessage(), e);
 
-        ApiError apiError = new ApiError(new Error(ApiError.INTERNAL_SERVER_ERROR.getError().getCode(), e.getMessage()));
-        return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
+        OutputError outputError = new OutputError(new Error(OutputError.INTERNAL_SERVER_ERROR.getError().getCode(), e.getMessage()));
+        return new ResponseEntity<>(outputError, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(ApiBadRequestException.class)
-    public ResponseEntity<ApiError> handleBadRequestException(
+    public ResponseEntity<OutputError> handleBadRequestException(
             ApiBadRequestException e) {
         log.error("Request to rest controller failed: " + e.getMessage(), e);
 
-        ApiError apiError = new ApiError(new Error(ApiError.BAD_REQUEST.getError().getCode(), e.getMessage()));
-        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+        OutputError outputError = new OutputError(new Error(OutputError.BAD_REQUEST.getError().getCode(), e.getMessage()));
+        return new ResponseEntity<>(outputError, HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -68,14 +68,14 @@ public class UserRestController {
 
     @RequestMapping(method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public ResponseEntity<ApiData<String>> registerUser(InputUser inputUser) {
+    public ResponseEntity<OutputData<String>> registerUser(InputUser inputUser) {
         checkUserIsNotEmpty(inputUser);
         User createdUser = User.builder().login(inputUser.getLogin()).password(inputUser.getPassword())
                 .roles(Collections.singletonList(USER)).build();
         userDao.addUser(createdUser);
 
-        ApiData<String> apiData = new ApiData<>(createdUser.getLogin(), null);
-        return new ResponseEntity<>(apiData, HttpStatus.CREATED);
+        OutputData<String> outputData = new OutputData<>(createdUser.getLogin(), null);
+        return new ResponseEntity<>(outputData, HttpStatus.CREATED);
     }
 
 
