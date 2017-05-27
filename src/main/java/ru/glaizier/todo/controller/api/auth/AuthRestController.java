@@ -12,6 +12,7 @@ import ru.glaizier.todo.controller.api.exception.ApiBadRequestException;
 import ru.glaizier.todo.controller.api.exception.ApiNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ApiUnauthorizedException;
 import ru.glaizier.todo.controller.api.exception.ExceptionHandlingController;
+import ru.glaizier.todo.controller.api.user.UserRestController;
 import ru.glaizier.todo.dao.UserDao;
 import ru.glaizier.todo.domain.api.input.InputUser;
 import ru.glaizier.todo.domain.api.output.OutputData;
@@ -39,7 +40,7 @@ public class AuthRestController extends ExceptionHandlingController {
     @RequestMapping(method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     public ResponseEntity<OutputData<OutputUser>> authenticateUser(InputUser inputUser) {
-        checkUserIsNotEmpty(inputUser);
+        UserRestController.checkUserIsNotEmpty(inputUser);
 
         if (!userDao.containsUser(inputUser.getLogin()))
             throw new ApiNotFoundException(format("User with login %s wasn't found!", inputUser.getLogin()));

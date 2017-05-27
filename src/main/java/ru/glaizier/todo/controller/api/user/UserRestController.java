@@ -49,7 +49,7 @@ public class UserRestController extends ExceptionHandlingController {
     }
 
 
-    private void checkUserIsNotEmpty(InputUser inputUser) {
+    public static void checkUserIsNotEmpty(InputUser inputUser) {
         if (inputUser == null)
             throw new ApiBadRequestException("Provided user is null!");
         if (StringUtils.isEmpty(StringUtils.trimWhitespace(inputUser.getLogin())))
