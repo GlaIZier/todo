@@ -1,17 +1,5 @@
 package ru.glaizier.todo.test.controller.api.task;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +18,13 @@ import ru.glaizier.todo.properties.PropertiesService;
 import ru.glaizier.todo.security.token.TokenService;
 
 import javax.servlet.http.Cookie;
+
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 // Todo think about tests after dao db will be created
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
@@ -91,7 +86,7 @@ public class TaskRestControllerIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", "/api/me/tasks/3"))
                 .andExpect(content().string("{\"data\":{\"id\":3,\"todo\":\"todoCreatedWithinTaskTest3\"}," +
-                        "\"_link\":{\"self\":\"http\"}}"));
+                        "\"_link\":{\"self\":\"/api/me/tasks/3\"}}"));
     }
 
     @Test
@@ -116,20 +111,23 @@ public class TaskRestControllerIntegrationTest {
     public void get200WhenGetTask() throws Exception {
         String token = tokenService.createToken("u");
 
-        mvc.perform(get("/api/me/tasks/1").cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
+        mvc.perform(get("/api/me/tasks/1").cookie(new Cookie(propertiesService.getApiTokenCookieName(),
+                token)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("{\"data\":{\"id\":1,\"todo\":\"todo1\"},\"_link\":{\"self\":\"http\"}}"));
+                .andExpect(content().string("{\"data\":{\"id\":1,\"todo\":\"todo1\"}}"));
     }
 
     @Test
     public void get404WhenGetUnknownIdTask() throws Exception {
         String token = tokenService.createToken("u");
 
-        mvc.perform(get("/api/me/tasks/100").cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
+        mvc.perform(get("/api/me/tasks/100").cookie(new Cookie(propertiesService.getApiTokenCookieName(),
+                token)))
                 .andDo(print())
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("{\"error\":{\"code\":404,\"message\":\"Task for user u with id 100 hasn't been found!\"}}"));
+                .andExpect(content().string("{\"error\":{\"code\":404," +
+                        "\"message\":\"Task for user u with id 100 hasn't been found!\"}}"));
     }
 
     @Test
@@ -157,7 +155,8 @@ public class TaskRestControllerIntegrationTest {
                 .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("{\"data\":{\"id\":1,\"todo\":\"todoUpdatedWithinTaskTest1\"},\"_link\":{\"self\":\"http\"}}"));
+                .andExpect(content().string("{\"data\":{\"id\":1," +
+                        "\"todo\":\"todoUpdatedWithinTaskTest1\"}}"));
     }
 
     @Test
@@ -202,7 +201,7 @@ public class TaskRestControllerIntegrationTest {
                 .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("{\"data\":{\"id\":1,\"todo\":\"todo1\"},\"_link\":{\"self\":\"http\"}}"));
+                .andExpect(content().string("{\"data\":{\"id\":1,\"todo\":\"todo1\"}}"));
     }
 
     @Test

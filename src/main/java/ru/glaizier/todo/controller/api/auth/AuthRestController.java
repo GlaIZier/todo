@@ -5,10 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.glaizier.todo.controller.api.exception.ApiBadRequestException;
 import ru.glaizier.todo.controller.api.exception.ApiNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ApiUnauthorizedException;
 import ru.glaizier.todo.controller.api.exception.ExceptionHandlingController;
@@ -50,18 +48,7 @@ public class AuthRestController extends ExceptionHandlingController {
 
         String token = tokenService.createToken(inputUser.getLogin());
 
-        OutputData<OutputUser> outputData = new OutputData<>(new OutputUser(inputUser.getLogin(), token), null);
+        OutputData<OutputUser> outputData = new OutputData<>(new OutputUser(inputUser.getLogin(), token));
         return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
-
-    private void checkUserIsNotEmpty(InputUser inputUser) {
-        if (inputUser == null)
-            throw new ApiBadRequestException("Provided user is null!");
-        if (StringUtils.isEmpty(StringUtils.trimWhitespace(inputUser.getLogin())))
-            throw new ApiBadRequestException("Provided user login is empty or null!");
-        if (inputUser.getPassword() == null ||
-                StringUtils.isEmpty(StringUtils.trimWhitespace(String.valueOf(inputUser.getPassword()))))
-            throw new ApiBadRequestException("Provided user password is empty or null!");
-    }
-
 }

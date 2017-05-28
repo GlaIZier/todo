@@ -44,7 +44,7 @@ public class UserRestController extends ExceptionHandlingController {
                 .roles(Collections.singletonList(USER)).build();
         userDao.addUser(createdUser);
 
-        OutputData<String> outputData = new OutputData<>(createdUser.getLogin(), null);
+        OutputData<String> outputData = new OutputData<>(createdUser.getLogin());
         return new ResponseEntity<>(outputData, HttpStatus.CREATED);
     }
 

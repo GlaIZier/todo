@@ -35,8 +35,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 // Todo add method security
 // Todo add different views for rest (html+json)?
 // Todo add swagger for rest api
-// Todo add AuthRestController to authenticate user via rest
 // Todo consume all in json? not in xxx form url encoded
+// Todo maybe create controller to get all links for tasks
 
 // Ide shows error but this works
 @RequiredArgsConstructor(onConstructor_ = {
@@ -44,7 +44,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 })
 public class TaskRestController extends ExceptionHandlingController {
 
-    // Todo crete TaskService that will hold Dao and TaskLinkCreator (or autogenerate this instead) Service
+    private static final String TASKS_BASE_URL = "/api/me/tasks/";
+
     private final TaskDao taskDao;
 
     private final PropertiesService propertiesService;
@@ -72,13 +73,13 @@ public class TaskRestController extends ExceptionHandlingController {
 
         HttpHeaders headers = new HttpHeaders();
         URI locationUri = UriComponentsBuilder.newInstance()
-                .path("/api/me/tasks/")
+                .path(TASKS_BASE_URL)
                 .path(String.valueOf(task.getId()))
                 .build()
                 .toUri();
         headers.setLocation(locationUri);
 
-        OutputData<Task> outputData = new OutputData<>(task, new Link("http"));
+        OutputData<Task> outputData = new OutputData<>(task, new Link(locationUri.toString()));
         return new ResponseEntity<>(outputData, headers, HttpStatus.CREATED);
     }
 
@@ -90,7 +91,7 @@ public class TaskRestController extends ExceptionHandlingController {
         if (task == null)
             throw new ApiTaskNotFoundException(login, id);
 
-        OutputData<Task> outputData = new OutputData<>(task, new Link("http"));
+        OutputData<Task> outputData = new OutputData<>(task);
         return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 
@@ -104,7 +105,7 @@ public class TaskRestController extends ExceptionHandlingController {
         if (taskDao.updateTask(login, updatedTask) == null)
             throw new ApiTaskNotFoundException(login, id);
 
-        OutputData<Task> outputData = new OutputData<>(updatedTask, new Link("http"));
+        OutputData<Task> outputData = new OutputData<>(updatedTask);
         return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 
@@ -116,7 +117,7 @@ public class TaskRestController extends ExceptionHandlingController {
         if (task == null)
             throw new ApiTaskNotFoundException(login, id);
 
-        OutputData<Task> outputData = new OutputData<>(task, new Link("http"));
+        OutputData<Task> outputData = new OutputData<>(task);
         return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 
