@@ -15,7 +15,8 @@ import ru.glaizier.todo.config.root.security.SecurityConfig;
 @PropertySource("classpath:profiles/environment.properties")
 // Register additional configs for root
 @Import({
-        SecurityConfig.class
+        SecurityConfig.class,
+        DbConfig.class
 })
 public class RootConfig {
 }

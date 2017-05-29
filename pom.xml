@@ -12,6 +12,8 @@
 
     <properties>
         <jdk.version>1.8</jdk.version>
+        <spring.version>4.3.6.RELEASE</spring.version>
+        <spring-security.version>4.2.1.RELEASE</spring-security.version>
     </properties>
     <profiles>
         <!--Todo move location to properties file-->
@@ -157,8 +159,15 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-            <version>4.3.6.RELEASE</version>
+            <version>${spring.version}</version>
         </dependency>
+        <!-- Embedded hsql db -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
 
         <!-- compile only, when deployed container provide this -->
         <!-- MvcWebAppInitializer depends on servlet api -->
@@ -191,13 +200,13 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-            <version>4.2.1.RELEASE</version>
+            <version>${spring-security.version}</version>
         </dependency>
         <!-- Need for AbstractSecurityWebApplicationInitializer-->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-            <version>4.2.1.RELEASE</version>
+            <version>${spring-security.version}</version>
         </dependency>
 
         <!-- Rest controller -->
@@ -240,7 +249,14 @@
             <version>1.7.25</version>
         </dependency>
 
+        <!-- Embedded db for local development -->
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.4.0</version>
+        </dependency>
 
+        <!--Test-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -251,7 +267,7 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
-            <version>4.2.1.RELEASE</version>
+            <version>${spring-security.version}</version>
             <scope>test</scope>
         </dependency>
         <!--greaterThan matchers-->
