@@ -1,5 +1,35 @@
-CREATE TABLE users (
-  id    INTEGER PRIMARY KEY,
-  name  VARCHAR(30),
-  email VARCHAR(50)
+CREATE TABLE user (
+  login    VARCHAR(50) PRIMARY KEY,
+  password VARCHAR(30)
 );
+
+CREATE TABLE role (
+  role VARCHAR(50) PRIMARY KEY
+);
+
+CREATE TABLE authorization (
+  id    INTEGER PRIMARY KEY,
+  login VARCHAR(50),
+  role  VARCHAR(50)
+);
+
+ALTER TABLE authorization
+  ADD FOREIGN KEY (login) REFERENCES user (login)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+ALTER TABLE authorization
+  ADD FOREIGN KEY (role) REFERENCES role (role)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+CREATE TABLE task (
+  login VARCHAR(50),
+  id    INTEGER,
+  todo  VARCHAR(255),
+  PRIMARY KEY (login, id)
+);
+
+ALTER TABLE task
+  ADD FOREIGN KEY (login) REFERENCES user (login)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
