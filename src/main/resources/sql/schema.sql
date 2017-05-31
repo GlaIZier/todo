@@ -8,7 +8,7 @@ CREATE TABLE role (
 );
 
 CREATE TABLE authorization (
-  id    INTEGER PRIMARY KEY,
+  id    INTEGER IDENTITY PRIMARY KEY,
   login VARCHAR(50),
   role  VARCHAR(50)
 );
@@ -24,7 +24,7 @@ ALTER TABLE authorization
 
 CREATE TABLE task (
   login VARCHAR(50),
-  id    INTEGER,
+  id    INTEGER IDENTITY,
   todo  VARCHAR(255),
   PRIMARY KEY (login, id)
 );
