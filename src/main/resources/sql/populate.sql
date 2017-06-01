@@ -1,20 +1,20 @@
-INSERT INTO user (login, password)
+INSERT INTO User (Login, Password)
 VALUES
   ('u', 'p'),
   ('a', 'p');
 
-INSERT INTO role (role)
+INSERT INTO Role (Role)
 VALUES
   ('USER'),
   ('ADMIN');
 
-INSERT INTO authorization (login, role)
+INSERT INTO Authorization (Login, Role)
 VALUES
   ('u', 'USER'),
   ('a', 'USER'),
   ('a', 'ADMIN');
 
-INSERT INTO task (login, todo)
+INSERT INTO Task (Login, Todo)
 VALUES
   ('u', 'todo1'),
   ('u', 'todo2'),

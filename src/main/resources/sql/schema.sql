@@ -1,35 +1,35 @@
-CREATE TABLE user (
-  login    VARCHAR(50) PRIMARY KEY,
-  password VARCHAR(30)
+CREATE TABLE User (
+  Login    VARCHAR(50) PRIMARY KEY,
+  Password VARCHAR(30)
 );
 
-CREATE TABLE role (
-  role VARCHAR(50) PRIMARY KEY
+CREATE TABLE Role (
+  Role VARCHAR(50) PRIMARY KEY
 );
 
-CREATE TABLE authorization (
-  id    INTEGER IDENTITY PRIMARY KEY,
-  login VARCHAR(50),
-  role  VARCHAR(50)
+CREATE TABLE Authorization (
+  Id    INTEGER IDENTITY PRIMARY KEY,
+  Login VARCHAR(50),
+  Role  VARCHAR(50)
 );
 
-ALTER TABLE authorization
-  ADD FOREIGN KEY (login) REFERENCES user (login)
+ALTER TABLE Authorization
+  ADD FOREIGN KEY (Login) REFERENCES user (Login)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
-ALTER TABLE authorization
-  ADD FOREIGN KEY (role) REFERENCES role (role)
+ALTER TABLE Authorization
+  ADD FOREIGN KEY (Role) REFERENCES role (Role)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
-CREATE TABLE task (
-  login VARCHAR(50),
-  id    INTEGER IDENTITY,
-  todo  VARCHAR(255),
-  PRIMARY KEY (login, id)
+CREATE TABLE Task (
+  Login VARCHAR(50),
+  Id    INTEGER IDENTITY,
+  Todo  VARCHAR(255),
+  PRIMARY KEY (Login, Id)
 );
 
-ALTER TABLE task
-  ADD FOREIGN KEY (login) REFERENCES user (login)
+ALTER TABLE Task
+  ADD FOREIGN KEY (Login) REFERENCES user (Login)
   ON DELETE CASCADE
   ON UPDATE CASCADE;

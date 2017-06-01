@@ -14,7 +14,8 @@ public class DbConfig {
     @Bean
     public DataSource dataSource() {
         return new EmbeddedDatabaseBuilder()
-                .generateUniqueName(true)
+                .generateUniqueName(false)
+                .setName("MemoryTaskDb")
                 .setType(HSQL)
                 .setScriptEncoding("UTF-8")
                 .ignoreFailedDrops(true)
