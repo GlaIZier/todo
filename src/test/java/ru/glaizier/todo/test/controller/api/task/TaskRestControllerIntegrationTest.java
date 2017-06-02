@@ -1,5 +1,17 @@
 package ru.glaizier.todo.test.controller.api.task;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,13 +30,6 @@ import ru.glaizier.todo.properties.PropertiesService;
 import ru.glaizier.todo.security.token.TokenService;
 
 import javax.servlet.http.Cookie;
-
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 // Todo think about tests after dao db will be created
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
@@ -84,9 +89,9 @@ public class TaskRestControllerIntegrationTest {
                 .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(header().string("Location", "/api/me/tasks/3"))
-                .andExpect(content().string("{\"data\":{\"id\":3,\"todo\":\"todoCreatedWithinTaskTest3\"}," +
-                        "\"_link\":{\"self\":\"/api/me/tasks/3\"}}"));
+                .andExpect(header().string("Location", "/api/me/tasks/4"))
+                .andExpect(content().string("{\"data\":{\"id\":4,\"todo\":\"todoCreatedWithinTaskTest3\"}," +
+                        "\"_link\":{\"self\":\"/api/me/tasks/4\"}}"));
     }
 
     @Test

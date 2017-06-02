@@ -2,10 +2,12 @@ package ru.glaizier.todo.config.root;
 
 import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.HSQL;
 
+import org.hsqldb.util.DatabaseManagerSwing;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 @Configuration
@@ -22,6 +24,12 @@ public class DbConfig {
                 .addScript("sql/schema.sql")
                 .addScript("sql/populate.sql")
                 .build();
+    }
+
+    @PostConstruct
+    public void startDBManager() {
+        //hsqldb
+        DatabaseManagerSwing.main(new String[]{"--url", "jdbc:hsqldb:mem:MemoryTaskDb", "--user", "sa", "--password", ""});
     }
 
 }

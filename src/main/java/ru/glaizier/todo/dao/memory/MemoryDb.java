@@ -12,10 +12,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.PostConstruct;
 
@@ -26,6 +26,8 @@ public class MemoryDb implements Db {
     private final ConcurrentMap<String, ConcurrentMap<Integer, Task>> loginToIdToTask = new ConcurrentHashMap<>();
 
     private final ConcurrentMap<String, User> loginToUser = new ConcurrentHashMap<>();
+
+    private AtomicInteger lastId = new AtomicInteger(0);
 
     @PostConstruct
     public void init() {
@@ -75,11 +77,12 @@ public class MemoryDb implements Db {
     }
 
     @Override
+    // Todo start here and create thread safe last id implementation
     public Task createTask(String login, String todo) {
         if (!containsLogin(login))
             return null;
 
-        Integer newId = getLastId(login).orElse(0) + 1;
+        Integer newId = lastId.incrementAndGet();
         Task newTask = new Task(newId, todo);
 
         ConcurrentMap<Integer, Task> idToTask = loginToIdToTask.get(login);
@@ -117,7 +120,8 @@ public class MemoryDb implements Db {
         return loginToIdToTask.get(login).remove(id);
     }
 
-    private Optional<Integer> getLastId(String login) {
-        return loginToIdToTask.get(login).keySet().stream().max(Integer::compareTo);
-    }
+    // Previously last id was for each login
+//    private Optional<Integer> getLastId(String login) {
+//        return loginToIdToTask.get(login).keySet().stream().max(Integer::compareTo);
+//    }
 }

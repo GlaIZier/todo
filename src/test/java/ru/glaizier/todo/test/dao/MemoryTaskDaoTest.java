@@ -41,9 +41,8 @@ public class MemoryTaskDaoTest {
 
     @Test
     public void getTheSameTaskAsCreatedOnCreateTask() {
-        Task task = new Task(3, "created todo100");
-        assertThat(memoryTaskDao.createTask("u", task.getTodo()), is(task));
-        assertThat(memoryTaskDao.getTask("u", 3), is(task));
+        assertThat(memoryTaskDao.createTask("u", "created todo100").getTodo(), is("created todo100"));
+        assertThat(memoryTaskDao.getTask("u", 4).getTodo(), is("created todo100"));
     }
 
     @Test
