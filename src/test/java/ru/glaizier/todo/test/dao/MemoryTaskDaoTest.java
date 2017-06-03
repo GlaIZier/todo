@@ -1,10 +1,5 @@
 package ru.glaizier.todo.test.dao;
 
-import static junit.framework.TestCase.assertNull;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +10,15 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
 import ru.glaizier.todo.dao.TaskDao;
+import ru.glaizier.todo.dao.embedded.EmbeddedTaskDao;
 import ru.glaizier.todo.domain.Task;
+
+import java.sql.SQLException;
+
+import static junit.framework.TestCase.assertNull;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -28,6 +31,9 @@ public class MemoryTaskDaoTest {
 
     @Autowired
     private TaskDao memoryTaskDao;
+
+    @Autowired
+    private EmbeddedTaskDao embeddedTaskDao;
 
     @Test
     public void get2TasksOnGetTasks() {
@@ -107,4 +113,10 @@ public class MemoryTaskDaoTest {
     public void getFalseOnContainsUserUnknownUser() {
         assertThat(memoryTaskDao.containsLogin("dummyLogin"), is(false));
     }
+
+    @Test
+    public void test() throws SQLException {
+        embeddedTaskDao.test();
+    }
+
 }

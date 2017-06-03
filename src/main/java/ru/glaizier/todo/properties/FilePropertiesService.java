@@ -15,7 +15,6 @@ public class FilePropertiesService implements PropertiesService {
     @NonNull
     private final String apiTokenCookieName;
 
-    @NonNull
     private final int apiTokenExpireDurationInSeconds;
 
     @NonNull
