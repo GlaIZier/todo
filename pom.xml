@@ -189,6 +189,20 @@
             <version>3.1.0</version>
             <scope>provided</scope>
         </dependency>
+        <!-- Need for JPA Spring Data work -->
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>persistence-api</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+        <!-- Need for JPA Spring Data work -->
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>7.0</version>
+            <scope>provided</scope>
+        </dependency>
+
 
         <dependency>
             <groupId>org.thymeleaf</groupId>
