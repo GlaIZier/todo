@@ -5,7 +5,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,7 +124,6 @@ public class MemoryTaskDaoTest {
     }
 
     @Test
-    @Ignore
     public void testEmbeddedTaskDao() throws SQLException {
         Task taskById = embeddedTaskDao.findTaskById(1);
         System.out.println(taskById);
