@@ -189,25 +189,8 @@
             <version>3.1.0</version>
             <scope>provided</scope>
         </dependency>
-        <!-- Need for JPA Spring Data work -->
-        <!--<dependency>-->
-        <!--<groupId>javax.persistence</groupId>-->
-        <!--<artifactId>persistence-api</artifactId>-->
-        <!--<version>1.0.2</version>-->
-        <!--</dependency>-->
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.0-api</artifactId>
-            <version>1.0.1.Final</version>
-        </dependency>
-        <!-- Need for JPA Spring Data work -->
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- Jpa provide. Need for JPA Spring Data work. -->
+
+        <!-- Jpa provider. Also include Java EE JPA2.1 api. Need for JPA Spring Data work. -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
