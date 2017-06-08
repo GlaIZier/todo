@@ -1,5 +1,11 @@
 package ru.glaizier.todo.controller.api.task;
 
+import static java.lang.String.format;
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -22,12 +28,10 @@ import ru.glaizier.todo.domain.api.Link;
 import ru.glaizier.todo.domain.api.output.OutputData;
 import ru.glaizier.todo.properties.PropertiesService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
-import java.util.Set;
+import java.util.List;
 
-import static java.lang.String.format;
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(value = {"/api/v1/me/tasks", "/api/me/tasks"})
@@ -53,10 +57,11 @@ public class TaskRestController extends ExceptionHandlingController {
     /**
      * Methods
      */
+    // Todo create links to each return value
     @RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<OutputData<Set<Task>>> getTasks(HttpServletRequest req) {
-        Set<Task> tasks = taskDao.getTasks(getLogin(req));
-        OutputData<Set<Task>> outputData = new OutputData<>(tasks, new Link("http"));
+    public ResponseEntity<OutputData<List<Task>>> getTasks(HttpServletRequest req) {
+        List<Task> tasks = taskDao.getTasks(getLogin(req));
+        OutputData<List<Task>> outputData = new OutputData<>(tasks);
         return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 
@@ -100,8 +105,8 @@ public class TaskRestController extends ExceptionHandlingController {
     public ResponseEntity<OutputData<Task>> updateTask(HttpServletRequest req,
                                                        @PathVariable int id,
                                                        @RequestBody String todo) {
-        Task updatedTask = new Task(id, todo);
         String login = getLogin(req);
+        Task updatedTask = Task.builder().id(id).login(login).todo(todo).build();
         if (taskDao.updateTask(login, updatedTask) == null)
             throw new ApiTaskNotFoundException(login, id);
 

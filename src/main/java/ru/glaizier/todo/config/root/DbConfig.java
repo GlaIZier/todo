@@ -40,11 +40,6 @@ public class DbConfig {
         return adapter;
     }
 
-//    @Bean
-//    public EntityManager entityManager() {
-//        return entityManagerFactory().createEntityManager();
-//    }
-
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();

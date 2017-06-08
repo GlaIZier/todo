@@ -66,12 +66,13 @@ public class TaskRestControllerIntegrationTest {
     @Test
     public void get200WhenGetTasks() throws Exception {
         // We can get empty list but it's OK 200 for rest get collection
-        String token = tokenService.createToken("dummyLogin");
+        String token = tokenService.createToken("u");
 
         mvc.perform(get("/api/me/tasks").cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("{\"_link\":{\"self\":\"http\"}}"));
+                .andExpect(content().string("{\"data\":[{\"id\":1,\"login\":\"u\",\"todo\":\"todo1\"}," +
+                        "{\"id\":2,\"login\":\"u\",\"todo\":\"todo2\"}]}"));
     }
 
     /**
@@ -90,8 +91,8 @@ public class TaskRestControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", "/api/me/tasks/4"))
-                .andExpect(content().string("{\"data\":{\"id\":4,\"todo\":\"todoCreatedWithinTaskTest3\"}," +
-                        "\"_link\":{\"self\":\"/api/me/tasks/4\"}}"));
+                .andExpect(content().string("{\"data\":{\"id\":4,\"login\":\"u\"," +
+                        "\"todo\":\"todoCreatedWithinTaskTest3\"},\"_link\":{\"self\":\"/api/me/tasks/4\"}}"));
     }
 
     @Test
@@ -120,7 +121,7 @@ public class TaskRestControllerIntegrationTest {
                 token)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("{\"data\":{\"id\":1,\"todo\":\"todo1\"}}"));
+                .andExpect(content().string("{\"data\":{\"id\":1,\"login\":\"u\",\"todo\":\"todo1\"}}"));
     }
 
     @Test
@@ -160,7 +161,7 @@ public class TaskRestControllerIntegrationTest {
                 .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("{\"data\":{\"id\":1," +
+                .andExpect(content().string("{\"data\":{\"id\":1,\"login\":\"u\"," +
                         "\"todo\":\"todoUpdatedWithinTaskTest1\"}}"));
     }
 
@@ -206,7 +207,7 @@ public class TaskRestControllerIntegrationTest {
                 .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("{\"data\":{\"id\":1,\"todo\":\"todo1\"}}"));
+                .andExpect(content().string("{\"data\":{\"id\":1,\"login\":\"u\",\"todo\":\"todo1\"}}"));
     }
 
     @Test

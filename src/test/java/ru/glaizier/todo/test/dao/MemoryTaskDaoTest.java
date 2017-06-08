@@ -63,7 +63,7 @@ public class MemoryTaskDaoTest {
     @Test
     public void getTaskOnGetTask() {
         assertThat(memoryTaskDao.getTask("u", 1),
-                is(new Task(1, "todo1")));
+                is(Task.builder().id(1).login("u").todo("todo1").build()));
     }
 
     @Test
@@ -78,24 +78,24 @@ public class MemoryTaskDaoTest {
 
     @Test
     public void getPreviousTaskOnUpdateTask() {
-        assertThat(memoryTaskDao.updateTask("u", new Task(1, "updated todo100")),
-                is(new Task(1, "todo1")));
+        assertThat(memoryTaskDao.updateTask("u", Task.builder().id(1).login("u").todo("updated todo100").build()),
+                is(Task.builder().id(1).login("u").todo("todo1").build()));
     }
 
     @Test
     public void getNullOnUpdateTaskForUnknownId() {
-        assertNull(memoryTaskDao.updateTask("u", new Task(3, "created todo100")));
+        assertNull(memoryTaskDao.updateTask("u", Task.builder().id(3).login("u").todo("created todo100").build()));
     }
 
     @Test
     public void getNullOnUpdateTaskForUnknownUser() {
-        assertNull(memoryTaskDao.updateTask("dummyLogin", new Task(1, "created todo100")));
+        assertNull(memoryTaskDao.updateTask("dummyLogin", Task.builder().id(1).login("u").todo("created todo100").build()));
     }
 
     @Test
     public void getRemovedTaskOnRemoveTask() {
         assertThat(memoryTaskDao.removeTask("u", 1),
-                is(new Task(1, "todo1")));
+                is(Task.builder().id(1).login("u").todo("todo1").build()));
     }
 
     @Test
@@ -126,6 +126,12 @@ public class MemoryTaskDaoTest {
     @Test
     public void testEmbeddedTaskDao() throws SQLException {
         Task taskById = embeddedTaskDao.findTaskById(1);
+        System.out.println(taskById);
+    }
+
+    @Test
+    public void testFindTaskByIdAndLogin() throws SQLException {
+        Task taskById = embeddedTaskDao.findTaskByIdAndLogin(1, "u");
         System.out.println(taskById);
     }
 

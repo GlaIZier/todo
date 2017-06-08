@@ -6,6 +6,9 @@ import ru.glaizier.todo.dao.Db;
 import ru.glaizier.todo.dao.TaskDao;
 import ru.glaizier.todo.domain.Task;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 
 @Repository
@@ -19,8 +22,12 @@ public class MemoryTaskDao implements TaskDao {
     }
 
     @Override
-    public Set<Task> getTasks(String login) {
-        return db.getTasks(login);
+    public List<Task> getTasks(String login) {
+        Set<Task> tasks = db.getTasks(login);
+        if (tasks == null)
+            return null;
+        return tasks.stream().sorted(Comparator.comparingInt(Task::getId))
+                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
     }
 
     @Override

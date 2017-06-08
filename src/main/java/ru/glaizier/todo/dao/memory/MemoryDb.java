@@ -83,7 +83,7 @@ public class MemoryDb implements Db {
             return null;
 
         Integer newId = lastId.incrementAndGet();
-        Task newTask = new Task(newId, todo);
+        Task newTask = Task.builder().id(newId).login(login).todo(todo).build();
 
         ConcurrentMap<Integer, Task> idToTask = loginToIdToTask.get(login);
         if (idToTask == null)
@@ -106,7 +106,7 @@ public class MemoryDb implements Db {
 
         Task prevTask = loginToIdToTask.get(login).get(task.getId());
         if (prevTask != null) {
-            Task updatedTask = new Task(task.getId(), task.getTodo());
+            Task updatedTask = Task.builder().id(task.getId()).login(login).todo(task.getTodo()).build();
             Map<Integer, Task> updatedMap = loginToIdToTask.get(login);
             updatedMap.put(updatedTask.getId(), updatedTask);
         }
