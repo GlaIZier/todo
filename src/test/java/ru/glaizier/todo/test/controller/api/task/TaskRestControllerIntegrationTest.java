@@ -71,8 +71,9 @@ public class TaskRestControllerIntegrationTest {
         mvc.perform(get("/api/me/tasks").cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("{\"data\":[{\"id\":1,\"login\":\"u\",\"todo\":\"todo1\"}," +
-                        "{\"id\":2,\"login\":\"u\",\"todo\":\"todo2\"}]}"));
+                .andExpect(content().string("{\"data\":" +
+                        "[{\"data\":{\"id\":1,\"login\":\"u\",\"todo\":\"todo1\"},\"_link\":{\"self\":\"/api/me/tasks/1\"}}," +
+                        "{\"data\":{\"id\":2,\"login\":\"u\",\"todo\":\"todo2\"},\"_link\":{\"self\":\"/api/me/tasks/2\"}}]}"));
     }
 
     /**

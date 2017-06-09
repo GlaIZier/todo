@@ -29,6 +29,7 @@ import ru.glaizier.todo.domain.api.output.OutputData;
 import ru.glaizier.todo.properties.PropertiesService;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,10 +60,16 @@ public class TaskRestController extends ExceptionHandlingController {
      */
     // Todo create links to each return value
     @RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<OutputData<List<Task>>> getTasks(HttpServletRequest req) {
+    public ResponseEntity<OutputData<List<OutputData<Task>>>> getTasks(HttpServletRequest req) {
         List<Task> tasks = taskDao.getTasks(getLogin(req));
-        OutputData<List<Task>> outputData = new OutputData<>(tasks);
-        return new ResponseEntity<>(outputData, HttpStatus.OK);
+        List<OutputData<Task>> outputData = null;
+        if (tasks != null) {
+            outputData = tasks.stream().collect(
+                    ArrayList::new,
+                    (acc, task) -> acc.add(new OutputData<Task>(task, new Link(TASKS_BASE_URL + task.getId()))),
+                    ArrayList::addAll);
+        }
+        return new ResponseEntity<>(new OutputData<>(outputData), HttpStatus.OK);
     }
 
     @RequestMapping(method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE
