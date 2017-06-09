@@ -131,7 +131,7 @@ public class MemoryTaskDaoTest {
 
     @Test
     public void testFindTaskByIdAndLogin() throws SQLException {
-        Task taskById = embeddedTaskDao.findTaskByIdAndLogin(1, "u");
+        Task taskById = embeddedTaskDao.findTaskByIdAndLogin(3, "a");
         System.out.println(taskById);
     }
 

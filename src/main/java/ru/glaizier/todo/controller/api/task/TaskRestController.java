@@ -58,7 +58,6 @@ public class TaskRestController extends ExceptionHandlingController {
     /**
      * Methods
      */
-    // Todo create links to each return value
     @RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<OutputData<List<OutputData<Task>>>> getTasks(HttpServletRequest req) {
         List<Task> tasks = taskDao.getTasks(getLogin(req));
