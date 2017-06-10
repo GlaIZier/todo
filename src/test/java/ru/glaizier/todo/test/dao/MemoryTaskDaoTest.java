@@ -1,10 +1,5 @@
 package ru.glaizier.todo.test.dao;
 
-import static junit.framework.TestCase.assertNull;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +15,11 @@ import ru.glaizier.todo.dao.embedded.EmbeddedTaskDaoSql;
 import ru.glaizier.todo.domain.Task;
 
 import java.sql.SQLException;
+
+import static junit.framework.TestCase.assertNull;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -131,7 +131,7 @@ public class MemoryTaskDaoTest {
 
     @Test
     public void testFindTaskByIdAndLogin() throws SQLException {
-        Task taskById = embeddedTaskDao.findTaskByIdAndLogin(3, "a");
+        Task taskById = embeddedTaskDao.findTaskByIdAndLogin(2, "a");
         System.out.println(taskById);
     }
 
