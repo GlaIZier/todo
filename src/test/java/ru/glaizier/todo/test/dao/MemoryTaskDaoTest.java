@@ -15,6 +15,7 @@ import ru.glaizier.todo.dao.embedded.EmbeddedTaskDaoSql;
 import ru.glaizier.todo.domain.Task;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import static junit.framework.TestCase.assertNull;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -124,15 +125,21 @@ public class MemoryTaskDaoTest {
     }
 
     @Test
-    public void testEmbeddedTaskDao() throws SQLException {
-        Task taskById = embeddedTaskDao.findTaskById(1);
+    public void testFindTaskByIdAndLogin() throws SQLException {
+        Task taskById = embeddedTaskDao.findTaskByIdAndLogin(2, "a");
         System.out.println(taskById);
     }
 
     @Test
-    public void testFindTaskByIdAndLogin() throws SQLException {
-        Task taskById = embeddedTaskDao.findTaskByIdAndLogin(2, "a");
-        System.out.println(taskById);
+    public void findTasksByLogin() throws SQLException {
+        List<Task> tasks = embeddedTaskDao.findTasksByLogin("u");
+        System.out.println(tasks.get(1));
+    }
+
+    @Test
+    public void saveTask() throws SQLException {
+        System.out.println(embeddedTaskDao.save(new Task(3, "u", "todo3")));
+        System.out.println(embeddedTaskDao.findTaskByIdAndLogin(3, "u"));
     }
 
 }
