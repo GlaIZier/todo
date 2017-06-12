@@ -142,4 +142,10 @@ public class MemoryTaskDaoTest {
         System.out.println(embeddedTaskDao.findTaskByIdAndLogin(3, "u"));
     }
 
+    @Test
+    public void updateTask() throws SQLException {
+        embeddedTaskDao.save(new Task(2, "u", "todo3"));
+        System.out.println(embeddedTaskDao.findTaskByIdAndLogin(2, "u"));
+    }
+
 }
