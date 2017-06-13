@@ -9,14 +9,5 @@ public interface EmbeddedTaskDao extends JpaRepository<Task, Integer> {
 
     List<Task> findTasksByLogin(String login);
 
-//    Task save(Task task);
-
     Task findTaskByIdAndLogin(int id, String login);
-
-//    void updateTask(Task task);
-
-//    Task removeTaskByIdAndLogin(String login, int id);
-//
-//    boolean existsLogin(String login);
-
 }

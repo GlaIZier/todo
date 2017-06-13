@@ -1,5 +1,10 @@
 package ru.glaizier.todo.test.dao;
 
+import static junit.framework.TestCase.assertNull;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +20,6 @@ import ru.glaizier.todo.dao.embedded.EmbeddedTaskDaoSql;
 import ru.glaizier.todo.domain.Task;
 
 import java.sql.SQLException;
-import java.util.List;
-
-import static junit.framework.TestCase.assertNull;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -132,20 +131,33 @@ public class MemoryTaskDaoTest {
 
     @Test
     public void findTasksByLogin() throws SQLException {
-        List<Task> tasks = embeddedTaskDao.findTasksByLogin("u");
-        System.out.println(tasks.get(1));
+        printTasks("u");
+        printTasks("a");
     }
 
     @Test
+    // Todo move to Integer to avoid save for the same login
     public void saveTask() throws SQLException {
         System.out.println(embeddedTaskDao.save(new Task(3, "u", "todo3")));
-        System.out.println(embeddedTaskDao.findTaskByIdAndLogin(3, "u"));
+        printTasks("u");
+        System.out.println("////");
+        printTasks("a");
     }
 
     @Test
     public void updateTask() throws SQLException {
         embeddedTaskDao.save(new Task(2, "u", "todo3"));
         System.out.println(embeddedTaskDao.findTaskByIdAndLogin(2, "u"));
+    }
+
+    @Test
+    public void removeTask() throws SQLException {
+        embeddedTaskDao.delete(3);
+        printTasks("a");
+    }
+
+    private void printTasks(String login) {
+        embeddedTaskDao.findTasksByLogin(login).forEach(System.out::println);
     }
 
 }
