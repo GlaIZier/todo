@@ -1,11 +1,10 @@
 package ru.glaizier.todo.dao;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import ru.glaizier.todo.domain.Task;
 
 import java.util.List;
 
-public interface TaskDao extends JpaRepository<Task, Integer>, OverrideTaskDao {
+public interface OverrideTaskDao {
 
     List<Task> findTasksByLogin(String login);
 

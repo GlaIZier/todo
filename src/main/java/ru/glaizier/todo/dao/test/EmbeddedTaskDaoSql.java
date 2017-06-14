@@ -1,4 +1,4 @@
-package ru.glaizier.todo.dao.embedded;
+package ru.glaizier.todo.dao.test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

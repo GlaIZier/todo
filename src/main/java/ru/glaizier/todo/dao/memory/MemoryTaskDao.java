@@ -2,8 +2,6 @@ package ru.glaizier.todo.dao.memory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ru.glaizier.todo.dao.Db;
-import ru.glaizier.todo.dao.TaskDao;
 import ru.glaizier.todo.domain.Task;
 
 import java.util.ArrayList;

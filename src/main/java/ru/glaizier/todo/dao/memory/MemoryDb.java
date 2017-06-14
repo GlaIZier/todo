@@ -3,8 +3,8 @@ package ru.glaizier.todo.dao.memory;
 import static ru.glaizier.todo.domain.Role.ADMIN;
 import static ru.glaizier.todo.domain.Role.USER;
 
+import lombok.NonNull;
 import org.springframework.stereotype.Repository;
-import ru.glaizier.todo.dao.Db;
 import ru.glaizier.todo.domain.Task;
 import ru.glaizier.todo.domain.User;
 
@@ -77,7 +77,6 @@ public class MemoryDb implements Db {
     }
 
     @Override
-    // Todo start here and create thread safe last id implementation
     public Task createTask(String login, String todo) {
         if (!containsLogin(login))
             return null;
@@ -95,7 +94,16 @@ public class MemoryDb implements Db {
     }
 
     @Override
-    public Task getTask(String login, int id) {
+    public Task getTask(@NonNull Integer id) {
+        for (ConcurrentMap<Integer, Task> map : loginToIdToTask.values()) {
+            if (map.containsKey(id))
+                return map.get(id);
+        }
+        return null;
+    }
+
+    @Override
+    public Task getTask(String login, @NonNull Integer id) {
         return (loginToIdToTask.get(login) == null) ? null : loginToIdToTask.get(login).get(id);
     }
 
@@ -114,10 +122,19 @@ public class MemoryDb implements Db {
     }
 
     @Override
-    public Task removeTask(String login, int id) {
+    public Task removeTask(String login, @NonNull Integer id) {
         if (loginToIdToTask.get(login) == null)
             return null;
         return loginToIdToTask.get(login).remove(id);
+    }
+
+    @Override
+    public Task removeTask(@NonNull Integer id) {
+        for (ConcurrentMap<Integer, Task> map : loginToIdToTask.values()) {
+            if (map.containsKey(id))
+                return map.remove(id);
+        }
+        return null;
     }
 
     // Previously last id was for each login

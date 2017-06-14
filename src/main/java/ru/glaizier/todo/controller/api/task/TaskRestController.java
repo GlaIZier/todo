@@ -22,7 +22,7 @@ import ru.glaizier.todo.controller.api.exception.ApiBadRequestException;
 import ru.glaizier.todo.controller.api.exception.ApiNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ApiTaskNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ExceptionHandlingController;
-import ru.glaizier.todo.dao.TaskDao;
+import ru.glaizier.todo.dao.memory.TaskDao;
 import ru.glaizier.todo.domain.Task;
 import ru.glaizier.todo.domain.api.Link;
 import ru.glaizier.todo.domain.api.output.OutputData;

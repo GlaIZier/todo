@@ -1,5 +1,8 @@
 package ru.glaizier.todo.controller.api.auth;
 
+import static java.lang.String.format;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,14 +14,11 @@ import ru.glaizier.todo.controller.api.exception.ApiNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ApiUnauthorizedException;
 import ru.glaizier.todo.controller.api.exception.ExceptionHandlingController;
 import ru.glaizier.todo.controller.api.user.UserRestController;
-import ru.glaizier.todo.dao.UserDao;
+import ru.glaizier.todo.dao.memory.UserDao;
 import ru.glaizier.todo.domain.api.input.InputUser;
 import ru.glaizier.todo.domain.api.output.OutputData;
 import ru.glaizier.todo.domain.api.output.OutputUser;
 import ru.glaizier.todo.security.token.TokenService;
-
-import static java.lang.String.format;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 // Todo add method security
 // Todo add different views for rest (html+json)?

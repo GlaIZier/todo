@@ -1,4 +1,4 @@
-package ru.glaizier.todo.dao;
+package ru.glaizier.todo.dao.memory;
 
 import ru.glaizier.todo.domain.User;
 

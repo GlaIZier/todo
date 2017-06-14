@@ -1,4 +1,4 @@
-package ru.glaizier.todo.dao;
+package ru.glaizier.todo.dao.memory;
 
 import ru.glaizier.todo.domain.Task;
 import ru.glaizier.todo.domain.User;
@@ -21,10 +21,14 @@ public interface Db {
 
     Task createTask(String login, String todo);
 
-    Task getTask(String login, int id);
+    Task getTask(String login, Integer id);
+
+    Task getTask(Integer id);
 
     Task updateTask(String login, Task task);
 
-    Task removeTask(String login, int id);
+    Task removeTask(String login, Integer id);
+
+    Task removeTask(Integer id);
 
 }

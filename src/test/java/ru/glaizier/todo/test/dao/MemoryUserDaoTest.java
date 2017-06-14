@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
-import ru.glaizier.todo.dao.UserDao;
+import ru.glaizier.todo.dao.memory.UserDao;
 import ru.glaizier.todo.domain.User;
 
 import java.util.Collections;
