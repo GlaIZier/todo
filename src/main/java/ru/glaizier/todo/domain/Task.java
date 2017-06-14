@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -13,14 +15,16 @@ import javax.persistence.Id;
 @Entity
 public class Task {
     @Id
-    private int id;
+    // check for postgres generated table: https://stackoverflow.com/questions/39807483/sequence-hibernate-sequence-not-found-sql-statement
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private String login;
     private String todo;
 
     protected Task() {
     }
 
-    public Task(int id, String login, String todo) {
+    public Task(Integer id, String login, String todo) {
         this.id = id;
         this.login = login;
         this.todo = todo;

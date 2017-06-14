@@ -138,7 +138,7 @@ public class MemoryTaskDaoTest {
     @Test
     // Todo move to Integer to avoid save for the same login
     public void saveTask() throws SQLException {
-        System.out.println(embeddedTaskDao.save(new Task(3, "u", "todo3")));
+        System.out.println(embeddedTaskDao.save(new Task(null, "u", "todo3")));
         printTasks("u");
         System.out.println("////");
         printTasks("a");
