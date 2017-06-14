@@ -22,7 +22,7 @@ import ru.glaizier.todo.controller.api.exception.ApiBadRequestException;
 import ru.glaizier.todo.controller.api.exception.ApiNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ApiTaskNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ExceptionHandlingController;
-import ru.glaizier.todo.dao.memory.TaskDao;
+import ru.glaizier.todo.dao.TaskDao;
 import ru.glaizier.todo.domain.Task;
 import ru.glaizier.todo.domain.api.Link;
 import ru.glaizier.todo.domain.api.output.OutputData;
@@ -60,7 +60,7 @@ public class TaskRestController extends ExceptionHandlingController {
      */
     @RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<OutputData<List<OutputData<Task>>>> getTasks(HttpServletRequest req) {
-        List<Task> tasks = taskDao.getTasks(getLogin(req));
+        List<Task> tasks = taskDao.findTasksByLogin(getLogin(req));
         List<OutputData<Task>> outputData = null;
         if (tasks != null) {
             outputData = tasks.stream().collect(
@@ -77,7 +77,7 @@ public class TaskRestController extends ExceptionHandlingController {
                                                        @RequestBody String todo) {
         checkTodoIsNotEmpty(todo);
         String login = getLogin(req);
-        Task task = taskDao.createTask(login, todo);
+        Task task = taskDao.save(new Task(login, todo));
         if (task == null)
             throw new ApiNotFoundException(format("Task creation failed! " +
                     "Login %s hasn't been found to create task for!", login));
@@ -98,7 +98,7 @@ public class TaskRestController extends ExceptionHandlingController {
     public ResponseEntity<OutputData<Task>> getTask(HttpServletRequest req,
                                                     @PathVariable int id) {
         String login = getLogin(req);
-        Task task = taskDao.getTask(login, id);
+        Task task = taskDao.findTaskByIdAndLogin(id, login);
         if (task == null)
             throw new ApiTaskNotFoundException(login, id);
 
@@ -112,9 +112,10 @@ public class TaskRestController extends ExceptionHandlingController {
                                                        @PathVariable int id,
                                                        @RequestBody String todo) {
         String login = getLogin(req);
-        Task updatedTask = Task.builder().id(id).login(login).todo(todo).build();
-        if (taskDao.updateTask(login, updatedTask) == null)
+        if (taskDao.findTaskByIdAndLogin(id, login) == null)
             throw new ApiTaskNotFoundException(login, id);
+
+        Task updatedTask = taskDao.save(Task.builder().id(id).login(login).todo(todo).build());
 
         OutputData<Task> outputData = new OutputData<>(updatedTask);
         return new ResponseEntity<>(outputData, HttpStatus.OK);
@@ -124,11 +125,13 @@ public class TaskRestController extends ExceptionHandlingController {
     public ResponseEntity<OutputData<Task>> deleteTask(HttpServletRequest req,
                                                        @PathVariable int id) {
         String login = getLogin(req);
-        Task task = taskDao.removeTask(login, id);
-        if (task == null)
+        Task deletedTask = taskDao.findTaskByIdAndLogin(id, login);
+        if (deletedTask == null)
             throw new ApiTaskNotFoundException(login, id);
 
-        OutputData<Task> outputData = new OutputData<>(task);
+        taskDao.delete(id);
+
+        OutputData<Task> outputData = new OutputData<>(deletedTask);
         return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 

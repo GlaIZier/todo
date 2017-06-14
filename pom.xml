@@ -18,6 +18,16 @@
     <profiles>
         <!--Todo move location to properties file-->
         <profile>
+            <id>memory</id>
+            <properties>
+                <profile.name>memory</profile.name>
+                <glaizier.server>127.0.0.1</glaizier.server>
+
+                <glaizier.tomcat.path>${project.name}</glaizier.tomcat.path>
+                <glaizier.tomcat.port>8080</glaizier.tomcat.port>
+            </properties>
+        </profile>
+        <profile>
             <id>local</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
