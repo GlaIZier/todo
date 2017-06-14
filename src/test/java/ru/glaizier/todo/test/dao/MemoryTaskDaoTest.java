@@ -76,6 +76,14 @@ public class MemoryTaskDaoTest {
     }
 
     @Test
+    public void getTaskOnGetTaskById() {
+        assertThat(taskDao.findTaskById(1),
+                is(Task.builder().id(1).login("u").todo("todo1").build()));
+        assertThat(taskDao.findTaskById(3),
+                is(Task.builder().id(3).login("a").todo("todo1").build()));
+    }
+
+    @Test
     public void getPreviousTaskOnUpdateTask() {
         assertThat(taskDao.save(Task.builder().id(1).login("u").todo("updated todo100").build()),
                 is(Task.builder().id(1).login("u").todo("updated todo100").build()));
