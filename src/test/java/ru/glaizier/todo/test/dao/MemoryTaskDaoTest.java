@@ -28,6 +28,7 @@ import java.sql.SQLException;
         RootConfig.class
 })
 @WebAppConfiguration
+//@ActiveProfiles(profiles = "memory")
 public class MemoryTaskDaoTest {
 
     @Autowired
@@ -136,7 +137,6 @@ public class MemoryTaskDaoTest {
     }
 
     @Test
-    // Todo move to Integer to avoid save for the same login
     public void saveTask() throws SQLException {
         System.out.println(embeddedTaskDao.save(new Task(null, "u", "todo3")));
         printTasks("u");

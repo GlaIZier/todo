@@ -1,27 +1,40 @@
-package ru.glaizier.todo.dao.memory;
+package ru.glaizier.todo.dao.embedded;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import ru.glaizier.todo.dao.Db;
-import ru.glaizier.todo.dao.TaskDao;
 import ru.glaizier.todo.domain.Task;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 
-@Repository
-public class MemoryTaskDao implements TaskDao {
+@Repository("mtd")
+@Profile("memory")
+public class EmbeddedTaskDaoImpl implements OverrideEmbeddedTaskDao {
 
     private final Db db;
 
     @Autowired
-    public MemoryTaskDao(Db db) {
+    public EmbeddedTaskDaoImpl(Db db) {
         this.db = db;
     }
 
     @Override
+    public List<Task> findTasksByLogin(String login) {
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAA");
+        return null;
+    }
+
+    @Override
+    public Task findTaskByIdAndLogin(int id, String login) {
+        System.out.println("BBBBBBBBBBBBBBBBBBBBBB");
+        return null;
+    }
+}
+
+/*
+
+ @Override
     public List<Task> getTasks(String login) {
         Set<Task> tasks = db.getTasks(login);
         if (tasks == null)
@@ -54,11 +67,5 @@ public class MemoryTaskDao implements TaskDao {
     public boolean containsLogin(String login) {
         return db.containsLogin(login);
     }
-
-}
-
-/*
-
-
 
  */
