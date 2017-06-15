@@ -39,7 +39,6 @@ import javax.servlet.http.Cookie;
         RootConfig.class
 })
 @WebAppConfiguration
-// Todo make tests for wrong user but with existing id task
 public class TaskRestControllerIntegrationTest {
 
     @Autowired
@@ -77,6 +76,71 @@ public class TaskRestControllerIntegrationTest {
                         "{\"data\":{\"id\":2,\"login\":\"u\",\"todo\":\"todo2\"},\"_link\":{\"self\":\"/api/me/tasks/2\"}}]}"));
     }
 
+    @Test
+    public void get404WhenGetTasksForUnknownUser() throws Exception {
+        String token = tokenService.createToken("dummyLogin");
+
+        mvc.perform(get("/api/me/tasks").cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    /**
+     * Read id
+     */
+    @Test
+    public void get200WhenGetTask() throws Exception {
+        String token = tokenService.createToken("u");
+
+        mvc.perform(get("/api/me/tasks/1").cookie(new Cookie(propertiesService.getApiTokenCookieName(),
+                token)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("{\"data\":{\"id\":1,\"login\":\"u\",\"todo\":\"todo1\"}}"));
+
+        token = tokenService.createToken("a");
+
+        mvc.perform(get("/api/me/tasks/3").cookie(new Cookie(propertiesService.getApiTokenCookieName(),
+                token)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("{\"data\":{\"id\":3,\"login\":\"a\",\"todo\":\"todo1\"}}"));
+    }
+
+    @Test
+    public void get404WhenGetUnknownIdTask() throws Exception {
+        String token = tokenService.createToken("u");
+
+        mvc.perform(get("/api/me/tasks/100").cookie(new Cookie(propertiesService.getApiTokenCookieName(),
+                token)))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("{\"error\":{\"code\":404," +
+                        "\"message\":\"Task for user u with id 100 hasn't been found!\"}}"));
+    }
+
+    @Test
+    public void get404WhenGetTaskForUnknownUser() throws Exception {
+        String token = tokenService.createToken("dummyLogin");
+
+        mvc.perform(get("/api/me/tasks/1").cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("{\"error\":{\"code\":404," +
+                        "\"message\":\"Task for user dummyLogin with id 1 hasn't been found!\"}}"));
+    }
+
+    @Test
+    public void get404WhenGetTaskWithExistingIdButWrongUser() throws Exception {
+        String token = tokenService.createToken("u");
+
+        mvc.perform(get("/api/me/tasks/3").cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("{\"error\":{\"code\":404," +
+                        "\"message\":\"Task for user u with id 3 hasn't been found!\"}}"));
+    }
+
     /**
      * Create
      */
@@ -110,43 +174,6 @@ public class TaskRestControllerIntegrationTest {
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("{\"error\":{\"code\":404,\"" +
                         "message\":\"Task creation failed! Login dummyLogin hasn't been found to create task for!\"}}"));
-    }
-
-    /**
-     * Read id
-     */
-    @Test
-    public void get200WhenGetTask() throws Exception {
-        String token = tokenService.createToken("u");
-
-        mvc.perform(get("/api/me/tasks/1").cookie(new Cookie(propertiesService.getApiTokenCookieName(),
-                token)))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string("{\"data\":{\"id\":1,\"login\":\"u\",\"todo\":\"todo1\"}}"));
-    }
-
-    @Test
-    public void get404WhenGetUnknownIdTask() throws Exception {
-        String token = tokenService.createToken("u");
-
-        mvc.perform(get("/api/me/tasks/100").cookie(new Cookie(propertiesService.getApiTokenCookieName(),
-                token)))
-                .andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("{\"error\":{\"code\":404," +
-                        "\"message\":\"Task for user u with id 100 hasn't been found!\"}}"));
-    }
-
-    @Test
-    public void get404WhenGetTaskForUnknownUser() throws Exception {
-        String token = tokenService.createToken("dummyLogin");
-
-        mvc.perform(get("/api/me/tasks/1").cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
-                .andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("{\"error\":{\"code\":404," +
-                        "\"message\":\"Task for user dummyLogin with id 1 hasn't been found!\"}}"));
     }
 
     /**

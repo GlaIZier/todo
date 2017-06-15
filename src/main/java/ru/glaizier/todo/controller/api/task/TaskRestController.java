@@ -63,7 +63,12 @@ public class TaskRestController extends ExceptionHandlingController {
      */
     @RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<OutputData<List<OutputData<Task>>>> getTasks(HttpServletRequest req) {
-        List<Task> tasks = taskDao.findTasksByLogin(getLogin(req));
+        String login = getLogin(req);
+        if (userDao.getUser(login) == null)
+            throw new ApiNotFoundException(format("Tasks list get failed! " +
+                    "Login %s hasn't been found!", login));
+
+        List<Task> tasks = taskDao.findTasksByLogin(login);
         List<OutputData<Task>> outputData = null;
         if (tasks != null) {
             outputData = tasks.stream().collect(
@@ -71,6 +76,7 @@ public class TaskRestController extends ExceptionHandlingController {
                     (acc, task) -> acc.add(new OutputData<Task>(task, new Link(TASKS_BASE_URL + task.getId()))),
                     ArrayList::addAll);
         }
+
         return new ResponseEntity<>(new OutputData<>(outputData), HttpStatus.OK);
     }
 

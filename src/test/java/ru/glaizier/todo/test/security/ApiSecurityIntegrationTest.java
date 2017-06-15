@@ -78,10 +78,19 @@ public class ApiSecurityIntegrationTest {
     @Test
     public void get200WhenTokenIsOk() throws Exception {
         // We can get empty list but it's OK 200 for rest get collection
-        String token = tokenService.createToken("dummyLogin");
+        String token = tokenService.createToken("u");
 
         mvc.perform(get(testUri).cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void get404WhenTokenIsOkForUnknownUser() throws Exception {
+        String token = tokenService.createToken("dummyLogin");
+
+        mvc.perform(get(testUri).cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 }
