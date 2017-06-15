@@ -1,6 +1,8 @@
 language: java
 jdk: oraclejdk8
-script: mvn clean verify
+script:
+  - mvn clean verify
+  - mvn clean verify -DargLine="-Dspring.profiles.active=memory"
 notifications:
   email:
     recipients:

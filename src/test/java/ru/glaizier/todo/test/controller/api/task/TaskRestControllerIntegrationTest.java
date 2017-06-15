@@ -39,6 +39,7 @@ import javax.servlet.http.Cookie;
         RootConfig.class
 })
 @WebAppConfiguration
+// Todo make tests for wrong user but with existing id task
 public class TaskRestControllerIntegrationTest {
 
     @Autowired

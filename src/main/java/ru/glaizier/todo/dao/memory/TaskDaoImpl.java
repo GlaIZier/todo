@@ -53,7 +53,8 @@ public class TaskDaoImpl implements OverrideTaskDao {
     public <S extends Task> S save(S s) {
         if (s.getId() == null || db.getTask(s.getLogin(), s.getId()) == null) {
             log.debug("save (createTask) memory implementation...");
-            db.createTask(s.getLogin(), s.getTodo());
+            Task createdTask = db.createTask(s.getLogin(), s.getTodo());
+            s.setId(createdTask.getId());
         } else {
             log.debug("save (updateTask) memory implementation...");
             db.updateTask(s.getLogin(), s);

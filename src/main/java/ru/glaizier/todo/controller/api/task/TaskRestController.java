@@ -23,6 +23,7 @@ import ru.glaizier.todo.controller.api.exception.ApiNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ApiTaskNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ExceptionHandlingController;
 import ru.glaizier.todo.dao.TaskDao;
+import ru.glaizier.todo.dao.memory.UserDao;
 import ru.glaizier.todo.domain.Task;
 import ru.glaizier.todo.domain.api.Link;
 import ru.glaizier.todo.domain.api.output.OutputData;
@@ -51,6 +52,8 @@ public class TaskRestController extends ExceptionHandlingController {
 
     private static final String TASKS_BASE_URL = "/api/me/tasks/";
 
+    private final UserDao userDao;
+
     private final TaskDao taskDao;
 
     private final PropertiesService propertiesService;
@@ -77,10 +80,12 @@ public class TaskRestController extends ExceptionHandlingController {
                                                        @RequestBody String todo) {
         checkTodoIsNotEmpty(todo);
         String login = getLogin(req);
-        Task task = taskDao.save(new Task(login, todo));
-        if (task == null)
+        // Todo avoid it when foreign key constraint will be ready
+        if (userDao.getUser(login) == null)
             throw new ApiNotFoundException(format("Task creation failed! " +
                     "Login %s hasn't been found to create task for!", login));
+
+        Task task = taskDao.save(new Task(login, todo));
 
         HttpHeaders headers = new HttpHeaders();
         URI locationUri = UriComponentsBuilder.newInstance()
