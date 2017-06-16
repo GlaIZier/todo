@@ -1,11 +1,5 @@
 package ru.glaizier.todo.test.dao;
 
-import static junit.framework.TestCase.assertNull;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.core.Is.is;
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +12,12 @@ import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
 import ru.glaizier.todo.dao.memory.UserDao;
 import ru.glaizier.todo.domain.User;
+
+import static junit.framework.TestCase.assertNull;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.core.Is.is;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -105,4 +105,37 @@ public class MemoryUserDaoTest {
     public void findUserByLogin() {
         assertThat(userDao.findUserByLogin("u"), is(new User("u", "p".toCharArray())));
     }
+
+    @Test
+    public void findUserByLoginAndPassword() {
+        assertThat(userDao.findUserByLoginAndPassword("u", "p".toCharArray()),
+                is(new User("u", "p".toCharArray())));
+    }
+
+    @Test
+    public void getNullForFindUserByLoginAndPassword() {
+        assertNull(userDao.findUserByLoginAndPassword("u", "w".toCharArray()));
+    }
+
+    @Test
+    public void save() {
+        assertThat(userDao.save(new User("savedUser", "savedPassword".toCharArray())),
+                is(new User("savedUser", "savedPassword".toCharArray())));
+        assertThat(userDao.findUserByLogin("savedUser"), is(new User("savedUser", "savedPassword".toCharArray())));
+    }
+
+    @Test
+    public void update() {
+        assertThat(userDao.save(new User("u", "savedPassword".toCharArray())),
+                is(new User("u", "savedPassword".toCharArray())));
+        assertThat(userDao.findUserByLogin("u"), is(new User("u", "savedPassword".toCharArray())));
+    }
+
+
+    @Test
+    public void delete() {
+        userDao.delete("u");
+        assertNull(userDao.findUserByLogin("u"));
+    }
+
 }
