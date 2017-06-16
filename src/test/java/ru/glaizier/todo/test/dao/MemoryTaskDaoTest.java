@@ -28,12 +28,6 @@ import ru.glaizier.todo.domain.Task;
 @ActiveProfiles(profiles = "memory")
 public class MemoryTaskDaoTest {
 
-//    @Autowired
-//    private ru.glaizier.todo.dao.memory.TaskDao memoryTaskDao;
-//
-//    @Autowired
-//    private EmbeddedTaskDaoSql embeddedTaskDaoSql;
-
     @Autowired
     private TaskDao taskDao;
 
@@ -100,56 +94,5 @@ public class MemoryTaskDaoTest {
         taskDao.delete(1);
         assertNull(taskDao.findTaskById(1));
     }
-
-//    @Test
-//    public void getTrueOnContainsUser() {
-//        assertThat(taskDao.containsLogin("u"), is(true));
-//    }
-//
-//    @Test
-//    public void getFalseOnContainsUserUnknownUser() {
-//        assertThat(memoryTaskDao.containsLogin("dummyLogin"), is(false));
-//    }
-
-//    @Test
-//    public void testEmbeddedTaskDaoSql() throws SQLException {
-//        embeddedTaskDaoSql.test();
-//    }
-//
-//    @Test
-//    public void testFindTaskByIdAndLogin() throws SQLException {
-//        Task taskById = taskDao.findTaskByIdAndLogin(2, "a");
-//        System.out.println(taskById);
-//    }
-//
-//    @Test
-//    public void findTasksByLogin() throws SQLException {
-//        printTasks("u");
-//        printTasks("a");
-//    }
-//
-//    @Test
-//    public void saveTask() throws SQLException {
-//        System.out.println(taskDao.save(new Task(null, "u", "todo3")));
-//        printTasks("u");
-//        System.out.println("////");
-//        printTasks("a");
-//    }
-//
-//    @Test
-//    public void updateTask() throws SQLException {
-//        taskDao.save(new Task(2, "u", "todo3"));
-//        System.out.println(taskDao.findTaskByIdAndLogin(2, "u"));
-//    }
-//
-//    @Test
-//    public void removeTask() throws SQLException {
-//        taskDao.delete(3);
-//        printTasks("a");
-//    }
-//
-//    private void printTasks(String login) {
-//        taskDao.findTasksByLogin(login).forEach(System.out::println);
-//    }
 
 }
