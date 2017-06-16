@@ -3,12 +3,22 @@ package ru.glaizier.todo.domain;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Data
 @Builder(builderClassName = "Builder", toBuilder = true)
+@Entity
 public class User {
-    private final String login;
-    private final char[] password;
-    private final List<Role> roles;
+    @Id
+    private String login;
+    private char[] password;
+
+    protected User() {
+    }
+
+    public User(String login, char[] password) {
+        this.login = login;
+        this.password = password;
+    }
 }

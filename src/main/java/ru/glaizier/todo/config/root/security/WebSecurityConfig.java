@@ -12,12 +12,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import ru.glaizier.todo.dao.memory.UserDao;
-import ru.glaizier.todo.domain.Role;
 import ru.glaizier.todo.properties.PropertiesService;
 import ru.glaizier.todo.security.handler.LoginSuccessHandler;
 import ru.glaizier.todo.security.token.TokenService;
-
-import java.util.stream.Collectors;
 
 @Configuration
 @Order(2)
@@ -49,16 +46,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // Todo add password encoding (hash + salt)
     public UserDetailsService inMemoryUserDetailsService() throws Exception {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        userDao.getUsers().forEach(user ->
-            manager.createUser(
-                    User.withUsername(user.getLogin()).password(String.valueOf(user.getPassword()))
-                            // Roles -> (to) Strings -> List of Strings -> array of Strings
-                            .roles(user.getRoles().stream().map(Role::toString).collect(Collectors.toList())
-                                    .toArray(new String[user.getRoles().size()]))
-                            .build())
-        );
-//        manager.createUser(User.withUsername("u").password("p").roles("USER").build());
-//        manager.createUser(User.withUsername("a").password("p").roles("USER", "ADMIN").build());
+//        userDao.getUsers().forEach(user ->
+//            manager.createUser(
+//                    User.withUsername(user.getLogin()).password(String.valueOf(user.getPassword()))
+//                            // Roles -> (to) Strings -> List of Strings -> array of Strings
+//                            .roles(user.getRoles().stream().map(Role::toString).collect(Collectors.toList())
+//                                    .toArray(new String[user.getRoles().size()]))
+//                            .build())
+//        );
+        manager.createUser(User.withUsername("u").password("p").roles("USER").build());
+        manager.createUser(User.withUsername("a").password("p").roles("USER", "ADMIN").build());
         return manager;
     }
 

@@ -1,7 +1,6 @@
 package ru.glaizier.todo.controller.api.user;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static ru.glaizier.todo.domain.Role.USER;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,6 @@ import ru.glaizier.todo.dao.memory.UserDao;
 import ru.glaizier.todo.domain.User;
 import ru.glaizier.todo.domain.api.input.InputUser;
 import ru.glaizier.todo.domain.api.output.OutputData;
-
-import java.util.Collections;
 
 // Todo add method security
 // Todo add different views for rest (html+json)?
@@ -41,7 +38,7 @@ public class UserRestController extends ExceptionHandlingController {
     public ResponseEntity<OutputData<String>> registerUser(InputUser inputUser) {
         checkUserIsNotEmpty(inputUser);
         User createdUser = User.builder().login(inputUser.getLogin()).password(inputUser.getPassword())
-                .roles(Collections.singletonList(USER)).build();
+                /*.roles(Collections.singletonList(USER))*/.build();
         userDao.addUser(createdUser);
 
         OutputData<String> outputData = new OutputData<>(createdUser.getLogin());

@@ -5,7 +5,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
-import static ru.glaizier.todo.domain.Role.USER;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,8 +19,6 @@ import ru.glaizier.todo.config.servlet.ServletConfig;
 import ru.glaizier.todo.dao.memory.UserDao;
 import ru.glaizier.todo.domain.User;
 
-import java.util.Collections;
-
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {
@@ -34,8 +31,11 @@ public class MemoryUserDaoTest {
     @Autowired
     private UserDao memoryUserDao;
 
+    @Autowired
+    private ru.glaizier.todo.dao.UserDao userDao;
+
     private User dummyInitUser = User.builder().login("dummyInitUser").password("p".toCharArray())
-            .roles(Collections.singletonList(USER)).build();
+            /*.roles(Collections.singletonList(USER))*/.build();
 
     @Before
     public void init() {
@@ -45,7 +45,7 @@ public class MemoryUserDaoTest {
     @Test
     public void createUserOnCreateUser() {
         User dummyUser = User.builder().login("dummyUser").password("p".toCharArray())
-                .roles(Collections.singletonList(USER)).build();
+                /*.roles(Collections.singletonList(USER))*/.build();
         memoryUserDao.addUser(dummyUser);
         assertThat(memoryUserDao.getUser(dummyUser.getLogin()), is(dummyUser));
     }
@@ -99,5 +99,10 @@ public class MemoryUserDaoTest {
     @Test
     public void getFalseWhenUserNotExistsOnContainsUser() {
         assertThat(memoryUserDao.containsUser("NonExistLogin"), is(false));
+    }
+
+    @Test
+    public void findUserByLogin() {
+        assertThat(userDao.findUserByLogin("u"), is(new User("u", "p".toCharArray())));
     }
 }

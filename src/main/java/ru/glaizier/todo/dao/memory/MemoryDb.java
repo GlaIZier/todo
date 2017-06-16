@@ -1,15 +1,10 @@
 package ru.glaizier.todo.dao.memory;
 
-import static ru.glaizier.todo.domain.Role.ADMIN;
-import static ru.glaizier.todo.domain.Role.USER;
-
 import lombok.NonNull;
 import org.springframework.stereotype.Repository;
 import ru.glaizier.todo.domain.Task;
 import ru.glaizier.todo.domain.User;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -32,9 +27,9 @@ public class MemoryDb implements Db {
     @PostConstruct
     public void init() {
         addUser(User.builder().login("u").password("p".toCharArray())
-                .roles(Collections.singletonList(USER)).build());
+                /*.roles(Collections.singletonList(USER))*/.build());
         addUser(User.builder().login("a").password("p".toCharArray())
-                .roles(Arrays.asList(USER, ADMIN)).build());
+                /*.roles(Arrays.asList(USER, ADMIN))*/.build());
 
         createTask("u", "todo1");
         createTask("u", "todo2");
