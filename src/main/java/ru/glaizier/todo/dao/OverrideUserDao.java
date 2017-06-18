@@ -1,9 +1,8 @@
 package ru.glaizier.todo.dao;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import ru.glaizier.todo.domain.User;
 
-public interface UserDao extends JpaRepository<User, String>, OverrideUserDao {
+public interface OverrideUserDao {
 
     User findUserByLogin(String login);
 

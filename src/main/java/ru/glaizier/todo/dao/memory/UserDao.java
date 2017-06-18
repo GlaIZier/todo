@@ -4,6 +4,7 @@ import ru.glaizier.todo.domain.User;
 
 import java.util.Set;
 
+@Deprecated
 public interface UserDao {
 
     void addUser(User user);
