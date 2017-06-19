@@ -23,7 +23,7 @@ import ru.glaizier.todo.controller.api.exception.ApiNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ApiTaskNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ExceptionHandlingController;
 import ru.glaizier.todo.dao.TaskDao;
-import ru.glaizier.todo.dao.memory.UserDao;
+import ru.glaizier.todo.dao.UserDao;
 import ru.glaizier.todo.domain.Task;
 import ru.glaizier.todo.domain.api.Link;
 import ru.glaizier.todo.domain.api.output.OutputData;
@@ -64,7 +64,7 @@ public class TaskRestController extends ExceptionHandlingController {
     @RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<OutputData<List<OutputData<Task>>>> getTasks(HttpServletRequest req) {
         String login = getLogin(req);
-        if (userDao.getUser(login) == null)
+        if (userDao.findUserByLogin(login) == null)
             throw new ApiNotFoundException(format("Tasks list get failed! " +
                     "Login %s hasn't been found!", login));
 
@@ -87,7 +87,7 @@ public class TaskRestController extends ExceptionHandlingController {
         checkTodoIsNotEmpty(todo);
         String login = getLogin(req);
         // Todo avoid it when foreign key constraint will be ready
-        if (userDao.getUser(login) == null)
+        if (userDao.findUserByLogin(login) == null)
             throw new ApiNotFoundException(format("Task creation failed! " +
                     "Login %s hasn't been found to create task for!", login));
 

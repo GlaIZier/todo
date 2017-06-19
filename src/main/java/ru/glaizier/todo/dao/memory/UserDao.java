@@ -5,6 +5,8 @@ import ru.glaizier.todo.domain.User;
 import java.util.Set;
 
 @Deprecated
+// Todo remove it. Check webSecurityConfig before
+// Todo update readme to maintain memory and embedded db
 public interface UserDao {
 
     void addUser(User user);

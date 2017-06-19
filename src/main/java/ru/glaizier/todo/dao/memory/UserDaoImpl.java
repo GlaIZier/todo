@@ -27,7 +27,10 @@ public class UserDaoImpl implements OverrideUserDao {
     @Override
     public User findUserByLoginAndPassword(String login, char[] password) {
         User user = findUserByLogin(login);
-        return Arrays.equals(user.getPassword(), password) ? user : null;
+        return user == null ?
+                null
+                :
+                Arrays.equals(user.getPassword(), password) ? user : null;
     }
 
     @Override

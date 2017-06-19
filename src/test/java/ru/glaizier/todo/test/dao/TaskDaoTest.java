@@ -26,7 +26,7 @@ import ru.glaizier.todo.domain.Task;
 })
 @WebAppConfiguration
 @ActiveProfiles(profiles = "memory")
-public class MemoryTaskDaoTest {
+public class TaskDaoTest {
 
     @Autowired
     private TaskDao taskDao;
