@@ -92,6 +92,11 @@
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
+                    <!--Uncomment to enable active spring profile from pom or use
+                    mvn clean tomcat7:run -Dspring.profiles.active=memory-->
+                    <!--<systemProperties>-->
+                    <!--<spring.profiles.active>memory</spring.profiles.active>-->
+                    <!--</systemProperties>-->
                     <!--http config-->
                     <server>${glaizier.server}</server>
                     <url>http://${glaizier.server}:${glaizier.tomcat.port}/manager/text</url>

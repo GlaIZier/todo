@@ -29,7 +29,7 @@ public class TaskDaoImpl implements OverrideTaskDao {
 
     @Override
     public List<Task> findTasksByLogin(String login) {
-        log.debug("findTasksByLogin memory implementation...");
+        log.info("findTasksByLogin memory implementation...");
         Set<Task> tasks = db.getTasks(login);
         if (tasks == null)
             return null;
@@ -39,24 +39,24 @@ public class TaskDaoImpl implements OverrideTaskDao {
 
     @Override
     public Task findTaskByIdAndLogin(Integer id, String login) {
-        log.debug("findTaskByIdAndLogin memory implementation...");
+        log.info("findTaskByIdAndLogin memory implementation...");
         return db.getTask(login, id);
     }
 
     @Override
     public Task findTaskById(Integer id) {
-        log.debug("findTaskById memory implementation...");
+        log.info("findTaskById memory implementation...");
         return db.getTask(id);
     }
 
     @Override
     public <S extends Task> S save(S s) {
         if (s.getId() == null || db.getTask(s.getLogin(), s.getId()) == null) {
-            log.debug("save (createTask) memory implementation...");
+            log.info("save (createTask) memory implementation...");
             Task createdTask = db.createTask(s.getLogin(), s.getTodo());
             s.setId(createdTask.getId());
         } else {
-            log.debug("save (updateTask) memory implementation...");
+            log.info("save (updateTask) memory implementation...");
             db.updateTask(s.getLogin(), s);
         }
         return s;
@@ -64,45 +64,7 @@ public class TaskDaoImpl implements OverrideTaskDao {
 
     @Override
     public void delete(Integer integer) {
-        log.debug("findTasksByLogin memory implementation...");
+        log.info("delete memory implementation...");
         db.removeTask(integer);
     }
 }
-
-/*
-
- @Override
-    public List<Task> getTasks(String login) {
-        Set<Task> tasks = db.getTasks(login);
-        if (tasks == null)
-            return null;
-        return tasks.stream().sorted(Comparator.comparingInt(Task::getId))
-                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
-    }
-
-    @Override
-    public Task createTask(String login, String todo) {
-        return db.createTask(login, todo);
-    }
-
-    @Override
-    public Task getTask(String login, int id) {
-        return db.getTask(login, id);
-    }
-
-    @Override
-    public Task updateTask(String login, Task task) {
-        return db.updateTask(login, task);
-    }
-
-    @Override
-    public Task removeTask(String login, int id) {
-        return db.removeTask(login, id);
-    }
-
-    @Override
-    public boolean containsLogin(String login) {
-        return db.containsLogin(login);
-    }
-
- */
