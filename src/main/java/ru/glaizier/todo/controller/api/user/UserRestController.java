@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.glaizier.todo.controller.api.exception.ApiBadRequestException;
 import ru.glaizier.todo.controller.api.exception.ExceptionHandlingController;
-import ru.glaizier.todo.dao.memory.UserDao;
+import ru.glaizier.todo.dao.UserDao;
 import ru.glaizier.todo.domain.User;
 import ru.glaizier.todo.domain.api.input.InputUser;
 import ru.glaizier.todo.domain.api.output.OutputData;
@@ -39,7 +39,7 @@ public class UserRestController extends ExceptionHandlingController {
         checkUserIsNotEmpty(inputUser);
         User createdUser = User.builder().login(inputUser.getLogin()).password(inputUser.getPassword())
                 /*.roles(Collections.singletonList(USER))*/.build();
-        userDao.addUser(createdUser);
+        userDao.save(createdUser);
 
         OutputData<String> outputData = new OutputData<>(createdUser.getLogin());
         return new ResponseEntity<>(outputData, HttpStatus.CREATED);

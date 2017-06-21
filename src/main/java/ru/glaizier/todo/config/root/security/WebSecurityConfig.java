@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import ru.glaizier.todo.dao.memory.UserDao;
 import ru.glaizier.todo.properties.PropertiesService;
 import ru.glaizier.todo.security.handler.LoginSuccessHandler;
 import ru.glaizier.todo.security.token.TokenService;
@@ -24,16 +23,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final TokenService tokenService;
 
-    private final UserDao userDao;
-
     @Autowired
     public WebSecurityConfig(
             TokenService tokenService,
-            PropertiesService propertiesService,
-            UserDao userDao) {
+            PropertiesService propertiesService) {
         this.propertiesService = propertiesService;
         this.tokenService = tokenService;
-        this.userDao = userDao;
     }
 
     @Bean

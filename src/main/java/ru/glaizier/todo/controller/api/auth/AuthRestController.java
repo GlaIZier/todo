@@ -14,7 +14,7 @@ import ru.glaizier.todo.controller.api.exception.ApiNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ApiUnauthorizedException;
 import ru.glaizier.todo.controller.api.exception.ExceptionHandlingController;
 import ru.glaizier.todo.controller.api.user.UserRestController;
-import ru.glaizier.todo.dao.memory.UserDao;
+import ru.glaizier.todo.dao.UserDao;
 import ru.glaizier.todo.domain.api.input.InputUser;
 import ru.glaizier.todo.domain.api.output.OutputData;
 import ru.glaizier.todo.domain.api.output.OutputUser;
@@ -40,10 +40,10 @@ public class AuthRestController extends ExceptionHandlingController {
     public ResponseEntity<OutputData<OutputUser>> authenticateUser(InputUser inputUser) {
         UserRestController.checkUserIsNotEmpty(inputUser);
 
-        if (!userDao.containsUser(inputUser.getLogin()))
+        if (userDao.findUserByLogin(inputUser.getLogin()) == null)
             throw new ApiNotFoundException(format("User with login %s wasn't found!", inputUser.getLogin()));
 
-        if (userDao.getUserWithPassword(inputUser.getLogin(), inputUser.getPassword()) == null)
+        if (userDao.findUserByLoginAndPassword(inputUser.getLogin(), inputUser.getPassword()) == null)
             throw new ApiUnauthorizedException("Wrong credentials were provided!");
 
         String token = tokenService.createToken(inputUser.getLogin());
