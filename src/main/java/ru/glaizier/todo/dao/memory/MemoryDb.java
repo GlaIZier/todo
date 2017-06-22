@@ -1,6 +1,7 @@
 package ru.glaizier.todo.dao.memory;
 
 import lombok.NonNull;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import ru.glaizier.todo.domain.Task;
 import ru.glaizier.todo.domain.User;
@@ -16,6 +17,7 @@ import javax.annotation.PostConstruct;
 
 // Just a simple memory db dummy
 @Repository
+@Profile("memory")
 public class MemoryDb implements Db {
 
     private final ConcurrentMap<String, ConcurrentMap<Integer, Task>> loginToIdToTask = new ConcurrentHashMap<>();
@@ -77,7 +79,9 @@ public class MemoryDb implements Db {
             return null;
 
         Integer newId = lastId.incrementAndGet();
-        Task newTask = Task.builder().id(newId).login(login).todo(todo).build();
+        // Todo
+//        Task newTask = Task.builder().id(newId).login(login).todo(todo).build();
+        Task newTask = null;
 
         ConcurrentMap<Integer, Task> idToTask = loginToIdToTask.get(login);
         if (idToTask == null)
@@ -109,7 +113,9 @@ public class MemoryDb implements Db {
 
         Task prevTask = loginToIdToTask.get(login).get(task.getId());
         if (prevTask != null) {
-            Task updatedTask = Task.builder().id(task.getId()).login(login).todo(task.getTodo()).build();
+            // Todo
+//            Task updatedTask = Task.builder().id(task.getId()).login(login).todo(task.getTodo()).build();
+            Task updatedTask = null;
             Map<Integer, Task> updatedMap = loginToIdToTask.get(login);
             updatedMap.put(updatedTask.getId(), updatedTask);
         }

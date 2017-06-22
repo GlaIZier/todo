@@ -18,6 +18,8 @@ import ru.glaizier.todo.config.servlet.ServletConfig;
 import ru.glaizier.todo.dao.UserDao;
 import ru.glaizier.todo.domain.User;
 
+import javax.transaction.Transactional;
+
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {
@@ -83,5 +85,13 @@ public class UserDaoTest {
     public void delete() {
         userDao.delete(dummyInitUser.getLogin());
         assertNull(userDao.findUserByLogin(dummyInitUser.getLogin()));
+    }
+
+    @Test
+    // need to make additional query to get lazy additional from another table
+    @Transactional
+    public void join() {
+        User u = userDao.findUserByLogin("u");
+        u.getTasks().forEach(System.out::println);
     }
 }
