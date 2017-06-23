@@ -1,8 +1,6 @@
 package ru.glaizier.todo.dao.memory;
 
 import lombok.NonNull;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Repository;
 import ru.glaizier.todo.domain.Task;
 import ru.glaizier.todo.domain.User;
 
@@ -16,8 +14,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.PostConstruct;
 
 // Just a simple memory db dummy
-@Repository
-@Profile("memory")
+//@Repository
+//@Profile("memory")
 public class MemoryDb implements Db {
 
     private final ConcurrentMap<String, ConcurrentMap<Integer, Task>> loginToIdToTask = new ConcurrentHashMap<>();
@@ -28,14 +26,14 @@ public class MemoryDb implements Db {
 
     @PostConstruct
     public void init() {
-        addUser(User.builder().login("u").password("p".toCharArray())
-                /*.roles(Collections.singletonList(USER))*/.build());
-        addUser(User.builder().login("a").password("p".toCharArray())
-                /*.roles(Arrays.asList(USER, ADMIN))*/.build());
-
-        createTask("u", "todo1");
-        createTask("u", "todo2");
-        createTask("a", "todo1");
+//        addUser(User.builder().login("u").password("p".toCharArray())
+//                /*.roles(Collections.singletonList(USER))*/.build());
+//        addUser(User.builder().login("a").password("p".toCharArray())
+//                /*.roles(Arrays.asList(USER, ADMIN))*/.build());
+//
+//        createTask("u", "todo1");
+//        createTask("u", "todo2");
+//        createTask("a", "todo1");
     }
 
     @Override

@@ -88,7 +88,7 @@ public class UserDaoTest {
     }
 
     @Test
-    // need to make additional query to get lazy additional from another table
+    // need to make additional query to get lazy additional from another table during single transaction
     @Transactional
     public void join() {
         User u = userDao.findUserByLogin("u");

@@ -2,6 +2,7 @@ package ru.glaizier.todo.test.dao;
 
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
@@ -12,6 +13,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
 import ru.glaizier.todo.dao.TaskDao;
+import ru.glaizier.todo.domain.Task;
+
+import javax.transaction.Transactional;
 
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -92,4 +96,11 @@ public class TaskDaoTest {
         assertNull(taskDao.findTaskById(1));
     }
 */
+
+    @Test
+    @Transactional
+    public void join() {
+        Task task = taskDao.findTaskById(1);
+        System.out.println(task.getUser());
+    }
 }
