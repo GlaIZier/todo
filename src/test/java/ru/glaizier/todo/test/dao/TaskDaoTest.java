@@ -1,7 +1,5 @@
 package ru.glaizier.todo.test.dao;
 
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +11,14 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
 import ru.glaizier.todo.dao.TaskDao;
+import ru.glaizier.todo.dao.UserDao;
 import ru.glaizier.todo.domain.Task;
+import ru.glaizier.todo.domain.User;
 
 import javax.transaction.Transactional;
+import java.util.List;
+
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -29,6 +32,9 @@ public class TaskDaoTest {
 
     @Autowired
     private TaskDao taskDao;
+
+    @Autowired
+    private UserDao userDao;
 
     /*
     @Test
@@ -102,5 +108,14 @@ public class TaskDaoTest {
     public void join() {
         Task task = taskDao.findTaskById(1);
         System.out.println(task.getUser());
+    }
+
+    @Test
+    public void find() {
+        User u = userDao.findUserByLogin("u");
+        List<Task> tasksByUser = taskDao.findTasksByUser(u);
+        System.out.println(tasksByUser.get(0).getTodo());
+//        tasksByUser.forEach(System.out::println);
+
     }
 }

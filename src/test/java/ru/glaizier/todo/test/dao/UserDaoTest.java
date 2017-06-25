@@ -1,11 +1,5 @@
 package ru.glaizier.todo.test.dao;
 
-import static junit.framework.TestCase.assertNull;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
-
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +13,8 @@ import ru.glaizier.todo.dao.UserDao;
 import ru.glaizier.todo.domain.User;
 
 import javax.transaction.Transactional;
+
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -35,6 +31,7 @@ public class UserDaoTest {
     private User dummyInitUser = User.builder().login("dummyInitUser").password("p".toCharArray())
             /*.roles(Collections.singletonList(USER))*/.build();
 
+            /*
     @Before
     public void init() {
         userDao.save(dummyInitUser);
@@ -86,6 +83,7 @@ public class UserDaoTest {
         userDao.delete(dummyInitUser.getLogin());
         assertNull(userDao.findUserByLogin(dummyInitUser.getLogin()));
     }
+    */
 
     @Test
     // need to make additional query to get lazy additional from another table during single transaction
