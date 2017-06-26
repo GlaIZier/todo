@@ -4,6 +4,7 @@ import static lombok.AccessLevel.NONE;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
@@ -20,6 +21,7 @@ import javax.persistence.ManyToMany;
 @ToString(exclude = "users")
 @Entity
 public class Role {
+    @NonNull
     @Id
     private String role;
 

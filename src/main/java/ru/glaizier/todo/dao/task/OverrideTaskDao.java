@@ -1,4 +1,4 @@
-package ru.glaizier.todo.dao;
+package ru.glaizier.todo.dao.task;
 
 public interface OverrideTaskDao {
 

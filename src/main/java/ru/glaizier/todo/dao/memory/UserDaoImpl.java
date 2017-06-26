@@ -1,6 +1,6 @@
 package ru.glaizier.todo.dao.memory;
 
-import ru.glaizier.todo.dao.OverrideUserDao;
+import ru.glaizier.todo.dao.user.OverrideUserDao;
 
 //@Repository
 //@Profile("memory")

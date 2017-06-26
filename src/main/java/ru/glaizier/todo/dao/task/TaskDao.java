@@ -1,4 +1,4 @@
-package ru.glaizier.todo.dao;
+package ru.glaizier.todo.dao.task;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.glaizier.todo.domain.Task;

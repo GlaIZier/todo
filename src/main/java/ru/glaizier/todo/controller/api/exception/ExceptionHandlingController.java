@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import ru.glaizier.todo.dao.exception.AccessDeniedException;
 import ru.glaizier.todo.domain.api.Error;
 import ru.glaizier.todo.domain.api.output.OutputError;
 
@@ -45,12 +46,21 @@ public class ExceptionHandlingController {
     }
 
     @ExceptionHandler(ApiUnauthorizedException.class)
-    public ResponseEntity<OutputError> handleNotFoundException(
+    public ResponseEntity<OutputError> handleUnauthorizedException(
             ApiUnauthorizedException e) {
         log.error("Request to rest controller failed: " + e.getMessage(), e);
 
         OutputError outputError = new OutputError(new Error(OutputError.UNAUTHORIZED.getError().getCode(), e.getMessage()));
         return new ResponseEntity<>(outputError, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler({ApiForbiddenException.class, AccessDeniedException.class})
+    public ResponseEntity<OutputError> handleForbiddenException(
+            ApiUnauthorizedException e) {
+        log.error("Request to rest controller failed: " + e.getMessage(), e);
+
+        OutputError outputError = new OutputError(new Error(OutputError.FORBIDDEN.getError().getCode(), e.getMessage()));
+        return new ResponseEntity<>(outputError, HttpStatus.FORBIDDEN);
     }
 
 }

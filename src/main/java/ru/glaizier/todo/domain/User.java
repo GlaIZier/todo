@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -27,9 +28,11 @@ import javax.persistence.OneToMany;
 @Entity
 // Todo remove setters?
 public class User {
+    @NonNull
     @Id
     private String login;
 
+    @NonNull
     private char[] password;
 
     @OneToMany(fetch = LAZY, mappedBy = "user", cascade = ALL)

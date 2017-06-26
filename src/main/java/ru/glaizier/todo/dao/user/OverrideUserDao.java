@@ -1,4 +1,4 @@
-package ru.glaizier.todo.dao;
+package ru.glaizier.todo.dao.user;
 
 public interface OverrideUserDao {
 

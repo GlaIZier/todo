@@ -1,5 +1,11 @@
 package ru.glaizier.todo.controller.api.task;
 
+import static java.lang.String.format;
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -15,8 +21,7 @@ import ru.glaizier.todo.controller.api.exception.ApiBadRequestException;
 import ru.glaizier.todo.controller.api.exception.ApiNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ApiTaskNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ExceptionHandlingController;
-import ru.glaizier.todo.dao.TaskDao;
-import ru.glaizier.todo.dao.UserDao;
+import ru.glaizier.todo.dao.Dao;
 import ru.glaizier.todo.domain.Task;
 import ru.glaizier.todo.domain.User;
 import ru.glaizier.todo.domain.api.Link;
@@ -24,13 +29,11 @@ import ru.glaizier.todo.domain.api.output.OutputData;
 import ru.glaizier.todo.domain.api.output.OutputTask;
 import ru.glaizier.todo.properties.PropertiesService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.String.format;
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import javax.servlet.http.HttpServletRequest;
 
 //@RestController
 @RequestMapping(value = {"/api/v1/me/tasks", "/api/me/tasks"})
@@ -49,21 +52,19 @@ public class TaskRestController extends ExceptionHandlingController {
 
     private static final String TASKS_BASE_URL = "/api/me/tasks/";
 
-    private final UserDao userDao;
-
-    private final TaskDao taskDao;
+    private final Dao dao;
 
     private final PropertiesService propertiesService;
 
     @RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<OutputData<List<OutputData<OutputTask>>>> getTasks(HttpServletRequest req) {
         String login = getLogin(req);
-        User user = userDao.findUserByLogin(login);
+        User user = dao.getUserDao().findUserByLogin(login);
         if (user == null)
             throw new ApiNotFoundException(format("Tasks list get failed! " +
                     "Login %s hasn't been found!", login));
 
-        List<Task> tasks = taskDao.findTasksByUser(user);
+        List<Task> tasks = dao.getTaskDao().findTasksByUser(user);
         if (tasks == null)
             return new ResponseEntity<>(new OutputData<>(null), HttpStatus.OK);
 
@@ -73,9 +74,9 @@ public class TaskRestController extends ExceptionHandlingController {
                 ArrayList::addAll);
 
         List<OutputData<OutputTask>> outputData = outputTasks.stream().collect(
-                    ArrayList::new,
+                ArrayList::new,
                 (acc, task) -> acc.add(new OutputData<OutputTask>(task, new Link(TASKS_BASE_URL + task.getId()))),
-                    ArrayList::addAll);
+                ArrayList::addAll);
 
         return new ResponseEntity<>(new OutputData<>(outputData), HttpStatus.OK);
     }
@@ -85,14 +86,12 @@ public class TaskRestController extends ExceptionHandlingController {
                                                        @RequestBody String todo) {
         checkTodoIsNotEmpty(todo);
         String login = getLogin(req);
-        // Todo avoid it when foreign key constraint will be ready
-        if (userDao.findUserByLogin(login) == null)
+        User user = dao.getUserDao().findUserByLogin(login);
+        if (user == null)
             throw new ApiNotFoundException(format("Task creation failed! " +
                     "Login %s hasn't been found to create task for!", login));
 
-        // Todo
-//        Task task = taskDao.save(new Task(login, todo));
-        Task task = null;
+        Task task = dao.getTaskDao().save(Task.builder().user(user).todo(todo).build());
 
         HttpHeaders headers = new HttpHeaders();
         URI locationUri = UriComponentsBuilder.newInstance()
@@ -110,7 +109,7 @@ public class TaskRestController extends ExceptionHandlingController {
     public ResponseEntity<OutputData<Task>> getTask(HttpServletRequest req,
                                                     @PathVariable int id) {
         String login = getLogin(req);
-        Task task = taskDao.findTaskByIdAndLogin(id, login);
+        Task task = dao.findTaskUserJoinedWithLoginCheck(id, login);
         if (task == null)
             throw new ApiTaskNotFoundException(login, id);
 
@@ -123,12 +122,11 @@ public class TaskRestController extends ExceptionHandlingController {
                                                        @PathVariable int id,
                                                        @RequestBody String todo) {
         String login = getLogin(req);
-        if (taskDao.findTaskByIdAndLogin(id, login) == null)
+        Task task = dao.findTaskUserJoinedWithLoginCheck(id, login);
+        if (task == null)
             throw new ApiTaskNotFoundException(login, id);
 
-        // Todo
-//        Task updatedTask = taskDao.save(Task.builder().id(id).login(login).todo(todo).build());
-        Task updatedTask = null;
+        Task updatedTask = dao.getTaskDao().save(Task.builder().id(id).user(task.getUser()).todo(todo).build());
 
         OutputData<Task> outputData = new OutputData<>(updatedTask);
         return new ResponseEntity<>(outputData, HttpStatus.OK);
@@ -138,11 +136,11 @@ public class TaskRestController extends ExceptionHandlingController {
     public ResponseEntity<OutputData<Task>> deleteTask(HttpServletRequest req,
                                                        @PathVariable int id) {
         String login = getLogin(req);
-        Task deletedTask = taskDao.findTaskByIdAndLogin(id, login);
+        Task deletedTask = dao.findTaskUserJoinedWithLoginCheck(id, login);
         if (deletedTask == null)
             throw new ApiTaskNotFoundException(login, id);
 
-        taskDao.delete(id);
+        dao.getTaskDao().delete(id);
 
         OutputData<Task> outputData = new OutputData<>(deletedTask);
         return new ResponseEntity<>(outputData, HttpStatus.OK);
