@@ -12,6 +12,7 @@ import lombok.ToString;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
@@ -21,11 +22,17 @@ import javax.persistence.ManyToMany;
 @ToString(exclude = "users")
 @Entity
 public class Role {
+    public static Role USER = new Role("USER");
+    public static Role ADMIN = new Role("ADMIN");
+
     @NonNull
     @Id
     private String role;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @Setter(NONE)
     private Set<User> users;
+
+    protected Role() {
+    }
 }

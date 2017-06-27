@@ -16,7 +16,6 @@ import java.util.Set;
 import javax.transaction.Transactional;
 
 @Repository
-@Transactional
 public class DaoService implements Dao {
 
     private TaskDao taskDao;
@@ -41,6 +40,7 @@ public class DaoService implements Dao {
     }
 
     @Override
+    @Transactional
     public Task findTaskUserJoined(Integer id) {
         Task task = taskDao.findTaskById(id);
         if (task == null)
@@ -52,6 +52,7 @@ public class DaoService implements Dao {
     }
 
     @Override
+    @Transactional
     public Task findTaskUserJoinedWithLoginCheck(Integer id, String login) {
         Task task = findTaskUserJoined(id);
         if (task == null)

@@ -9,7 +9,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.util.Set;
 
@@ -24,7 +23,6 @@ import javax.persistence.OneToMany;
 @Setter
 // Exclude tasks to avoid cyclic dependencies between user and task
 @EqualsAndHashCode(exclude = "tasks")
-@ToString(exclude = {"tasks", "password"})
 @Entity
 // Todo remove setters?
 public class User {
@@ -39,7 +37,7 @@ public class User {
     @Setter(AccessLevel.NONE)
     private Set<Task> tasks;
 
-    @ManyToMany(cascade = ALL)
+    @ManyToMany(cascade = ALL, fetch = LAZY)
     @JoinTable(name = "Authorization",
             joinColumns = @JoinColumn(name = "login", referencedColumnName = "login"),
             inverseJoinColumns = @JoinColumn(name = "role", referencedColumnName = "role"))
@@ -53,5 +51,9 @@ public class User {
         this.login = login;
         this.password = password;
         this.roles = roles;
+    }
+
+    public String toString() {
+        return "ru.glaizier.todo.domain.User(login=" + this.getLogin() + ", roles=" + this.getRoles() + ")";
     }
 }

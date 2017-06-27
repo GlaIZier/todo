@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.glaizier.todo.controller.api.exception.ApiNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ApiUnauthorizedException;
 import ru.glaizier.todo.controller.api.exception.ExceptionHandlingController;
-import ru.glaizier.todo.dao.user.UserDao;
+import ru.glaizier.todo.controller.api.user.UserRestController;
+import ru.glaizier.todo.dao.Dao;
 import ru.glaizier.todo.domain.api.input.InputUser;
 import ru.glaizier.todo.domain.api.output.OutputData;
 import ru.glaizier.todo.domain.api.output.OutputUser;
@@ -30,19 +31,19 @@ import ru.glaizier.todo.security.token.TokenService;
 })
 public class AuthRestController extends ExceptionHandlingController {
 
-    private final UserDao userDao;
+    private final Dao dao;
 
     private final TokenService tokenService;
 
     @RequestMapping(method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     public ResponseEntity<OutputData<OutputUser>> authenticateUser(InputUser inputUser) {
-//        UserRestController.checkUserIsNotEmpty(inputUser);
+        UserRestController.checkUserIsNotEmpty(inputUser);
 
-        if (userDao.findUserByLogin(inputUser.getLogin()) == null)
+        if (dao.getUserDao().findUserByLogin(inputUser.getLogin()) == null)
             throw new ApiNotFoundException(format("User with login %s wasn't found!", inputUser.getLogin()));
 
-        if (userDao.findUserByLoginAndPassword(inputUser.getLogin(), inputUser.getPassword()) == null)
+        if (dao.getUserDao().findUserByLoginAndPassword(inputUser.getLogin(), inputUser.getPassword()) == null)
             throw new ApiUnauthorizedException("Wrong credentials were provided!");
 
         String token = tokenService.createToken(inputUser.getLogin());

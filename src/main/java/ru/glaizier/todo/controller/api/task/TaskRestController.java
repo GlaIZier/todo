@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.glaizier.todo.controller.api.exception.ApiBadRequestException;
 import ru.glaizier.todo.controller.api.exception.ApiNotFoundException;
@@ -35,7 +36,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-//@RestController
+@RestController
 @RequestMapping(value = {"/api/v1/me/tasks", "/api/me/tasks"})
 // todo create react
 // Todo add method security

@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
+import ru.glaizier.todo.dao.Dao;
 import ru.glaizier.todo.dao.task.TaskDao;
 import ru.glaizier.todo.dao.user.UserDao;
 import ru.glaizier.todo.domain.Task;
@@ -36,6 +37,9 @@ public class TaskDaoTest {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private Dao dao;
 
     /*
     @Test
@@ -112,11 +116,20 @@ public class TaskDaoTest {
     }
 
     @Test
+//    @Transactional
     public void find() {
         User u = userDao.findUserByLogin("u");
         List<Task> tasksByUser = taskDao.findTasksByUser(u);
         System.out.println(tasksByUser.get(0).getTodo());
 //        tasksByUser.forEach(System.out::println);
 
+    }
+
+    @Test
+//    @Transactional
+    public void findWithCheck() {
+        Task u = dao.findTaskUserJoinedWithLoginCheck(1, "u");
+//        System.out.println(u.getUser());
+//        System.out.println(u);
     }
 }
