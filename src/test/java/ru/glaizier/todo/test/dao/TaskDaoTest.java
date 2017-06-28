@@ -130,6 +130,20 @@ public class TaskDaoTest {
     public void findWithCheck() {
         Task u = dao.findTaskUserJoinedWithLoginCheck(1, "u");
 //        System.out.println(u.getUser());
-//        System.out.println(u);
+        System.out.println(u);
+    }
+
+    @Test
+    @Transactional
+    public void findJoined() {
+        Task u = dao.findTaskUserJoined(1);
+//        System.out.println(u.getUser());
+        System.out.println(u);
+    }
+
+    @Test
+//    @Transactional
+    public void findJoinedDto() {
+        System.out.println(dao.testDto(1));
     }
 }

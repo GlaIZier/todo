@@ -10,12 +10,15 @@ import ru.glaizier.todo.dao.user.UserDao;
 import ru.glaizier.todo.domain.Role;
 import ru.glaizier.todo.domain.Task;
 import ru.glaizier.todo.domain.User;
+import ru.glaizier.todo.domain.dto.TaskDto;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
 @Repository
+@Transactional
 public class DaoService implements Dao {
 
     private TaskDao taskDao;
@@ -60,5 +63,17 @@ public class DaoService implements Dao {
         if (!task.getUser().getLogin().equals(login))
             throw new AccessDeniedException(format("%s is forbidden to get task with %s id", login, id));
         return task;
+    }
+
+    @Transactional
+    public TaskDto testDto(Integer id) {
+        Task task = taskDao.findTaskById(id);
+        if (task == null)
+            return null;
+        String login = task.getUser().getLogin();
+        Set<String> taskUserRoles = task.getUser().getRoles().stream()
+                .map(Role::getRole)
+                .collect(Collectors.toSet());
+        return new TaskDto(id, login, taskUserRoles, task.getTodo());
     }
 }
