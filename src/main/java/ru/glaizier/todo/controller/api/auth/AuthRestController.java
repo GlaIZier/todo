@@ -15,9 +15,9 @@ import ru.glaizier.todo.controller.api.exception.ApiUnauthorizedException;
 import ru.glaizier.todo.controller.api.exception.ExceptionHandlingController;
 import ru.glaizier.todo.controller.api.user.UserRestController;
 import ru.glaizier.todo.dao.Dao;
-import ru.glaizier.todo.domain.api.input.InputUser;
-import ru.glaizier.todo.domain.api.output.OutputData;
-import ru.glaizier.todo.domain.api.output.OutputUser;
+import ru.glaizier.todo.model.dto.api.input.InputUser;
+import ru.glaizier.todo.model.dto.api.output.OutputData;
+import ru.glaizier.todo.model.dto.api.output.OutputUser;
 import ru.glaizier.todo.security.token.TokenService;
 
 // Todo add method security

@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.filter.GenericFilterBean;
-import ru.glaizier.todo.domain.api.output.OutputError;
+import ru.glaizier.todo.model.dto.api.output.OutputError;
 import ru.glaizier.todo.properties.PropertiesService;
 import ru.glaizier.todo.security.token.TokenDecodingException;
 import ru.glaizier.todo.security.token.TokenService;

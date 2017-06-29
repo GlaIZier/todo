@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.glaizier.todo.controller.api.exception.ApiBadRequestException;
 import ru.glaizier.todo.controller.api.exception.ExceptionHandlingController;
 import ru.glaizier.todo.dao.Dao;
-import ru.glaizier.todo.domain.api.input.InputUser;
-import ru.glaizier.todo.domain.api.output.OutputData;
 import ru.glaizier.todo.model.domain.Role;
 import ru.glaizier.todo.model.domain.User;
+import ru.glaizier.todo.model.dto.api.input.InputUser;
+import ru.glaizier.todo.model.dto.api.output.OutputData;
 
 import java.util.Collections;
 import java.util.HashSet;

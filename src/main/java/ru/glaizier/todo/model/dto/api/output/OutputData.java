@@ -1,10 +1,10 @@
-package ru.glaizier.todo.domain.api.output;
+package ru.glaizier.todo.model.dto.api.output;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import ru.glaizier.todo.domain.api.Link;
+import ru.glaizier.todo.model.dto.api.Link;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Value

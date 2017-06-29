@@ -1,4 +1,4 @@
-package ru.glaizier.todo.domain.api.output;
+package ru.glaizier.todo.model.dto.api.output;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;

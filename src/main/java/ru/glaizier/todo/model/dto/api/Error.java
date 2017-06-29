@@ -1,4 +1,4 @@
-package ru.glaizier.todo.domain.api;
+package ru.glaizier.todo.model.dto.api;
 
 import lombok.Data;
 

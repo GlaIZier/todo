@@ -1,4 +1,4 @@
-package ru.glaizier.todo.domain.dto;
+package ru.glaizier.todo.model.dto;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
