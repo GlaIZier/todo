@@ -1,8 +1,8 @@
 package ru.glaizier.todo.dao.task;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.glaizier.todo.domain.Task;
-import ru.glaizier.todo.domain.User;
+import ru.glaizier.todo.model.domain.Task;
+import ru.glaizier.todo.model.domain.User;
 
 import java.util.List;
 

@@ -15,8 +15,8 @@ import ru.glaizier.todo.config.servlet.ServletConfig;
 import ru.glaizier.todo.dao.Dao;
 import ru.glaizier.todo.dao.task.TaskDao;
 import ru.glaizier.todo.dao.user.UserDao;
-import ru.glaizier.todo.domain.Task;
-import ru.glaizier.todo.domain.User;
+import ru.glaizier.todo.model.domain.Task;
+import ru.glaizier.todo.model.domain.User;
 
 import java.util.List;
 

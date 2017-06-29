@@ -1,8 +1,8 @@
 package ru.glaizier.todo.dao.memory;
 
 import lombok.NonNull;
-import ru.glaizier.todo.domain.Task;
-import ru.glaizier.todo.domain.User;
+import ru.glaizier.todo.model.domain.Task;
+import ru.glaizier.todo.model.domain.User;
 
 import java.util.HashSet;
 import java.util.Map;

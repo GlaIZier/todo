@@ -1,4 +1,4 @@
-package ru.glaizier.todo.domain;
+package ru.glaizier.todo.model.domain;
 
 import static lombok.AccessLevel.NONE;
 

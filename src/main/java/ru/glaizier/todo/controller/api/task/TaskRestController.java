@@ -23,11 +23,11 @@ import ru.glaizier.todo.controller.api.exception.ApiNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ApiTaskNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ExceptionHandlingController;
 import ru.glaizier.todo.dao.Dao;
-import ru.glaizier.todo.domain.Task;
-import ru.glaizier.todo.domain.User;
 import ru.glaizier.todo.domain.api.Link;
 import ru.glaizier.todo.domain.api.output.OutputData;
 import ru.glaizier.todo.domain.api.output.OutputTask;
+import ru.glaizier.todo.model.domain.Task;
+import ru.glaizier.todo.model.domain.User;
 import ru.glaizier.todo.properties.PropertiesService;
 
 import java.net.URI;

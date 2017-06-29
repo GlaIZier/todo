@@ -12,7 +12,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
 import ru.glaizier.todo.dao.user.UserDao;
-import ru.glaizier.todo.domain.User;
+import ru.glaizier.todo.model.domain.User;
 
 import javax.transaction.Transactional;
 

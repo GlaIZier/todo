@@ -7,10 +7,10 @@ import org.springframework.stereotype.Repository;
 import ru.glaizier.todo.dao.exception.AccessDeniedException;
 import ru.glaizier.todo.dao.task.TaskDao;
 import ru.glaizier.todo.dao.user.UserDao;
-import ru.glaizier.todo.domain.Role;
-import ru.glaizier.todo.domain.Task;
-import ru.glaizier.todo.domain.User;
 import ru.glaizier.todo.domain.dto.TaskDto;
+import ru.glaizier.todo.model.domain.Role;
+import ru.glaizier.todo.model.domain.Task;
+import ru.glaizier.todo.model.domain.User;
 
 import java.util.Set;
 import java.util.stream.Collectors;

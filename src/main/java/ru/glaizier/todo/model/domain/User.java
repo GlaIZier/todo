@@ -1,4 +1,4 @@
-package ru.glaizier.todo.domain;
+package ru.glaizier.todo.model.domain;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
@@ -54,6 +54,6 @@ public class User {
     }
 
     public String toString() {
-        return "ru.glaizier.todo.domain.User(login=" + this.getLogin() + ", roles=" + this.getRoles() + ")";
+        return "ru.glaizier.todo.model.domain.User(login=" + this.getLogin() + ", roles=" + this.getRoles() + ")";
     }
 }

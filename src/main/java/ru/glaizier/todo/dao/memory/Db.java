@@ -1,7 +1,7 @@
 package ru.glaizier.todo.dao.memory;
 
-import ru.glaizier.todo.domain.Task;
-import ru.glaizier.todo.domain.User;
+import ru.glaizier.todo.model.domain.Task;
+import ru.glaizier.todo.model.domain.User;
 
 import java.util.Set;
 

@@ -1,7 +1,7 @@
 package ru.glaizier.todo.dao.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.glaizier.todo.domain.User;
+import ru.glaizier.todo.model.domain.User;
 
 public interface UserDao extends JpaRepository<User, String>/*, OverrideUserDao*/ {
 
