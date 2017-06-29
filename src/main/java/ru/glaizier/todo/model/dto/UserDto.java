@@ -2,7 +2,6 @@ package ru.glaizier.todo.model.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import ru.glaizier.todo.model.domain.Role;
 
 import java.util.Set;
 
@@ -11,5 +10,5 @@ import java.util.Set;
 public class UserDto {
     private final String login;
     private final char[] password;
-    private final Set<Role> roles;
+    private final Set<RoleDto> roles;
 }
