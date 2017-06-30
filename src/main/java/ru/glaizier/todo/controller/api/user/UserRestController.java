@@ -1,30 +1,15 @@
 package ru.glaizier.todo.controller.api.user;
 
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import ru.glaizier.todo.controller.api.exception.ApiBadRequestException;
 import ru.glaizier.todo.controller.api.exception.ExceptionHandlingController;
-import ru.glaizier.todo.dao.Dao;
-import ru.glaizier.todo.model.domain.Role;
-import ru.glaizier.todo.model.domain.User;
-import ru.glaizier.todo.model.dto.api.input.InputUser;
-import ru.glaizier.todo.model.dto.api.output.OutputData;
-
-import java.util.Collections;
-import java.util.HashSet;
+import ru.glaizier.todo.dao.Persistence;
 
 // Todo add method security
 // Todo add different views for rest (html+json)?
 // Todo add swagger for rest api
-@RestController
+//@RestController
 @RequestMapping(value = {"/api/v1/users", "/api/users"})
 // Ide shows error but this works
 @RequiredArgsConstructor(onConstructor_ = {
@@ -32,15 +17,16 @@ import java.util.HashSet;
 })
 public class UserRestController extends ExceptionHandlingController {
 
-    private final Dao dao;
+    private final Persistence persistence;
 
+    /*
     @RequestMapping(method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     public ResponseEntity<OutputData<String>> registerUser(InputUser inputUser) {
         checkUserIsNotEmpty(inputUser);
         User createdUser = User.builder().login(inputUser.getLogin()).password(inputUser.getPassword())
                 .roles(new HashSet<>(Collections.singletonList(Role.USER))).build();
-        dao.getUserDao().save(createdUser);
+//        persistence.getUserDao().save(createdUser);
 
         OutputData<String> outputData = new OutputData<>(createdUser.getLogin());
         return new ResponseEntity<>(outputData, HttpStatus.CREATED);
@@ -56,4 +42,5 @@ public class UserRestController extends ExceptionHandlingController {
                 StringUtils.isEmpty(StringUtils.trimWhitespace(String.valueOf(inputUser.getPassword()))))
             throw new ApiBadRequestException("Provided user password is empty or null!");
     }
+    */
 }

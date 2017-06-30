@@ -51,7 +51,7 @@ public class DbConfig {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setDataSource(dataSource());
         factoryBean.setJpaVendorAdapter(jpaVendorAdapter());
-        factoryBean.setPackagesToScan("ru.glaizier.todo.domain");
+        factoryBean.setPackagesToScan("ru.glaizier.todo.model.domain");
         return factoryBean;
     }
 

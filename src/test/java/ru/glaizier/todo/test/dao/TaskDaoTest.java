@@ -12,15 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
-import ru.glaizier.todo.dao.Dao;
-import ru.glaizier.todo.dao.task.TaskDao;
-import ru.glaizier.todo.dao.user.UserDao;
-import ru.glaizier.todo.model.domain.Task;
-import ru.glaizier.todo.model.domain.User;
-
-import java.util.List;
-
-import javax.transaction.Transactional;
+import ru.glaizier.todo.dao.Persistence;
 
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -32,14 +24,14 @@ import javax.transaction.Transactional;
 @ActiveProfiles(profiles = "memory")
 public class TaskDaoTest {
 
-    @Autowired
-    private TaskDao taskDao;
+//    @Autowired
+//    private TaskDao taskDao;
+//
+//    @Autowired
+//    private UserDao userDao;
 
     @Autowired
-    private UserDao userDao;
-
-    @Autowired
-    private Dao dao;
+    private Persistence persistence;
 
     /*
     @Test
@@ -108,42 +100,42 @@ public class TaskDaoTest {
     }
 */
 
-    @Test
-    @Transactional
-    public void join() {
-        Task task = taskDao.findTaskById(1);
-        System.out.println(task.getUser());
-    }
-
-    @Test
+//    @Test
 //    @Transactional
-    public void find() {
-        User u = userDao.findUserByLogin("u");
-        List<Task> tasksByUser = taskDao.findTasksByUser(u);
-        System.out.println(tasksByUser.get(0).getTodo());
-//        tasksByUser.forEach(System.out::println);
-
-    }
-
-    @Test
+//    public void join() {
+//        Task task = taskDao.findTaskById(1);
+//        System.out.println(task.getUser());
+//    }
+//
+//    @Test
+////    @Transactional
+//    public void find() {
+//        User u = userDao.findUserByLogin("u");
+//        List<Task> tasksByUser = taskDao.findTasksByUser(u);
+//        System.out.println(tasksByUser.get(0).getTodo());
+////        tasksByUser.forEach(System.out::println);
+//
+//    }
+//
+//    @Test
+////    @Transactional
+//    public void findWithCheck() {
+//        Task u = persistence.findTaskUserJoinedWithLoginCheck(1, "u");
+////        System.out.println(u.getUser());
+//        System.out.println(u);
+//    }
+//
+//    @Test
 //    @Transactional
-    public void findWithCheck() {
-        Task u = dao.findTaskUserJoinedWithLoginCheck(1, "u");
-//        System.out.println(u.getUser());
-        System.out.println(u);
-    }
-
-    @Test
-    @Transactional
-    public void findJoined() {
-        Task u = dao.findTaskUserJoined(1);
-//        System.out.println(u.getUser());
-        System.out.println(u);
-    }
+//    public void findJoined() {
+//        Task u = persistence.findTaskUserJoined(1);
+////        System.out.println(u.getUser());
+//        System.out.println(u);
+//    }
 
     @Test
 //    @Transactional
     public void findJoinedDto() {
-        System.out.println(dao.testDto(1));
+        System.out.println(persistence.findTaskByIdAndLogin(1, "u"));
     }
 }

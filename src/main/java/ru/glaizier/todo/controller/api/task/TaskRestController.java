@@ -1,42 +1,13 @@
 package ru.glaizier.todo.controller.api.task;
 
-import static java.lang.String.format;
-import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static org.springframework.web.bind.annotation.RequestMethod.PUT;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
-import ru.glaizier.todo.controller.api.exception.ApiBadRequestException;
-import ru.glaizier.todo.controller.api.exception.ApiNotFoundException;
-import ru.glaizier.todo.controller.api.exception.ApiTaskNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ExceptionHandlingController;
-import ru.glaizier.todo.dao.Dao;
-import ru.glaizier.todo.model.domain.Task;
-import ru.glaizier.todo.model.domain.User;
-import ru.glaizier.todo.model.dto.api.Link;
-import ru.glaizier.todo.model.dto.api.output.OutputData;
-import ru.glaizier.todo.model.dto.api.output.OutputTask;
+import ru.glaizier.todo.dao.Persistence;
 import ru.glaizier.todo.properties.PropertiesService;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
-@RestController
+//@RestController
 @RequestMapping(value = {"/api/v1/me/tasks", "/api/me/tasks"})
 // todo create react
 // Todo add method security
@@ -53,19 +24,20 @@ public class TaskRestController extends ExceptionHandlingController {
 
     private static final String TASKS_BASE_URL = "/api/me/tasks/";
 
-    private final Dao dao;
+    private final Persistence persistence;
 
     private final PropertiesService propertiesService;
 
+    /*
     @RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<OutputData<List<OutputData<OutputTask>>>> getTasks(HttpServletRequest req) {
         String login = getLogin(req);
-        User user = dao.getUserDao().findUserByLogin(login);
+        User user = persistence.getUserDao().findUserByLogin(login);
         if (user == null)
             throw new ApiNotFoundException(format("Tasks list get failed! " +
                     "Login %s hasn't been found!", login));
 
-        List<Task> tasks = dao.getTaskDao().findTasksByUser(user);
+        List<Task> tasks = persistence.getTaskDao().findTasksByUser(user);
         if (tasks == null)
             return new ResponseEntity<>(new OutputData<>(null), HttpStatus.OK);
 
@@ -87,12 +59,12 @@ public class TaskRestController extends ExceptionHandlingController {
                                                        @RequestBody String todo) {
         checkTodoIsNotEmpty(todo);
         String login = getLogin(req);
-        User user = dao.getUserDao().findUserByLogin(login);
+        User user = persistence.getUserDao().findUserByLogin(login);
         if (user == null)
             throw new ApiNotFoundException(format("Task creation failed! " +
                     "Login %s hasn't been found to create task for!", login));
 
-        Task task = dao.getTaskDao().save(Task.builder().user(user).todo(todo).build());
+        Task task = persistence.getTaskDao().save(Task.builder().user(user).todo(todo).build());
 
         HttpHeaders headers = new HttpHeaders();
         URI locationUri = UriComponentsBuilder.newInstance()
@@ -110,7 +82,7 @@ public class TaskRestController extends ExceptionHandlingController {
     public ResponseEntity<OutputData<Task>> getTask(HttpServletRequest req,
                                                     @PathVariable int id) {
         String login = getLogin(req);
-        Task task = dao.findTaskUserJoinedWithLoginCheck(id, login);
+        Task task = persistence.findTaskUserJoinedWithLoginCheck(id, login);
         if (task == null)
             throw new ApiTaskNotFoundException(login, id);
 
@@ -123,11 +95,11 @@ public class TaskRestController extends ExceptionHandlingController {
                                                        @PathVariable int id,
                                                        @RequestBody String todo) {
         String login = getLogin(req);
-        Task task = dao.findTaskUserJoinedWithLoginCheck(id, login);
+        Task task = persistence.findTaskUserJoinedWithLoginCheck(id, login);
         if (task == null)
             throw new ApiTaskNotFoundException(login, id);
 
-        Task updatedTask = dao.getTaskDao().save(Task.builder().id(id).user(task.getUser()).todo(todo).build());
+        Task updatedTask = persistence.getTaskDao().save(Task.builder().id(id).user(task.getUser()).todo(todo).build());
 
         OutputData<Task> outputData = new OutputData<>(updatedTask);
         return new ResponseEntity<>(outputData, HttpStatus.OK);
@@ -137,11 +109,11 @@ public class TaskRestController extends ExceptionHandlingController {
     public ResponseEntity<OutputData<Task>> deleteTask(HttpServletRequest req,
                                                        @PathVariable int id) {
         String login = getLogin(req);
-        Task deletedTask = dao.findTaskUserJoinedWithLoginCheck(id, login);
+        Task deletedTask = persistence.findTaskUserJoinedWithLoginCheck(id, login);
         if (deletedTask == null)
             throw new ApiTaskNotFoundException(login, id);
 
-        dao.getTaskDao().delete(id);
+        persistence.getTaskDao().delete(id);
 
         OutputData<Task> outputData = new OutputData<>(deletedTask);
         return new ResponseEntity<>(outputData, HttpStatus.OK);
@@ -158,4 +130,5 @@ public class TaskRestController extends ExceptionHandlingController {
         if (StringUtils.isEmpty(StringUtils.trimWhitespace(todo)))
             throw new ApiBadRequestException("Provided todo is empty or null!");
     }
+    */
 }
