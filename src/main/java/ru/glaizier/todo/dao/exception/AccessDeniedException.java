@@ -1,6 +1,6 @@
 package ru.glaizier.todo.dao.exception;
 
-public class AccessDeniedException extends RuntimeException {
+public class AccessDeniedException extends PersistenceException {
     public AccessDeniedException(String message, Throwable cause) {
         super(message, cause);
     }
