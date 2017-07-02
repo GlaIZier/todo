@@ -1,7 +1,6 @@
 package ru.glaizier.todo.dao;
 
 import ru.glaizier.todo.dao.exception.AccessDeniedException;
-import ru.glaizier.todo.model.domain.User;
 import ru.glaizier.todo.model.dto.RoleDto;
 import ru.glaizier.todo.model.dto.TaskDto;
 import ru.glaizier.todo.model.dto.UserDto;
@@ -11,11 +10,13 @@ import java.util.Set;
 
 public interface Persistence {
 
-    List<TaskDto> findTasksByUser(User user);
+    List<TaskDto> findTasksByLogin(String login);
 
     TaskDto findTaskById(Integer id);
 
     TaskDto saveTask(String login, String todo);
+
+    TaskDto saveTask(String login, Integer id, String todo);
 
     void deleteTask(Integer id);
 

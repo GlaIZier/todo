@@ -32,10 +32,13 @@ public class PersistenceService implements Persistence {
     }
 
     @Override
-    public List<TaskDto> findTasksByUser(User user) {
+    public List<TaskDto> findTasksByLogin(String login) {
+        User user = userDao.findUserByLogin(login);
+        if (user == null)
+            return null;
         List<Task> tasksByUser = taskDao.findTasksByUser(user);
         if (tasksByUser == null)
-            return null;
+            return new ArrayList<>();
         return tasksByUser.stream().collect(ArrayList::new,
                 (acc, t) -> {
                     acc.add(new TaskDto(t.getId(), Optional.empty(), t.getTodo()));
@@ -59,6 +62,20 @@ public class PersistenceService implements Persistence {
         if (userByLogin == null)
             return null;
         Task task = taskDao.save(Task.builder().user(userByLogin).todo(todo).build());
+        return TaskDto.builder().id(task.getId()).user(Optional.empty()).todo(task.getTodo()).build();
+    }
+
+    @Override
+    public TaskDto saveTask(String login, Integer id, String todo) {
+        Objects.requireNonNull(login);
+        Objects.requireNonNull(id);
+        Objects.requireNonNull(todo);
+
+        User userByLogin = userDao.findUserByLogin(login);
+        if (userByLogin == null)
+            return null;
+
+        Task task = taskDao.save(Task.builder().id(id).user(userByLogin).todo(todo).build());
         return TaskDto.builder().id(task.getId()).user(Optional.empty()).todo(task.getTodo()).build();
     }
 

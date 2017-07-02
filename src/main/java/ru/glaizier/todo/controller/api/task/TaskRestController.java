@@ -2,12 +2,36 @@ package ru.glaizier.todo.controller.api.task;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
+import ru.glaizier.todo.controller.api.exception.ApiBadRequestException;
+import ru.glaizier.todo.controller.api.exception.ApiNotFoundException;
+import ru.glaizier.todo.controller.api.exception.ApiTaskNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ExceptionHandlingController;
 import ru.glaizier.todo.dao.Persistence;
+import ru.glaizier.todo.model.dto.TaskDto;
+import ru.glaizier.todo.model.dto.api.Link;
+import ru.glaizier.todo.model.dto.api.output.OutputData;
+import ru.glaizier.todo.model.dto.api.output.OutputTask;
 import ru.glaizier.todo.properties.PropertiesService;
 
-//@RestController
+import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.lang.String.format;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
+
+@RestController
 @RequestMapping(value = {"/api/v1/me/tasks", "/api/me/tasks"})
 // todo create react
 // Todo add method security
@@ -28,17 +52,16 @@ public class TaskRestController extends ExceptionHandlingController {
 
     private final PropertiesService propertiesService;
 
-    /*
+
     @RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<OutputData<List<OutputData<OutputTask>>>> getTasks(HttpServletRequest req) {
         String login = getLogin(req);
-        User user = persistence.getUserDao().findUserByLogin(login);
-        if (user == null)
+        List<TaskDto> tasks = persistence.findTasksByLogin(login);
+
+        if (tasks == null)
             throw new ApiNotFoundException(format("Tasks list get failed! " +
                     "Login %s hasn't been found!", login));
-
-        List<Task> tasks = persistence.getTaskDao().findTasksByUser(user);
-        if (tasks == null)
+        if (tasks.isEmpty())
             return new ResponseEntity<>(new OutputData<>(null), HttpStatus.OK);
 
         List<OutputTask> outputTasks = tasks.stream().collect(
@@ -55,16 +78,15 @@ public class TaskRestController extends ExceptionHandlingController {
     }
 
     @RequestMapping(method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<OutputData<Task>> createTask(HttpServletRequest req,
-                                                       @RequestBody String todo) {
+    public ResponseEntity<OutputData<OutputTask>> createTask(HttpServletRequest req,
+                                                             @RequestBody String todo) {
         checkTodoIsNotEmpty(todo);
         String login = getLogin(req);
-        User user = persistence.getUserDao().findUserByLogin(login);
-        if (user == null)
+
+        TaskDto task = persistence.saveTask(login, todo);
+        if (task == null)
             throw new ApiNotFoundException(format("Task creation failed! " +
                     "Login %s hasn't been found to create task for!", login));
-
-        Task task = persistence.getTaskDao().save(Task.builder().user(user).todo(todo).build());
 
         HttpHeaders headers = new HttpHeaders();
         URI locationUri = UriComponentsBuilder.newInstance()
@@ -74,48 +96,49 @@ public class TaskRestController extends ExceptionHandlingController {
                 .toUri();
         headers.setLocation(locationUri);
 
-        OutputData<Task> outputData = new OutputData<>(task, new Link(locationUri.toString()));
+        OutputData<OutputTask> outputData = new OutputData<>(transform(task, login), new Link(locationUri.toString()));
         return new ResponseEntity<>(outputData, headers, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/{id}", method = GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<OutputData<Task>> getTask(HttpServletRequest req,
-                                                    @PathVariable int id) {
+    public ResponseEntity<OutputData<OutputTask>> getTask(HttpServletRequest req,
+                                                          @PathVariable int id) {
         String login = getLogin(req);
-        Task task = persistence.findTaskUserJoinedWithLoginCheck(id, login);
+        TaskDto task = persistence.findTaskByIdAndLogin(id, login);
         if (task == null)
             throw new ApiTaskNotFoundException(login, id);
 
-        OutputData<Task> outputData = new OutputData<>(task);
+
+        OutputData<OutputTask> outputData = new OutputData<>(transform(task, login));
         return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<OutputData<Task>> updateTask(HttpServletRequest req,
-                                                       @PathVariable int id,
-                                                       @RequestBody String todo) {
+    public ResponseEntity<OutputData<OutputTask>> updateTask(HttpServletRequest req,
+                                                             @PathVariable int id,
+                                                             @RequestBody String todo) {
         String login = getLogin(req);
-        Task task = persistence.findTaskUserJoinedWithLoginCheck(id, login);
+        TaskDto task = persistence.findTaskByIdAndLogin(id, login);
         if (task == null)
             throw new ApiTaskNotFoundException(login, id);
 
-        Task updatedTask = persistence.getTaskDao().save(Task.builder().id(id).user(task.getUser()).todo(todo).build());
+        TaskDto updatedTask = persistence.saveTask(login, id, todo);
 
-        OutputData<Task> outputData = new OutputData<>(updatedTask);
+        OutputData<OutputTask> outputData = new OutputData<>(transform(updatedTask, login));
         return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<OutputData<Task>> deleteTask(HttpServletRequest req,
-                                                       @PathVariable int id) {
+    public ResponseEntity<OutputData<OutputTask>> deleteTask(HttpServletRequest req,
+                                                             @PathVariable int id) {
         String login = getLogin(req);
-        Task deletedTask = persistence.findTaskUserJoinedWithLoginCheck(id, login);
+        TaskDto deletedTask = persistence.findTaskByIdAndLogin(id, login);
         if (deletedTask == null)
             throw new ApiTaskNotFoundException(login, id);
 
-        persistence.getTaskDao().delete(id);
+        persistence.deleteTask(id);
 
-        OutputData<Task> outputData = new OutputData<>(deletedTask);
+        OutputData<OutputTask> outputData = new OutputData<>(transform(deletedTask, login));
         return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 
@@ -130,5 +153,8 @@ public class TaskRestController extends ExceptionHandlingController {
         if (StringUtils.isEmpty(StringUtils.trimWhitespace(todo)))
             throw new ApiBadRequestException("Provided todo is empty or null!");
     }
-    */
+
+    private OutputTask transform(TaskDto taskDto, String login) {
+        return OutputTask.builder().id(taskDto.getId()).login(login).todo(taskDto.getTodo()).build();
+    }
 }

@@ -54,9 +54,15 @@ public class ExceptionHandlingController {
         return new ResponseEntity<>(outputError, HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler({ApiForbiddenException.class, AccessDeniedException.class})
+    @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<OutputError> handleForbiddenException(
-            ApiUnauthorizedException e) {
+            AccessDeniedException e) {
+        return handleForbiddenException(new ApiForbiddenException(e.getMessage(), e));
+    }
+
+    @ExceptionHandler(ApiForbiddenException.class)
+    public ResponseEntity<OutputError> handleForbiddenException(
+            ApiForbiddenException e) {
         log.error("Request to rest controller failed: " + e.getMessage(), e);
 
         OutputError outputError = new OutputError(new Error(OutputError.FORBIDDEN.getError().getCode(), e.getMessage()));
