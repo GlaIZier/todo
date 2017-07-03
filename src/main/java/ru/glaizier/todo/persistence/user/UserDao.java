@@ -1,4 +1,4 @@
-package ru.glaizier.todo.dao.user;
+package ru.glaizier.todo.persistence.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.glaizier.todo.model.domain.User;

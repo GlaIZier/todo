@@ -1,4 +1,4 @@
-package ru.glaizier.todo.dao.test;
+package ru.glaizier.todo.persistence.test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

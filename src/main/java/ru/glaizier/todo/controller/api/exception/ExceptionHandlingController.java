@@ -5,9 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import ru.glaizier.todo.dao.exception.AccessDeniedException;
 import ru.glaizier.todo.model.dto.api.Error;
 import ru.glaizier.todo.model.dto.api.output.OutputError;
+import ru.glaizier.todo.persistence.exception.AccessDeniedException;
 
 import java.lang.invoke.MethodHandles;
 

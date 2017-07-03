@@ -18,7 +18,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "ru.glaizier.todo.dao")
+@EnableJpaRepositories(basePackages = "ru.glaizier.todo.persistence")
 @EnableTransactionManagement
 // 21.06 is a commit before joins
 public class DbConfig {

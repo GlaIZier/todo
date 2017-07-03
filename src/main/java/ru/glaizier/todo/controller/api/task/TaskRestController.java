@@ -1,5 +1,11 @@
 package ru.glaizier.todo.controller.api.task;
 
+import static java.lang.String.format;
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -16,20 +22,18 @@ import ru.glaizier.todo.controller.api.exception.ApiBadRequestException;
 import ru.glaizier.todo.controller.api.exception.ApiNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ApiTaskNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ExceptionHandlingController;
-import ru.glaizier.todo.dao.Persistence;
 import ru.glaizier.todo.model.dto.TaskDto;
 import ru.glaizier.todo.model.dto.api.Link;
 import ru.glaizier.todo.model.dto.api.output.OutputData;
 import ru.glaizier.todo.model.dto.api.output.OutputTask;
+import ru.glaizier.todo.persistence.Persistence;
 import ru.glaizier.todo.properties.PropertiesService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.String.format;
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(value = {"/api/v1/me/tasks", "/api/me/tasks"})

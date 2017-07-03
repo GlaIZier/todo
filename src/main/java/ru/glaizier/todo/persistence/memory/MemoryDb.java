@@ -1,4 +1,4 @@
-package ru.glaizier.todo.dao.memory;
+package ru.glaizier.todo.persistence.memory;
 
 import lombok.NonNull;
 import ru.glaizier.todo.model.domain.Task;

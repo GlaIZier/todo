@@ -1,9 +1,9 @@
-package ru.glaizier.todo.dao;
+package ru.glaizier.todo.persistence;
 
-import ru.glaizier.todo.dao.exception.AccessDeniedException;
 import ru.glaizier.todo.model.dto.RoleDto;
 import ru.glaizier.todo.model.dto.TaskDto;
 import ru.glaizier.todo.model.dto.UserDto;
+import ru.glaizier.todo.persistence.exception.AccessDeniedException;
 
 import java.util.List;
 import java.util.Set;

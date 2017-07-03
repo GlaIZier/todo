@@ -8,7 +8,7 @@ import ru.glaizier.todo.config.root.security.SecurityConfig;
 
 @Configuration
 @ComponentScan(basePackages = {
-        "ru.glaizier.todo.dao",
+        "ru.glaizier.todo.persistence",
         "ru.glaizier.todo.properties"
 })
 // This also enables PropertyPlaceholderBFPP

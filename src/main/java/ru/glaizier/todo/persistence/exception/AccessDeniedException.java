@@ -1,4 +1,4 @@
-package ru.glaizier.todo.dao.exception;
+package ru.glaizier.todo.persistence.exception;
 
 public class AccessDeniedException extends PersistenceException {
     public AccessDeniedException(String message, Throwable cause) {

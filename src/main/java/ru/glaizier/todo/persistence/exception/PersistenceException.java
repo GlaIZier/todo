@@ -1,4 +1,4 @@
-package ru.glaizier.todo.dao.exception;
+package ru.glaizier.todo.persistence.exception;
 
 public class PersistenceException extends RuntimeException {
     public PersistenceException(String message, Throwable cause) {

@@ -1,4 +1,4 @@
-package ru.glaizier.todo.test.dao;
+package ru.glaizier.todo.test.persistence;
 
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 
@@ -11,8 +11,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
-import ru.glaizier.todo.dao.user.UserDao;
 import ru.glaizier.todo.model.domain.User;
+import ru.glaizier.todo.persistence.user.UserDao;
 
 import javax.transaction.Transactional;
 
