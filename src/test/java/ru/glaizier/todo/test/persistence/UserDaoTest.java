@@ -1,7 +1,10 @@
 package ru.glaizier.todo.test.persistence;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +14,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
+import ru.glaizier.todo.model.domain.Role;
 import ru.glaizier.todo.model.domain.User;
 import ru.glaizier.todo.persistence.user.UserDao;
+
+import java.util.Collections;
+import java.util.HashSet;
 
 import javax.transaction.Transactional;
 
@@ -29,9 +36,8 @@ public class UserDaoTest {
     private UserDao userDao;
 
     private User dummyInitUser = User.builder().login("dummyInitUser").password("p".toCharArray())
-            /*.roles(Collections.singletonList(USER))*/.build();
+            .roles(new HashSet<>(Collections.singletonList(Role.USER))).build();
 
-            /*
     @Before
     public void init() {
         userDao.save(dummyInitUser);
@@ -42,6 +48,7 @@ public class UserDaoTest {
         assertThat(userDao.findUserByLogin(dummyInitUser.getLogin()), is(dummyInitUser));
     }
 
+    /*
     @Test
     public void getNullForNonExistUserOnFindUserByLogin() {
         assertNull(userDao.findUserByLogin("nonExistLogin"));
@@ -83,8 +90,7 @@ public class UserDaoTest {
         userDao.delete(dummyInitUser.getLogin());
         assertNull(userDao.findUserByLogin(dummyInitUser.getLogin()));
     }
-    */
-
+*/
     @Test
     // need to make additional query to get lazy additional from another table during single transaction
     @Transactional

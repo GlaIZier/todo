@@ -1,14 +1,14 @@
 package ru.glaizier.todo.model.domain;
 
-import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.LAZY;
 
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Set;
 
@@ -22,7 +22,8 @@ import javax.persistence.OneToMany;
 @Getter
 @Setter
 // Exclude tasks to avoid cyclic dependencies between user and task
-@EqualsAndHashCode(exclude = "tasks")
+@EqualsAndHashCode(exclude = {"tasks", "roles"})
+@ToString(exclude = {"tasks", "password"})
 @Entity
 // Todo remove setters?
 public class User {
@@ -33,11 +34,11 @@ public class User {
     @NonNull
     private char[] password;
 
-    @OneToMany(fetch = LAZY, mappedBy = "user", cascade = ALL)
-    @Setter(AccessLevel.NONE)
+    @OneToMany(fetch = LAZY, mappedBy = "user", cascade = PERSIST)
     private Set<Task> tasks;
 
-    @ManyToMany(cascade = ALL, fetch = LAZY)
+    // Todo start here and check cascading remove from authorization properly
+    @ManyToMany(fetch = LAZY)
     @JoinTable(name = "Authorization",
             joinColumns = @JoinColumn(name = "login", referencedColumnName = "login"),
             inverseJoinColumns = @JoinColumn(name = "role", referencedColumnName = "role"))
@@ -51,9 +52,5 @@ public class User {
         this.login = login;
         this.password = password;
         this.roles = roles;
-    }
-
-    public String toString() {
-        return "ru.glaizier.todo.model.domain.User(login=" + this.getLogin() + ", roles=" + this.getRoles() + ")";
     }
 }

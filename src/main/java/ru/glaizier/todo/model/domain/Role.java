@@ -1,7 +1,5 @@
 package ru.glaizier.todo.model.domain;
 
-import static lombok.AccessLevel.NONE;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
@@ -14,9 +12,12 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 @Getter
+@Setter
 @RequiredArgsConstructor
 @EqualsAndHashCode(exclude = "users")
 @ToString(exclude = "users")
@@ -30,7 +31,9 @@ public class Role {
     private String role;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @Setter(NONE)
+    @JoinTable(name = "Authorization",
+            joinColumns = @JoinColumn(name = "role", referencedColumnName = "role"),
+            inverseJoinColumns = @JoinColumn(name = "login", referencedColumnName = "login"))
     private Set<User> users;
 
     protected Role() {

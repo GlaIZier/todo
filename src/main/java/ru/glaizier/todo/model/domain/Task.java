@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+// Todo remove Data and add getter setter to string and equals
 @Data
 @Builder
 @Entity
