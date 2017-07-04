@@ -12,36 +12,41 @@ import lombok.ToString;
 
 import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 @Getter
 @Setter
 // Exclude tasks to avoid cyclic dependencies between user and task
-@EqualsAndHashCode(exclude = {"tasks", "roles"})
+@EqualsAndHashCode(exclude = "tasks")
 @ToString(exclude = {"tasks", "password"})
 @Entity
-// Todo remove setters?
+@Table(name = "User")
 public class User {
     @NonNull
     @Id
+    @Column(unique = true, nullable = false)
     private String login;
 
     @NonNull
+    @Column(nullable = false, length = 30)
     private char[] password;
 
+    // Todo check cascade after all tests will be done
     @OneToMany(fetch = LAZY, mappedBy = "user", cascade = PERSIST)
     private Set<Task> tasks;
 
-    // Todo start here and check cascading remove from authorization properly
-    @ManyToMany(fetch = LAZY)
+    // Todo check cascade after all tests will be done
+    @ManyToMany(fetch = LAZY/*, cascade = {
+            DETACH,
+            MERGE,
+            REFRESH,
+            PERSIST
+    }*/)
     @JoinTable(name = "Authorization",
-            joinColumns = @JoinColumn(name = "login", referencedColumnName = "login"),
-            inverseJoinColumns = @JoinColumn(name = "role", referencedColumnName = "role"))
+            joinColumns = @JoinColumn(name = "login", referencedColumnName = "login", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "role", referencedColumnName = "role", nullable = false),
+            foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
+            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
     private Set<Role> roles;
 
     protected User() {

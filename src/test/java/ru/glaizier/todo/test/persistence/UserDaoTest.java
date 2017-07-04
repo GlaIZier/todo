@@ -1,6 +1,7 @@
 package ru.glaizier.todo.test.persistence;
 
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 
@@ -30,6 +31,7 @@ import javax.transaction.Transactional;
         RootConfig.class
 })
 @WebAppConfiguration
+@Transactional
 public class UserDaoTest {
 
     @Autowired
@@ -37,6 +39,12 @@ public class UserDaoTest {
 
     private User dummyInitUser = User.builder().login("dummyInitUser").password("p".toCharArray())
             .roles(new HashSet<>(Collections.singletonList(Role.USER))).build();
+
+    private User u = User.builder().login("u").password("p".toCharArray())
+            .roles(new HashSet<>(Collections.singletonList(Role.USER))).build();
+
+    private User u1 = User.builder().login("u").password("p".toCharArray())
+            .roles(new HashSet<>(Collections.singletonList(Role.ADMIN))).build();
 
     @Before
     public void init() {
@@ -46,14 +54,16 @@ public class UserDaoTest {
     @Test
     public void findUserByLogin() {
         assertThat(userDao.findUserByLogin(dummyInitUser.getLogin()), is(dummyInitUser));
+        assertThat(userDao.findUserByLogin(u.getLogin()), is(u));
     }
 
-    /*
+
     @Test
     public void getNullForNonExistUserOnFindUserByLogin() {
         assertNull(userDao.findUserByLogin("nonExistLogin"));
     }
 
+    /*
     @Test
     public void findUserByLoginAndPassword() {
         assertThat(userDao.findUserByLoginAndPassword(dummyInitUser.getLogin(), dummyInitUser.getPassword()),

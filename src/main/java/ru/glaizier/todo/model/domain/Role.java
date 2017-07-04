@@ -9,12 +9,7 @@ import lombok.ToString;
 
 import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -22,18 +17,28 @@ import javax.persistence.ManyToMany;
 @EqualsAndHashCode(exclude = "users")
 @ToString(exclude = "users")
 @Entity
+@Table(name = "Role")
 public class Role {
     public static Role USER = new Role("USER");
     public static Role ADMIN = new Role("ADMIN");
 
     @NonNull
     @Id
+    @Column(unique = true, nullable = false)
     private String role;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    // Todo check cascade after all tests will be done
+    @ManyToMany(fetch = FetchType.LAZY/*, cascade = {
+            DETACH,
+            MERGE,
+            REFRESH,
+            PERSIST
+    }*/)
     @JoinTable(name = "Authorization",
-            joinColumns = @JoinColumn(name = "role", referencedColumnName = "role"),
-            inverseJoinColumns = @JoinColumn(name = "login", referencedColumnName = "login"))
+            joinColumns = @JoinColumn(name = "role", referencedColumnName = "role", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "login", referencedColumnName = "login", nullable = false),
+            foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
+            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
     private Set<User> users;
 
     protected Role() {
