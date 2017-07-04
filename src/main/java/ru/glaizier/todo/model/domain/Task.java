@@ -3,8 +3,11 @@ package ru.glaizier.todo.model.domain;
 import static javax.persistence.FetchType.LAZY;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,9 +16,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-// Todo remove Data and add getter setter to string and equals
-@Data
-@Builder
+@Getter
+@Setter
+@EqualsAndHashCode()
+@ToString()
 @Entity
 public class Task {
     @Id
@@ -38,6 +42,7 @@ public class Task {
         this(null, user, todo);
     }
 
+    @Builder
     public Task(Integer id, User user, String todo) {
         this.id = id;
         this.user = user;
