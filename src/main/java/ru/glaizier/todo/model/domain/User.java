@@ -52,7 +52,7 @@ public class User {
     protected User() {
     }
 
-    @Builder
+    @Builder(toBuilder = true)
     public User(String login, char[] password, Set<Role> roles) {
         this.login = login;
         this.password = password;

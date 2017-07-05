@@ -47,7 +47,7 @@ public class Task {
         this(null, user, todo);
     }
 
-    @Builder
+    @Builder(toBuilder = true)
     public Task(Integer id, User user, String todo) {
         this.id = id;
         this.user = user;
