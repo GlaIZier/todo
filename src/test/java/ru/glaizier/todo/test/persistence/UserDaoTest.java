@@ -1,6 +1,7 @@
 package ru.glaizier.todo.test.persistence;
 
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
@@ -8,6 +9,8 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.test.annotation.DirtiesContext;
@@ -18,13 +21,13 @@ import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
 import ru.glaizier.todo.model.domain.Role;
 import ru.glaizier.todo.model.domain.User;
-import ru.glaizier.todo.persistence.sql.PersistenceSql;
+import ru.glaizier.todo.persistence.role.RoleDao;
 import ru.glaizier.todo.persistence.user.UserDao;
 
+import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -38,11 +41,13 @@ import javax.transaction.Transactional;
 @Transactional
 public class UserDaoTest {
 
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
     @Autowired
     private UserDao userDao;
 
     @Autowired
-    private PersistenceSql persistenceSql;
+    private RoleDao roleDao;
 
     private User dummyInitUser = User.builder().login("dummyInitUser").password("p".toCharArray())
             .roles(new HashSet<>(Collections.singletonList(Role.USER))).build();
@@ -53,18 +58,9 @@ public class UserDaoTest {
     private User a = User.builder().login("a").password("p".toCharArray())
             .roles(new HashSet<>(Arrays.asList(Role.USER, Role.ADMIN))).build();
 
-    private User u1 = User.builder().login("u").password("p".toCharArray())
-            .roles(new HashSet<>(Collections.singletonList(Role.ADMIN))).build();
-
     @Before
     public void init() {
-        // Todo start here
-        Map<String, String> authorization = persistenceSql.getAllFromAuthorization();
-        System.out.println(authorization.size());
-        authorization.forEach((u, r) -> System.out.println(u + ":" + r));
-
         userDao.save(dummyInitUser);
-//        userDao.findUserByLogin(u1.getLogin());
     }
 
     @Test
@@ -73,7 +69,6 @@ public class UserDaoTest {
         assertThat(userDao.findUserByLogin(u.getLogin()), is(u));
         assertThat(userDao.findUserByLogin(a.getLogin()), is(a));
     }
-
 
     @Test
     public void getNullForNonExistUserOnFindUserByLogin() {
@@ -101,6 +96,11 @@ public class UserDaoTest {
     }
 
     @Test
+    public void findAll() {
+        assertThat(userDao.findAll().size(), is(3));
+    }
+
+    @Test
     public void save() {
         assertThat(userDao.save(User.builder().login("savedUser").password("savedPassword".toCharArray())
                         .roles(new HashSet<>(Collections.singletonList(Role.USER))).build()),
@@ -111,13 +111,28 @@ public class UserDaoTest {
                         .roles(new HashSet<>(Collections.singletonList(Role.USER))).build()));
     }
 
-    // Todo write test when we create role before
     @Test(expected = JpaObjectRetrievalFailureException.class)
     public void getExceptionOnSaveWithNonExistingRole() {
         assertThat(userDao.save(User.builder().login("savedUser").password("savedPassword".toCharArray())
                         .roles(new HashSet<>(Collections.singletonList(new Role("nonExistingRole")))).build()),
                 is(User.builder().login("savedUser").password("savedPassword".toCharArray())
                         .roles(new HashSet<>(Collections.singletonList(new Role("nonExistingRole")))).build()));
+    }
+
+    @Test
+    public void saveWithNewRole() {
+        assertNull(roleDao.findRoleByRole("savedRole"));
+        try {
+            userDao.save(User.builder().login("savedUser").password("savedPassword".toCharArray())
+                    .roles(new HashSet<>(Collections.singletonList(new Role("savedRole")))).build());
+        } catch (JpaObjectRetrievalFailureException e) {
+            log.info(e.getMessage() + ". Creating new role...");
+        }
+        roleDao.save(new Role("savedRole"));
+        assertThat(userDao.save(User.builder().login("savedUser").password("savedPassword".toCharArray())
+                        .roles(new HashSet<>(Collections.singletonList(new Role("savedRole")))).build()),
+                is(User.builder().login("savedUser").password("savedPassword".toCharArray())
+                        .roles(new HashSet<>(Collections.singletonList(new Role("savedRole")))).build()));
     }
 
     @Test
@@ -133,15 +148,8 @@ public class UserDaoTest {
 
     @Test
     public void delete() {
+        assertNotNull(userDao.findUserByLogin(dummyInitUser.getLogin()));
         userDao.delete(dummyInitUser.getLogin());
         assertNull(userDao.findUserByLogin(dummyInitUser.getLogin()));
-    }
-
-    @Test
-    // need to make additional query to get lazy additional from another table during single transaction
-    @Transactional
-    public void join() {
-        User u = userDao.findUserByLogin("u");
-        u.getTasks().forEach(System.out::println);
     }
 }

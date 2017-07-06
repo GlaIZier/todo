@@ -2,14 +2,15 @@ package ru.glaizier.todo.persistence.sql;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.glaizier.todo.model.dto.Authorization;
 import ru.glaizier.todo.persistence.exception.PersistenceException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -25,13 +26,13 @@ public class PersistenceSqlService implements PersistenceSql {
     }
 
     @Override
-    public Map<String, String> getAllFromAuthorization() {
-        Map<String, String> result = new TreeMap<>();
+    public List<Authorization> getAuthorizations() {
+        List<Authorization> result = new ArrayList<>();
         try (Connection c = dataSource.getConnection();
              PreparedStatement preparedStatement = c.prepareStatement("SELECT * FROM AUTHORIZATION");
              ResultSet rs = preparedStatement.executeQuery()) {
             while (rs.next()) {
-                result.put(rs.getString("login"), rs.getString("role"));
+                result.add(new Authorization(rs.getString("login"), rs.getString("role")));
             }
             return result;
         } catch (SQLException e) {

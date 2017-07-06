@@ -61,6 +61,7 @@ public class PersistenceService implements Persistence {
     }
 
     @Override
+    // Todo maybe throw exception on user not found
     public TaskDto saveTask(String login, String todo) {
         Objects.requireNonNull(login);
         Objects.requireNonNull(todo);
@@ -110,6 +111,7 @@ public class PersistenceService implements Persistence {
         return user;
     }
 
+    // Todo check all roles are present. If not throw exception?
     @Override
     public UserDto saveUser(String login, char[] password, Set<RoleDto> roles) {
         Objects.requireNonNull(login);

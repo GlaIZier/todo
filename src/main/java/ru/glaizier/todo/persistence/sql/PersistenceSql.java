@@ -1,9 +1,11 @@
 package ru.glaizier.todo.persistence.sql;
 
-import java.util.Map;
+import ru.glaizier.todo.model.dto.Authorization;
+
+import java.util.List;
 
 public interface PersistenceSql {
 
-    Map<String, String> getAllFromAuthorization();
+    List<Authorization> getAuthorizations();
 
 }
