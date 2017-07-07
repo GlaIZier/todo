@@ -1,15 +1,15 @@
 CREATE TABLE User (
-  login    VARCHAR(50) PRIMARY KEY,
-  password VARCHAR(30)
+  login    VARCHAR(50) PRIMARY KEY NOT NULL,
+  password VARCHAR(30)             NOT NULL
 );
 
 CREATE TABLE Role (
-  role VARCHAR(50) PRIMARY KEY
+  role VARCHAR(50) PRIMARY KEY NOT NULL
 );
 
 CREATE TABLE Authorization (
-  login VARCHAR(50),
-  role  VARCHAR(50),
+  login VARCHAR(50) NOT NULL,
+  role  VARCHAR(50) NOT NULL,
   PRIMARY KEY (login, role)
 );
 
@@ -27,9 +27,9 @@ CREATE TABLE Task (
   INCREMENT BY 1
 ),
   login VARCHAR (50
-),
+) NOT NULL,
   todo VARCHAR (255
-),
+) NOT NULL,
 PRIMARY KEY (id
 )
 );
