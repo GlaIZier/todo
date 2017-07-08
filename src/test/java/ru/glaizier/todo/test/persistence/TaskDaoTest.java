@@ -1,11 +1,5 @@
 package ru.glaizier.todo.test.persistence;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,17 +17,19 @@ import ru.glaizier.todo.config.servlet.ServletConfig;
 import ru.glaizier.todo.model.domain.Role;
 import ru.glaizier.todo.model.domain.Task;
 import ru.glaizier.todo.model.domain.User;
-import ru.glaizier.todo.persistence.Persistence;
 import ru.glaizier.todo.persistence.role.RoleDao;
 import ru.glaizier.todo.persistence.task.TaskDao;
 import ru.glaizier.todo.persistence.user.UserDao;
 
+import javax.transaction.Transactional;
 import java.lang.invoke.MethodHandles;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import javax.transaction.Transactional;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.*;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -62,9 +58,6 @@ public class TaskDaoTest {
             .roles(new HashSet<>(Collections.singletonList(dummyRole))).build();
 
     private final Task dummyTask = Task.builder().user(dummyUser).todo("dummyTodo").build();
-
-    @Autowired
-    private Persistence persistence;
 
     @Before
     public void init() {
@@ -142,6 +135,7 @@ public class TaskDaoTest {
 
     @Test
     public void removeTask() {
+        assertNotNull(taskDao.findTaskById(4));
         taskDao.delete(4);
         assertNull(taskDao.findTaskById(4));
         assertThat(userDao.findUserByLogin("dummyLogin"), is(dummyUser));

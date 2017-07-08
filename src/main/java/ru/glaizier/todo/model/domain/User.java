@@ -1,18 +1,12 @@
 package ru.glaizier.todo.model.domain;
 
-import static javax.persistence.CascadeType.PERSIST;
-import static javax.persistence.FetchType.LAZY;
-
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
-import lombok.ToString;
-
-import java.util.Set;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
+
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.FetchType.LAZY;
 
 @Getter
 @Setter
@@ -36,12 +30,11 @@ public class User {
     private Set<Task> tasks;
 
     // Todo check cascade after all tests will be done
-    @ManyToMany(fetch = LAZY/*, cascade = {
-            DETACH,
-            MERGE,
-            REFRESH,
-            PERSIST
-    }*/)
+    @ManyToMany(fetch = LAZY
+//            , cascade = {
+//            CascadeType.ALL
+//    }
+    )
     @JoinTable(name = "Authorization",
             joinColumns = @JoinColumn(name = "login", referencedColumnName = "login", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "role", referencedColumnName = "role", nullable = false),

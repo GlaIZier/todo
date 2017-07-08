@@ -1,15 +1,9 @@
 package ru.glaizier.todo.model.domain;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
-import java.util.Set;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -28,12 +22,11 @@ public class Role {
     private String role;
 
     // Todo check cascade after all tests will be done
-    @ManyToMany(fetch = FetchType.LAZY/*, cascade = {
-            DETACH,
-            MERGE,
-            REFRESH,
-            PERSIST
-    }*/)
+    @ManyToMany(fetch = FetchType.LAZY
+//            , cascade = {
+//            CascadeType.REMOVE
+//    }
+    )
     @JoinTable(name = "Authorization",
             joinColumns = @JoinColumn(name = "role", referencedColumnName = "role", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "login", referencedColumnName = "login", nullable = false),

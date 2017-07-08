@@ -1,11 +1,5 @@
 package ru.glaizier.todo.test.persistence;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,12 +18,15 @@ import ru.glaizier.todo.model.domain.User;
 import ru.glaizier.todo.persistence.role.RoleDao;
 import ru.glaizier.todo.persistence.user.UserDao;
 
+import javax.transaction.Transactional;
 import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 
-import javax.transaction.Transactional;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.*;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -49,8 +46,10 @@ public class UserDaoTest {
     @Autowired
     private RoleDao roleDao;
 
-    private User dummyInitUser = User.builder().login("dummyInitUser").password("p".toCharArray())
-            .roles(new HashSet<>(Collections.singletonList(Role.USER))).build();
+    private final Role dummyRole = new Role("dummyRole");
+
+    private final User dummyUser = User.builder().login("dummyLogin").password("dummyPassword".toCharArray())
+            .roles(new HashSet<>(Collections.singletonList(dummyRole))).build();
 
     private User u = User.builder().login("u").password("p".toCharArray())
             .roles(new HashSet<>(Collections.singletonList(Role.USER))).build();
@@ -60,25 +59,26 @@ public class UserDaoTest {
 
     @Before
     public void init() {
-        userDao.save(dummyInitUser);
+        roleDao.save(dummyRole);
+        userDao.save(dummyUser);
     }
 
     @Test
     public void findUserByLogin() {
-        assertThat(userDao.findUserByLogin(dummyInitUser.getLogin()), is(dummyInitUser));
+        assertThat(userDao.findUserByLogin(dummyUser.getLogin()), is(dummyUser));
         assertThat(userDao.findUserByLogin(u.getLogin()), is(u));
         assertThat(userDao.findUserByLogin(a.getLogin()), is(a));
     }
 
     @Test
     public void getNullForNonExistUserOnFindUserByLogin() {
-        assertNull(userDao.findUserByLogin("nonExistLogin"));
+        assertNull(userDao.findUserByLogin("nonExistingLogin"));
     }
 
     @Test
     public void findUserByLoginAndPassword() {
-        assertThat(userDao.findUserByLoginAndPassword(dummyInitUser.getLogin(), dummyInitUser.getPassword()),
-                is(dummyInitUser));
+        assertThat(userDao.findUserByLoginAndPassword(dummyUser.getLogin(), dummyUser.getPassword()),
+                is(dummyUser));
         assertThat(userDao.findUserByLoginAndPassword(u.getLogin(), u.getPassword()),
                 is(u));
         assertThat(userDao.findUserByLoginAndPassword(a.getLogin(), a.getPassword()),
@@ -87,12 +87,12 @@ public class UserDaoTest {
 
     @Test
     public void getNullForWrongPasswordOnFindUserByLoginAndPassword() {
-        assertNull(userDao.findUserByLoginAndPassword(dummyInitUser.getLogin(), "wrongPassword".toCharArray()));
+        assertNull(userDao.findUserByLoginAndPassword(dummyUser.getLogin(), "wrongPassword".toCharArray()));
     }
 
     @Test
     public void getNullForNonExistUserOnFindUserByLoginAndPassword() {
-        assertNull(userDao.findUserByLoginAndPassword("nonExistLogin", "p".toCharArray()));
+        assertNull(userDao.findUserByLoginAndPassword("nonExistingLogin", "dummyPassword".toCharArray()));
     }
 
     @Test
@@ -137,19 +137,19 @@ public class UserDaoTest {
 
     @Test
     public void update() {
-        assertThat(userDao.save(User.builder().login(dummyInitUser.getLogin()).password("savedPassword".toCharArray())
-                        .roles(dummyInitUser.getRoles()).build()),
-                is(dummyInitUser.toBuilder().password("savedPassword".toCharArray()).build())
+        assertThat(userDao.save(User.builder().login(dummyUser.getLogin()).password("savedPassword".toCharArray())
+                        .roles(dummyUser.getRoles()).build()),
+                is(dummyUser.toBuilder().password("savedPassword".toCharArray()).build())
         );
 
-        assertThat(userDao.findUserByLogin(dummyInitUser.getLogin()),
-                is(dummyInitUser.toBuilder().password("savedPassword".toCharArray()).build()));
+        assertThat(userDao.findUserByLogin(dummyUser.getLogin()),
+                is(dummyUser.toBuilder().password("savedPassword".toCharArray()).build()));
     }
 
     @Test
     public void delete() {
-        assertNotNull(userDao.findUserByLogin(dummyInitUser.getLogin()));
-        userDao.delete(dummyInitUser.getLogin());
-        assertNull(userDao.findUserByLogin(dummyInitUser.getLogin()));
+        assertNotNull(userDao.findUserByLogin(dummyUser.getLogin()));
+        userDao.delete(dummyUser.getLogin());
+        assertNull(userDao.findUserByLogin(dummyUser.getLogin()));
     }
 }
