@@ -1,7 +1,5 @@
 package ru.glaizier.todo.persistence;
 
-import static java.lang.String.format;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.glaizier.todo.model.domain.Role;
@@ -11,18 +9,14 @@ import ru.glaizier.todo.model.dto.RoleDto;
 import ru.glaizier.todo.model.dto.TaskDto;
 import ru.glaizier.todo.model.dto.UserDto;
 import ru.glaizier.todo.persistence.exception.AccessDeniedException;
+import ru.glaizier.todo.persistence.role.RoleDao;
 import ru.glaizier.todo.persistence.task.TaskDao;
 import ru.glaizier.todo.persistence.user.UserDao;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-
 import javax.transaction.Transactional;
+import java.util.*;
+
+import static java.lang.String.format;
 
 @Service
 @Transactional
@@ -32,10 +26,13 @@ public class PersistenceService implements Persistence {
 
     private final UserDao userDao;
 
+    private final RoleDao roleDao;
+
     @Autowired
-    private PersistenceService(TaskDao taskDao, UserDao userDao) {
+    private PersistenceService(TaskDao taskDao, UserDao userDao, RoleDao roleDao) {
         this.taskDao = taskDao;
         this.userDao = userDao;
+        this.roleDao = roleDao;
     }
 
     @Override
@@ -144,6 +141,29 @@ public class PersistenceService implements Persistence {
                     login, id));
 
         return new TaskDto(id, Optional.empty(), task.getTodo());
+    }
+
+    @Override
+    public RoleDto findRole(String role) {
+        Role roleByRole = roleDao.findRoleByRole(role);
+        return new RoleDto(roleByRole.getRole());
+    }
+
+    @Override
+    public RoleDto saveRole(String role) {
+        Role savedRole = roleDao.save(new Role(role));
+        return new RoleDto(savedRole.getRole());
+    }
+
+    @Override
+    public RoleDto updateRole(String role, String updatedRole) {
+        deleteRole(role);
+        return saveRole(updatedRole);
+    }
+
+    @Override
+    public void deleteRole(String role) {
+        roleDao.delete(role);
     }
 
     private Set<Role> transformRoleDtos(Set<RoleDto> roleDtos) {

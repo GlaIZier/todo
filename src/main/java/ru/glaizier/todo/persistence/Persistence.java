@@ -29,4 +29,12 @@ public interface Persistence {
     void deleteUser(String login);
 
     TaskDto findTaskByIdAndLogin(Integer id, String login) throws AccessDeniedException;
+
+    RoleDto findRole(String role);
+
+    RoleDto saveRole(String role);
+
+    RoleDto updateRole(String role, String updatedRole);
+
+    void deleteRole(String role);
 }
