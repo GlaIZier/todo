@@ -146,13 +146,13 @@ public class PersistenceService implements Persistence {
     @Override
     public RoleDto findRole(String role) {
         Role roleByRole = roleDao.findRoleByRole(role);
-        return new RoleDto(roleByRole.getRole());
+        return (roleByRole == null) ? null : new RoleDto(roleByRole.getRole());
     }
 
     @Override
     public RoleDto saveRole(String role) {
         Role savedRole = roleDao.save(new Role(role));
-        return new RoleDto(savedRole.getRole());
+        return savedRole == null ? null : new RoleDto(savedRole.getRole());
     }
 
     @Override
