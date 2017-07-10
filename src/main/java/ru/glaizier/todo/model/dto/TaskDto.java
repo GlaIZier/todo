@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Data
 @RequiredArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 public class TaskDto {
     @NonNull
     private final Integer id;
