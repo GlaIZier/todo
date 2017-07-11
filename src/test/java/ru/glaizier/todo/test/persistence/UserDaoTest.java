@@ -1,5 +1,11 @@
 package ru.glaizier.todo.test.persistence;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,15 +24,12 @@ import ru.glaizier.todo.model.domain.User;
 import ru.glaizier.todo.persistence.role.RoleDao;
 import ru.glaizier.todo.persistence.user.UserDao;
 
-import javax.transaction.Transactional;
 import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
+import javax.transaction.Transactional;
 
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -109,6 +112,17 @@ public class UserDaoTest {
         assertThat(userDao.findUserByLogin("savedUser"),
                 is(User.builder().login("savedUser").password("savedPassword".toCharArray())
                         .roles(new HashSet<>(Collections.singletonList(Role.USER))).build()));
+    }
+
+    @Test
+    public void saveWithNoRoles() {
+        assertThat(userDao.save(User.builder().login("savedUser").password("savedPassword".toCharArray())
+                        .roles(new HashSet<>()).build()),
+                is(User.builder().login("savedUser").password("savedPassword".toCharArray())
+                        .roles(new HashSet<>()).build()));
+        assertThat(userDao.findUserByLogin("savedUser"),
+                is(User.builder().login("savedUser").password("savedPassword".toCharArray())
+                        .roles(new HashSet<>()).build()));
     }
 
     @Test(expected = JpaObjectRetrievalFailureException.class)

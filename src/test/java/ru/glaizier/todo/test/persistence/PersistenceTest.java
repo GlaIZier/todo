@@ -15,10 +15,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
+import ru.glaizier.todo.model.domain.Role;
 import ru.glaizier.todo.model.dto.RoleDto;
 import ru.glaizier.todo.model.dto.TaskDto;
 import ru.glaizier.todo.model.dto.UserDto;
 import ru.glaizier.todo.persistence.Persistence;
+import ru.glaizier.todo.persistence.exception.AccessDeniedException;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -64,47 +66,45 @@ public class PersistenceTest {
         assertNull(p.findTasksByLogin("nonExistingLogin"));
     }
 
-    /*
     @Test
-    public void getEmptyListOnGetTasksForUnknownUser() {
-        assertTrue(p.findTasksByLogin("nonExistingLogin").isEmpty());
-    }
-
-    @Test
-    public void getTheSameTaskAsCreatedOnCreateTask() {
-        TaskDto dummyTask2 = dummyTask.toBuilder().id(101).todo("dummyTodo2").build();
-        assertThat(p.saveTask(dummyUser.getLogin(), 101, dummyTask2.getTodo()), is(dummyTask2));
+    public void saveTask() {
+        TaskDto dummyTask2 = dummyTask.toBuilder().id(5).user(Optional.empty()).todo("dummyTodo2").build();
+        assertThat(p.saveTask(dummyUser.getLogin(), dummyTask2.getTodo()), is(dummyTask2));
         assertThat(p.findTasksByLogin(dummyUser.getLogin()).get(1), is(dummyTask2));
     }
 
-    @Test(expected = InvalidDataAccessApiUsageException.class)
-    public void getExceptionOnCreateTaskForUnknownUser() {
-        User nonExistingUser = User.builder().login("nonExistingLogin").password("".toCharArray()).build();
-        Task nonExistingTask = Task.builder().user(nonExistingUser).todo("nonExistingTodo").build();
-        taskDao.save(nonExistingTask);
+    @Test()
+    public void getNullOnSaveTaskForUnknownUser() {
+        assertNull(p.saveTask("nonExistingLogin", dummyTask.getTodo()));
     }
 
     @Test
     public void getTaskOnGetTask() {
-        assertThat(taskDao.findTaskById(4), is(dummyTask));
+        assertThat(p.findTaskById(4), is(dummyTask));
     }
 
     @Test
     public void getNullOnGetTaskForUnknownId() {
-        assertNull(taskDao.findTaskById(100));
+        assertNull(p.findTaskById(100));
     }
 
     @Test
-    public void getTaskOnGetTaskByIdAndUser() {
-        assertThat(taskDao.findTaskByIdAndUser(4, dummyUser),
-                is(dummyTask));
+    public void getTaskOnGetTaskByIdAndLogin() {
+        assertThat(p.findTaskByIdAndLogin(4, dummyUser.getLogin()),
+                is(dummyTask.toBuilder().user(Optional.empty()).build()));
     }
 
     @Test
-    public void getNullOnGetTaskForUnknownUser() {
-        User nonExistingUser = User.builder().login("nonExistingLogin").password("".toCharArray()).build();
-        assertNull(taskDao.findTaskByIdAndUser(4, nonExistingUser));
+    public void getNullOnGetTaskByIdAndLoginForUnknownLogin() {
+        assertNull(p.findTaskByIdAndLogin(4, "nonExistingLogin"));
     }
+
+    @Test(expected = AccessDeniedException.class)
+    public void getExceptionOnGetTaskByIdAndLoginForWrongLogin() {
+        p.saveUser("wrongLogin", "password".toCharArray(), new HashSet<>(Collections.singletonList(new RoleDto(Role.USER.getRole()))));
+        p.findTaskByIdAndLogin(4, "wrongLogin");
+    }
+    /*
 
     @Test
     public void updateTask() {
@@ -156,5 +156,5 @@ public class PersistenceTest {
         assertThat(p.findUserByLogin(dummyUser.getLogin()), is(dummyUser.toBuilder().roles(Optional.of(new HashSet<>())).build()));
 
     }
-*/
+    */
 }

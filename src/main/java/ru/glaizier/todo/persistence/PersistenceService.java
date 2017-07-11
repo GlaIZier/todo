@@ -1,5 +1,7 @@
 package ru.glaizier.todo.persistence;
 
+import static java.lang.String.format;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.glaizier.todo.model.domain.Role;
@@ -13,10 +15,15 @@ import ru.glaizier.todo.persistence.role.RoleDao;
 import ru.glaizier.todo.persistence.task.TaskDao;
 import ru.glaizier.todo.persistence.user.UserDao;
 
-import javax.transaction.Transactional;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
-import static java.lang.String.format;
+import javax.transaction.Transactional;
 
 @Service
 @Transactional
@@ -54,11 +61,14 @@ public class PersistenceService implements Persistence {
         Task taskById = taskDao.findTaskById(id);
         if (taskById == null)
             return null;
-        return new TaskDto(taskById.getId(), Optional.empty(), taskById.getTodo());
+        User user = taskById.getUser();
+        Set<Role> roles = user.getRoles();
+        UserDto userDto = UserDto.builder().login(user.getLogin()).password(user.getPassword()).roles(Optional.of(transformRoles(roles))).build();
+        return new TaskDto(taskById.getId(), Optional.of(userDto), taskById.getTodo());
     }
 
     @Override
-    // Todo maybe throw exception on user not found
+    // Todo maybe throw exception on user not found?
     public TaskDto saveTask(String login, String todo) {
         Objects.requireNonNull(login);
         Objects.requireNonNull(todo);
@@ -133,6 +143,9 @@ public class PersistenceService implements Persistence {
     public TaskDto findTaskByIdAndLogin(Integer id, String login) throws AccessDeniedException {
         Task task = taskDao.findTaskById(id);
         if (task == null)
+            return null;
+
+        if (userDao.findUserByLogin(login) == null)
             return null;
 
         String taskLogin = task.getUser().getLogin();
