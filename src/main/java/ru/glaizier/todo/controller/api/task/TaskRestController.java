@@ -108,7 +108,7 @@ public class TaskRestController extends ExceptionHandlingController {
     public ResponseEntity<OutputData<OutputTask>> getTask(HttpServletRequest req,
                                                           @PathVariable int id) {
         String login = getLogin(req);
-        TaskDto task = persistence.findTaskByIdAndLogin(id, login);
+        TaskDto task = persistence.findTask(id, login);
         if (task == null)
             throw new ApiTaskNotFoundException(login, id);
 
@@ -122,11 +122,11 @@ public class TaskRestController extends ExceptionHandlingController {
                                                              @PathVariable int id,
                                                              @RequestBody String todo) {
         String login = getLogin(req);
-        TaskDto task = persistence.findTaskByIdAndLogin(id, login);
+        TaskDto task = persistence.findTask(id, login);
         if (task == null)
             throw new ApiTaskNotFoundException(login, id);
 
-        TaskDto updatedTask = persistence.saveTask(login, id, todo);
+        TaskDto updatedTask = persistence.updateTask(login, id, todo);
 
         OutputData<OutputTask> outputData = new OutputData<>(transform(updatedTask, login));
         return new ResponseEntity<>(outputData, HttpStatus.OK);
@@ -136,7 +136,7 @@ public class TaskRestController extends ExceptionHandlingController {
     public ResponseEntity<OutputData<OutputTask>> deleteTask(HttpServletRequest req,
                                                              @PathVariable int id) {
         String login = getLogin(req);
-        TaskDto deletedTask = persistence.findTaskByIdAndLogin(id, login);
+        TaskDto deletedTask = persistence.findTask(id, login);
         if (deletedTask == null)
             throw new ApiTaskNotFoundException(login, id);
 

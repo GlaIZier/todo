@@ -57,7 +57,7 @@ public class PersistenceService implements Persistence {
     }
 
     @Override
-    public TaskDto findTaskById(Integer id) {
+    public TaskDto findTask(Integer id) {
         Task taskById = taskDao.findTaskById(id);
         if (taskById == null)
             return null;
@@ -65,6 +65,23 @@ public class PersistenceService implements Persistence {
         Set<Role> roles = user.getRoles();
         UserDto userDto = UserDto.builder().login(user.getLogin()).password(user.getPassword()).roles(Optional.of(transformRoles(roles))).build();
         return new TaskDto(taskById.getId(), Optional.of(userDto), taskById.getTodo());
+    }
+
+    @Override
+    public TaskDto findTask(Integer id, String login) throws AccessDeniedException {
+        Task task = taskDao.findTaskById(id);
+        if (task == null)
+            return null;
+
+        if (userDao.findUserByLogin(login) == null)
+            return null;
+
+        String taskLogin = task.getUser().getLogin();
+        if (!taskLogin.equals(login))
+            throw new AccessDeniedException(format("User with login %s doesn't have rights to access task with %d id!",
+                    login, id));
+
+        return new TaskDto(id, Optional.empty(), task.getTodo());
     }
 
     @Override
@@ -81,26 +98,50 @@ public class PersistenceService implements Persistence {
     }
 
     @Override
-    public TaskDto saveTask(String login, Integer id, String todo) {
+    public TaskDto updateTask(String login, Integer id, String todo) throws AccessDeniedException {
         Objects.requireNonNull(login);
         Objects.requireNonNull(id);
         Objects.requireNonNull(todo);
 
-        User userByLogin = userDao.findUserByLogin(login);
-        if (userByLogin == null)
+        User user = userDao.findUserByLogin(login);
+        if (user == null)
             return null;
 
-        Task task = taskDao.save(Task.builder().id(id).user(userByLogin).todo(todo).build());
-        return TaskDto.builder().id(task.getId()).user(Optional.empty()).todo(task.getTodo()).build();
+        Task task = taskDao.findTaskById(id);
+        if (!task.getUser().getLogin().equals(login))
+            throw new AccessDeniedException(format("User with login %s doesn't have rights to access task with %d id!",
+                    login, id));
+        taskDao.save(task.toBuilder().todo(todo).build());
+
+        return TaskDto.builder().id(id).user(Optional.empty()).todo(todo).build();
     }
 
     @Override
-    public void deleteTask(Integer id) {
+    public TaskDto deleteTask(Integer id) {
+        Task task = taskDao.findTaskById(id);
+        if (task == null) {
+            return null;
+        }
+        User user = task.getUser();
+        Set<Role> roles = user.getRoles();
+        TaskDto taskDto = TaskDto.builder().id(task.getId())
+                .user(Optional.of(UserDto.builder().login(user.getLogin()).password(user.getPassword())
+                        .roles(Optional.of(transformRoles(roles))).build()))
+                .todo(task.getTodo())
+                .build();
         taskDao.delete(id);
+        return taskDto;
     }
 
     @Override
-    public UserDto findUserByLogin(String login) {
+    public TaskDto deleteTask(Integer id, String login) {
+        if (findTask(id, login) == null)
+            return null;
+        return deleteTask(id);
+    }
+
+    @Override
+    public UserDto findUser(String login) {
         User user = userDao.findUserByLogin(login);
         if (user == null)
             return null;
@@ -111,8 +152,8 @@ public class PersistenceService implements Persistence {
     }
 
     @Override
-    public UserDto findUserByLoginAndPassword(String login, char[] password) {
-        UserDto user = findUserByLogin(login);
+    public UserDto findUser(String login, char[] password) {
+        UserDto user = findUser(login);
         if (user == null || !Arrays.equals(password, user.getPassword()))
             return null;
         return user;
@@ -137,23 +178,6 @@ public class PersistenceService implements Persistence {
     @Override
     public void deleteUser(String login) {
         userDao.delete(login);
-    }
-
-    @Override
-    public TaskDto findTaskByIdAndLogin(Integer id, String login) throws AccessDeniedException {
-        Task task = taskDao.findTaskById(id);
-        if (task == null)
-            return null;
-
-        if (userDao.findUserByLogin(login) == null)
-            return null;
-
-        String taskLogin = task.getUser().getLogin();
-        if (!taskLogin.equals(login))
-            throw new AccessDeniedException(format("User with login %s doesn't have rights to access task with %d id!",
-                    login, id));
-
-        return new TaskDto(id, Optional.empty(), task.getTodo());
     }
 
     @Override

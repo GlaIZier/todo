@@ -41,10 +41,10 @@ public class AuthRestController extends ExceptionHandlingController {
     public ResponseEntity<OutputData<OutputUser>> authenticateUser(InputUser inputUser) {
         UserRestController.checkUserIsNotEmpty(inputUser);
 
-        if (persistence.findUserByLogin(inputUser.getLogin()) == null)
+        if (persistence.findUser(inputUser.getLogin()) == null)
             throw new ApiNotFoundException(format("User with login %s wasn't found!", inputUser.getLogin()));
 
-        if (persistence.findUserByLoginAndPassword(inputUser.getLogin(), inputUser.getPassword()) == null)
+        if (persistence.findUser(inputUser.getLogin(), inputUser.getPassword()) == null)
             throw new ApiUnauthorizedException("Wrong credentials were provided!");
 
         String token = tokenService.createToken(inputUser.getLogin());

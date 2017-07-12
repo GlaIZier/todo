@@ -12,23 +12,25 @@ public interface Persistence {
 
     List<TaskDto> findTasksByLogin(String login);
 
-    TaskDto findTaskById(Integer id);
+    TaskDto findTask(Integer id);
+
+    TaskDto findTask(Integer id, String login) throws AccessDeniedException;
 
     TaskDto saveTask(String login, String todo);
 
-    TaskDto saveTask(String login, Integer id, String todo);
+    TaskDto updateTask(String login, Integer id, String todo) throws AccessDeniedException;
 
-    void deleteTask(Integer id);
+    TaskDto deleteTask(Integer id);
 
-    UserDto findUserByLogin(String login);
+    TaskDto deleteTask(Integer id, String login) throws AccessDeniedException;
 
-    UserDto findUserByLoginAndPassword(String login, char[] password);
+    UserDto findUser(String login);
+
+    UserDto findUser(String login, char[] password);
 
     UserDto saveUser(String login, char[] password, Set<RoleDto> roles);
 
     void deleteUser(String login);
-
-    TaskDto findTaskByIdAndLogin(Integer id, String login) throws AccessDeniedException;
 
     RoleDto findRole(String role);
 
