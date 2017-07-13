@@ -43,7 +43,7 @@ public class PersistenceService implements Persistence {
     }
 
     @Override
-    public List<TaskDto> findTasksByLogin(String login) {
+    public List<TaskDto> findTasks(String login) {
         User user = userDao.findUserByLogin(login);
         if (user == null)
             return null;
@@ -147,8 +147,7 @@ public class PersistenceService implements Persistence {
             return null;
         Set<Role> roles = user.getRoles();
         Objects.requireNonNull(roles);
-        Set<RoleDto> roleDtos = roles.stream().collect(HashSet::new, (a, r) -> a.add(new RoleDto(r.getRole())), HashSet::addAll);
-        return UserDto.builder().login(user.getLogin()).password(user.getPassword()).roles(Optional.of(roleDtos)).build();
+        return UserDto.builder().login(user.getLogin()).password(user.getPassword()).roles(Optional.of(transformRoles(roles))).build();
     }
 
     @Override
@@ -159,7 +158,6 @@ public class PersistenceService implements Persistence {
         return user;
     }
 
-    // Todo check all roles are present. If not throw exception?
     @Override
     public UserDto saveUser(String login, char[] password, Set<RoleDto> roles) {
         Objects.requireNonNull(login);

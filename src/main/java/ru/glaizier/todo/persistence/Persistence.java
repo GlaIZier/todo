@@ -10,7 +10,7 @@ import java.util.Set;
 
 public interface Persistence {
 
-    List<TaskDto> findTasksByLogin(String login);
+    List<TaskDto> findTasks(String login);
 
     TaskDto findTask(Integer id);
 
