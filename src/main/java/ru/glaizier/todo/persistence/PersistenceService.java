@@ -151,6 +151,14 @@ public class PersistenceService implements Persistence {
     }
 
     @Override
+    public List<UserDto> findUsers() {
+        List<User> users = userDao.findAll();
+        return users.stream().collect(ArrayList::new, (acc, user) -> {
+            acc.add(UserDto.builder().login(user.getLogin()).password(user.getPassword()).roles(Optional.of(transformRoles(user.getRoles()))).build());
+        }, ArrayList::addAll);
+    }
+
+    @Override
     public UserDto findUser(String login, char[] password) {
         UserDto user = findUser(login);
         if (user == null || !Arrays.equals(password, user.getPassword()))
@@ -179,6 +187,11 @@ public class PersistenceService implements Persistence {
     }
 
     @Override
+    public List<RoleDto> findRoles() {
+        return transformRoles(roleDao.findAll());
+    }
+
+    @Override
     public RoleDto findRole(String role) {
         Role roleByRole = roleDao.findRoleByRole(role);
         return (roleByRole == null) ? null : new RoleDto(roleByRole.getRole());
@@ -191,12 +204,6 @@ public class PersistenceService implements Persistence {
     }
 
     @Override
-    public RoleDto updateRole(String role, String updatedRole) {
-        deleteRole(role);
-        return saveRole(updatedRole);
-    }
-
-    @Override
     public void deleteRole(String role) {
         roleDao.delete(role);
     }
@@ -205,8 +212,16 @@ public class PersistenceService implements Persistence {
         return roleDtos.stream().collect(HashSet::new, (a, r) -> a.add(new Role(r.getRole())), HashSet::addAll);
     }
 
+    private List<Role> transformRoleDtos(List<RoleDto> roleDtos) {
+        return roleDtos.stream().collect(ArrayList::new, (a, r) -> a.add(new Role(r.getRole())), ArrayList::addAll);
+    }
+
     private Set<RoleDto> transformRoles(Set<Role> roles) {
         return roles.stream().collect(HashSet::new, (a, r) -> a.add(new RoleDto(r.getRole())), HashSet::addAll);
+    }
+
+    private List<RoleDto> transformRoles(List<Role> roles) {
+        return roles.stream().collect(ArrayList::new, (a, r) -> a.add(new RoleDto(r.getRole())), ArrayList::addAll);
     }
 
 }

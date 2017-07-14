@@ -24,19 +24,24 @@ public interface Persistence {
 
     TaskDto deleteTask(Integer id, String login) throws AccessDeniedException;
 
+    List<UserDto> findUsers();
+
     UserDto findUser(String login);
 
     UserDto findUser(String login, char[] password);
 
+    // Also is used to update user
     UserDto saveUser(String login, char[] password, Set<RoleDto> roles);
 
     void deleteUser(String login);
+
+    List<RoleDto> findRoles();
 
     RoleDto findRole(String role);
 
     RoleDto saveRole(String role);
 
-    RoleDto updateRole(String role, String updatedRole);
+    // no update because we need to update all users with updated role
 
     void deleteRole(String role);
 }
