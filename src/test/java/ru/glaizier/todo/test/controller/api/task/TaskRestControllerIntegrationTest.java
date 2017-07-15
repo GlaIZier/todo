@@ -1,17 +1,5 @@
 package ru.glaizier.todo.test.controller.api.task;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,7 +19,14 @@ import ru.glaizier.todo.security.token.TokenService;
 
 import javax.servlet.http.Cookie;
 
-// Todo think about tests after dao db will be created
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+// Todo change tests to not depend on a and u users. Create users and tasks for tests dynamically before running tests
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {
@@ -131,14 +126,14 @@ public class TaskRestControllerIntegrationTest {
     }
 
     @Test
-    public void get404WhenGetTaskWithExistingIdButWrongUser() throws Exception {
+    public void get403WhenGetTaskWithExistingIdButWrongUser() throws Exception {
         String token = tokenService.createToken("u");
 
         mvc.perform(get("/api/me/tasks/3").cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
                 .andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("{\"error\":{\"code\":404," +
-                        "\"message\":\"Task for user u with id 3 hasn't been found!\"}}"));
+                .andExpect(status().isForbidden())
+                .andExpect(content().string("{\"error\":{\"code\":403," +
+                        "\"message\":\"User with login u doesn't have rights to access task with 3 id!\"}}"));
     }
 
     /**
