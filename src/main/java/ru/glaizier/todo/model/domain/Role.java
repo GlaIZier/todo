@@ -21,7 +21,6 @@ public class Role {
     @Column(unique = true, nullable = false)
     private String role;
 
-    // Todo check cascade after all tests will be done
     @ManyToMany(fetch = FetchType.LAZY
 //            , cascade = {
 //            CascadeType.REMOVE

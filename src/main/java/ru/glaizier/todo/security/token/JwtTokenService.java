@@ -1,7 +1,5 @@
 package ru.glaizier.todo.security.token;
 
-import static java.lang.String.format;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -21,6 +19,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import static java.lang.String.format;
+
 public class JwtTokenService implements TokenService {
 
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -39,7 +39,6 @@ public class JwtTokenService implements TokenService {
 
         this.expireDurationInSeconds = expireDurationInSeconds;
         try {
-            // Todo inject this when Security will be finished
             this.algorithm = Algorithm.HMAC512(signingKey);
         } catch (UnsupportedEncodingException e) {
             throw new TokenServiceCreationException("Couldn't create algorithm to sign api tokens!", e);

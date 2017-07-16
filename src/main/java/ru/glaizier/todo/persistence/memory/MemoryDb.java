@@ -4,6 +4,7 @@ import lombok.NonNull;
 import ru.glaizier.todo.model.domain.Task;
 import ru.glaizier.todo.model.domain.User;
 
+import javax.annotation.PostConstruct;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -11,9 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.annotation.PostConstruct;
-
 // Just a simple memory db dummy
+// Todo create simple memory implementation
 //@Repository
 //@Profile("memory")
 public class MemoryDb implements Db {
@@ -77,7 +77,6 @@ public class MemoryDb implements Db {
             return null;
 
         Integer newId = lastId.incrementAndGet();
-        // Todo
 //        Task newTask = Task.builder().id(newId).login(login).todo(todo).build();
         Task newTask = null;
 
@@ -111,7 +110,6 @@ public class MemoryDb implements Db {
 
         Task prevTask = loginToIdToTask.get(login).get(task.getId());
         if (prevTask != null) {
-            // Todo
 //            Task updatedTask = Task.builder().id(task.getId()).login(login).todo(task.getTodo()).build();
             Task updatedTask = null;
             Map<Integer, Task> updatedMap = loginToIdToTask.get(login);

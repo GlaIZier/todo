@@ -25,11 +25,9 @@ public class User {
     @Column(nullable = false, length = 30)
     private char[] password;
 
-    // Todo check cascade after all tests will be done
     @OneToMany(fetch = LAZY, mappedBy = "user", cascade = PERSIST)
     private Set<Task> tasks;
 
-    // Todo check cascade after all tests will be done
     @ManyToMany(fetch = LAZY
 //            , cascade = {
 //            CascadeType.ALL

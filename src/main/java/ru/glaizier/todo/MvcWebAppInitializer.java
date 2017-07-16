@@ -5,7 +5,7 @@ import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
 
 // Todo add aop logging
-// Todo think about exception handling architecture
+// Todo move the whole application to docker to run it with one command
 public class MvcWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override

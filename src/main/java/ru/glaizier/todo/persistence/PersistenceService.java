@@ -1,7 +1,5 @@
 package ru.glaizier.todo.persistence;
 
-import static java.lang.String.format;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.glaizier.todo.model.domain.Role;
@@ -15,15 +13,10 @@ import ru.glaizier.todo.persistence.role.RoleDao;
 import ru.glaizier.todo.persistence.task.TaskDao;
 import ru.glaizier.todo.persistence.user.UserDao;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-
 import javax.transaction.Transactional;
+import java.util.*;
+
+import static java.lang.String.format;
 
 @Service
 @Transactional
@@ -85,7 +78,6 @@ public class PersistenceService implements Persistence {
     }
 
     @Override
-    // Todo maybe throw exception on user not found?
     public TaskDto saveTask(String login, String todo) {
         Objects.requireNonNull(login);
         Objects.requireNonNull(todo);
