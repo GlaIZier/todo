@@ -15,20 +15,29 @@ import ru.glaizier.todo.properties.PropertiesService;
 import ru.glaizier.todo.security.handler.LoginSuccessHandler;
 import ru.glaizier.todo.security.token.TokenService;
 
+import javax.sql.DataSource;
+
 @Configuration
 @Order(2)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private static final String USER_BY_LOGIN_QUERY = "select login, password, true as enabled from User where login=?";
+    private static final String AUTHORITY_BY_LOGIN_QUERY = "select login, 'ROLE_USER' from Authorization where login=?";
 
     private final PropertiesService propertiesService;
 
     private final TokenService tokenService;
 
+    private final DataSource dataSource;
+
     @Autowired
     public WebSecurityConfig(
             TokenService tokenService,
-            PropertiesService propertiesService) {
+            PropertiesService propertiesService,
+            DataSource dataSource) {
         this.propertiesService = propertiesService;
         this.tokenService = tokenService;
+        this.dataSource = dataSource;
     }
 
     @Bean
@@ -41,6 +50,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // Todo add password encoding (hash + salt)
     public UserDetailsService inMemoryUserDetailsService() throws Exception {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+        manager.createUser(User.withUsername("u").password("p").roles("USER").build());
+        manager.createUser(User.withUsername("a").password("p").roles("USER", "ADMIN").build());
+        return manager;
 //        userDao.getUsers().forEach(user ->
 //            manager.createUser(
 //                    User.withUsername(user.getLogin()).password(String.valueOf(user.getPassword()))
@@ -49,15 +61,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                                    .toArray(new String[user.getRoles().size()]))
 //                            .build())
 //        );
-        manager.createUser(User.withUsername("u").password("p").roles("USER").build());
-        manager.createUser(User.withUsername("a").password("p").roles("USER", "ADMIN").build());
-        return manager;
     }
 
     @Override
     // configure UserDetailsService
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(inMemoryUserDetailsService());
+        auth.jdbcAuthentication()
+                .dataSource(dataSource)
+                .usersByUsernameQuery(USER_BY_LOGIN_QUERY)
+                .authoritiesByUsernameQuery(AUTHORITY_BY_LOGIN_QUERY);
+//        auth.userDetailsService(inMemoryUserDetailsService());
         // Don't erase password after authentication
         auth.eraseCredentials(false);
     }
