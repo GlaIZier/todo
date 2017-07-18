@@ -1,9 +1,15 @@
 package ru.glaizier.todo.model.domain;
 
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+import java.util.Set;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -13,8 +19,8 @@ import java.util.Set;
 @Entity
 @Table(name = "Role")
 public class Role {
-    public static Role USER = new Role("USER");
-    public static Role ADMIN = new Role("ADMIN");
+    public static Role USER = new Role("ROLE_USER");
+    public static Role ADMIN = new Role("ROLE_ADMIN");
 
     @NonNull
     @Id

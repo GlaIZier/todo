@@ -22,7 +22,7 @@ import javax.sql.DataSource;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String USER_BY_LOGIN_QUERY = "select login, password, true as enabled from User where login=?";
-    private static final String AUTHORITY_BY_LOGIN_QUERY = "select login, 'ROLE_USER' from Authorization where login=?";
+    private static final String AUTHORITY_BY_LOGIN_QUERY = "select login, role from Authorization where login=?";
 
     private final PropertiesService propertiesService;
 
@@ -46,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    // TODO add database authentication and create inmemory dummy UserDetailsService for SecurityTest
+    // TODO create inmemory dummy UserDetailsService for SecurityTest
     // Todo add password encoding (hash + salt)
     public UserDetailsService inMemoryUserDetailsService() throws Exception {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();

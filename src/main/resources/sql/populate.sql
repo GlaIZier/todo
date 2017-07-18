@@ -5,14 +5,14 @@ VALUES
 
 INSERT INTO Role (role)
 VALUES
-  ('USER'),
-  ('ADMIN');
+  ('ROLE_USER'),
+  ('ROLE_ADMIN');
 
 INSERT INTO Authorization (login, role)
 VALUES
-  ('u', 'USER'),
-  ('a', 'USER'),
-  ('a', 'ADMIN');
+  ('u', 'ROLE_USER'),
+  ('a', 'ROLE_USER'),
+  ('a', 'ROLE_ADMIN');
 
 INSERT INTO Task (login, todo)
 VALUES
