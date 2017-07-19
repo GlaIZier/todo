@@ -32,7 +32,7 @@ public class DbConfig {
                 .setScriptEncoding("UTF-8")
                 .ignoreFailedDrops(true)
                 .addScript("sql/schema.sql")
-                .addScript("sql/populate.sql")
+//                .addScript("sql/populate.sql")
                 .build();
     }
 

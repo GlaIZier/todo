@@ -1,6 +1,9 @@
 package ru.glaizier.todo.persistence;
 
+import static java.lang.String.format;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.glaizier.todo.model.domain.Role;
 import ru.glaizier.todo.model.domain.Task;
@@ -13,10 +16,16 @@ import ru.glaizier.todo.persistence.role.RoleDao;
 import ru.glaizier.todo.persistence.task.TaskDao;
 import ru.glaizier.todo.persistence.user.UserDao;
 
-import javax.transaction.Transactional;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
-import static java.lang.String.format;
+import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 
 @Service
 @Transactional
@@ -28,11 +37,30 @@ public class PersistenceService implements Persistence {
 
     private final RoleDao roleDao;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    private PersistenceService(TaskDao taskDao, UserDao userDao, RoleDao roleDao) {
+    private PersistenceService(
+            TaskDao taskDao,
+            UserDao userDao,
+            RoleDao roleDao,
+            PasswordEncoder passwordEncoder) {
         this.taskDao = taskDao;
         this.userDao = userDao;
         this.roleDao = roleDao;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @PostConstruct
+    public void init() {
+        RoleDto userRole = new RoleDto(Role.USER.getRole());
+        RoleDto adminRole = new RoleDto(Role.ADMIN.getRole());
+        saveRole(userRole.getRole());
+        saveRole(adminRole.getRole());
+        HashSet<RoleDto> uRoles = new HashSet<>(Arrays.asList(userRole));
+        HashSet<RoleDto> aRoles = new HashSet<>(Arrays.asList(userRole, adminRole));
+        saveUser("u", passwordEncoder.encode("p").toCharArray(), uRoles);
+        saveUser("a", passwordEncoder.encode("p").toCharArray(), aRoles);
     }
 
     @Override

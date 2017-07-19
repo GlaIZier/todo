@@ -8,4 +8,6 @@ public interface PropertiesService {
     String getApiTokenSigningKey();
 
     String getApiTokenSessionAttributeName();
+
+    String getPasswordEncoderSecret();
 }

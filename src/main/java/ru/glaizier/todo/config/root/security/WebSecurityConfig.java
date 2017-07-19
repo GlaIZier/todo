@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import ru.glaizier.todo.properties.PropertiesService;
@@ -30,14 +31,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final DataSource dataSource;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
     public WebSecurityConfig(
             TokenService tokenService,
             PropertiesService propertiesService,
-            DataSource dataSource) {
+            DataSource dataSource,
+            PasswordEncoder passwordEncoder) {
         this.propertiesService = propertiesService;
         this.tokenService = tokenService;
         this.dataSource = dataSource;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Bean
@@ -69,7 +74,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .usersByUsernameQuery(USER_BY_LOGIN_QUERY)
-                .authoritiesByUsernameQuery(AUTHORITY_BY_LOGIN_QUERY);
+                .authoritiesByUsernameQuery(AUTHORITY_BY_LOGIN_QUERY)
+                .passwordEncoder(passwordEncoder);
 //        auth.userDetailsService(inMemoryUserDetailsService());
         // Don't erase password after authentication
         auth.eraseCredentials(false);

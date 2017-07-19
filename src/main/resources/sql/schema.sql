@@ -1,6 +1,6 @@
 CREATE TABLE User (
   login    VARCHAR(50) PRIMARY KEY NOT NULL,
-  password VARCHAR(30)             NOT NULL
+  password VARCHAR(100)            NOT NULL
 );
 
 CREATE TABLE Role (
