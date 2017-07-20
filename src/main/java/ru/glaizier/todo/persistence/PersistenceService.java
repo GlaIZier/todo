@@ -179,20 +179,22 @@ public class PersistenceService implements Persistence {
     }
 
     @Override
-    public UserDto findUser(String login, char[] password) {
+    public UserDto findUser(String login, char[] rawPassword) {
         UserDto user = findUser(login);
-        if (user == null || !Arrays.equals(password, user.getPassword()))
+        char[] encodedPassword = passwordEncoder.encode(String.valueOf(rawPassword)).toCharArray();
+        if (user == null || !Arrays.equals(encodedPassword, user.getPassword()))
             return null;
         return user;
     }
 
     @Override
-    public UserDto saveUser(String login, char[] password, Set<RoleDto> roles) {
+    public UserDto saveUser(String login, char[] rawPassword, Set<RoleDto> roles) {
         Objects.requireNonNull(login);
-        Objects.requireNonNull(password);
+        Objects.requireNonNull(rawPassword);
         Objects.requireNonNull(roles);
 
-        User createdUser = User.builder().login(login).password(password)
+        char[] encodedPassword = passwordEncoder.encode(String.valueOf(rawPassword)).toCharArray();
+        User createdUser = User.builder().login(login).password(encodedPassword)
                 .roles(transformRoleDtos(roles))
                 .build();
         User user = userDao.save(createdUser);

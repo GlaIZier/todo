@@ -31,10 +31,10 @@ public interface Persistence {
 
     UserDto findUser(String login);
 
-    UserDto findUser(String login, char[] password);
+    UserDto findUser(String login, char[] rawPassword);
 
     // Also is used to update user
-    UserDto saveUser(String login, char[] password, Set<RoleDto> roles);
+    UserDto saveUser(String login, char[] rawPassword, Set<RoleDto> roles);
 
     void deleteUser(String login);
 
