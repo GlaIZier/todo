@@ -5,6 +5,7 @@ import static java.lang.String.format;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.glaizier.todo.init.annotation.PostProxy;
 import ru.glaizier.todo.model.domain.Role;
 import ru.glaizier.todo.model.domain.Task;
 import ru.glaizier.todo.model.domain.User;
@@ -24,7 +25,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
 @Service
@@ -51,16 +51,23 @@ public class PersistenceService implements Persistence {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @PostConstruct
-    public void init() {
+    @PostProxy
+    @Override
+    public void initDb() {
+        System.out.println("3d phase");
         RoleDto userRole = new RoleDto(Role.USER.getRole());
         RoleDto adminRole = new RoleDto(Role.ADMIN.getRole());
         saveRole(userRole.getRole());
         saveRole(adminRole.getRole());
+
         HashSet<RoleDto> uRoles = new HashSet<>(Arrays.asList(userRole));
         HashSet<RoleDto> aRoles = new HashSet<>(Arrays.asList(userRole, adminRole));
-        saveUser("u", passwordEncoder.encode("p").toCharArray(), uRoles);
-        saveUser("a", passwordEncoder.encode("p").toCharArray(), aRoles);
+        UserDto u = saveUser("u", "p".toCharArray(), uRoles);
+        UserDto a = saveUser("a", "p".toCharArray(), aRoles);
+
+        saveTask(u.getLogin(), "todo1");
+        saveTask(u.getLogin(), "todo2");
+        saveTask(a.getLogin(), "todo1");
     }
 
     @Override
@@ -181,8 +188,7 @@ public class PersistenceService implements Persistence {
     @Override
     public UserDto findUser(String login, char[] rawPassword) {
         UserDto user = findUser(login);
-        char[] encodedPassword = passwordEncoder.encode(String.valueOf(rawPassword)).toCharArray();
-        if (user == null || !Arrays.equals(encodedPassword, user.getPassword()))
+        if (user == null || !passwordEncoder.matches(String.valueOf(rawPassword), String.valueOf(user.getPassword())))
             return null;
         return user;
     }

@@ -35,7 +35,6 @@ public class AuthRestController extends ExceptionHandlingController {
 
     private final TokenService tokenService;
 
-
     @RequestMapping(method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     public ResponseEntity<OutputData<OutputUser>> authenticateUser(InputUser inputUser) {
