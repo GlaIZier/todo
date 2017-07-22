@@ -1,11 +1,5 @@
 package ru.glaizier.todo.test.persistence;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,12 +18,15 @@ import ru.glaizier.todo.model.domain.User;
 import ru.glaizier.todo.persistence.role.RoleDao;
 import ru.glaizier.todo.persistence.user.UserDao;
 
+import javax.transaction.Transactional;
 import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 
-import javax.transaction.Transactional;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.*;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -69,8 +66,6 @@ public class UserDaoTest {
     @Test
     public void findUserByLogin() {
         assertThat(userDao.findUserByLogin(dummyUser.getLogin()), is(dummyUser));
-        assertThat(userDao.findUserByLogin(u.getLogin()), is(u));
-        assertThat(userDao.findUserByLogin(a.getLogin()), is(a));
     }
 
     @Test
@@ -82,10 +77,6 @@ public class UserDaoTest {
     public void findUserByLoginAndPassword() {
         assertThat(userDao.findUserByLoginAndPassword(dummyUser.getLogin(), dummyUser.getPassword()),
                 is(dummyUser));
-        assertThat(userDao.findUserByLoginAndPassword(u.getLogin(), u.getPassword()),
-                is(u));
-        assertThat(userDao.findUserByLoginAndPassword(a.getLogin(), a.getPassword()),
-                is(a));
     }
 
     @Test
