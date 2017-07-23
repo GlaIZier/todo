@@ -1,12 +1,5 @@
 package ru.glaizier.todo.test.persistence;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +24,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.*;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -143,7 +140,7 @@ public class PersistenceTest {
     public void deleteTaskById() {
         assertThat(p.deleteTask(4), is(dummyTask));
         assertNull(p.findTask(4));
-        assertThat(p.findUser(dummyUser.getLogin()), is(dummyUser));
+        assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
         assertThat(p.findRole(dummyRole.getRole()), is(dummyRole));
         assertTrue(p.findTasks(dummyUser.getLogin()).isEmpty());
     }
@@ -151,7 +148,7 @@ public class PersistenceTest {
     @Test
     public void getNullOnRemoveTaskByIdWhenTaskNotExists() {
         assertNull(p.deleteTask(100));
-        assertThat(p.findUser(dummyUser.getLogin()), is(dummyUser));
+        assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
         assertThat(p.findRole(dummyRole.getRole()), is(dummyRole));
     }
 
@@ -159,7 +156,7 @@ public class PersistenceTest {
     public void removeTaskByIdAndLogin() {
         assertThat(p.deleteTask(4, dummyUser.getLogin()), is(dummyTask));
         assertNull(p.findTask(4, dummyUser.getLogin()));
-        assertThat(p.findUser(dummyUser.getLogin()), is(dummyUser));
+        assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
         assertThat(p.findRole(dummyRole.getRole()), is(dummyRole));
         assertTrue(p.findTasks(dummyUser.getLogin()).isEmpty());
     }
@@ -167,7 +164,7 @@ public class PersistenceTest {
     @Test
     public void getNullOnRemoveTaskByIdAndLoginWhenLoginNotExists() {
         assertNull(p.deleteTask(4, wrongDummyUser.getLogin()));
-        assertThat(p.findUser(dummyUser.getLogin()), is(dummyUser));
+        assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
         assertThat(p.findRole(dummyRole.getRole()), is(dummyRole));
     }
 
@@ -190,6 +187,7 @@ public class PersistenceTest {
     @Test
     public void findUserByLogin() {
         assertThat(p.findUser(dummyUser.getLogin()), is(dummyUser));
+        assertThat(p.findUser(dummyUser.getLogin()), is(p.findUser(dummyUser.getLogin(), dummyUser.getPassword())));
     }
 
     @Test
@@ -221,7 +219,7 @@ public class PersistenceTest {
 
         assertThat(p.saveUser(dummyUser2.getLogin(), dummyUser2.getPassword(), new HashSet<>(Collections.singletonList(dummyRole))),
                 is(dummyUser2));
-        assertThat(p.findUser(dummyUser2.getLogin()), is(dummyUser2));
+        assertThat(p.findUser(dummyUser2.getLogin(), dummyUser2.getPassword()), is(dummyUser2));
 
         assertTrue(p.findTasks(dummyUser2.getLogin()).isEmpty());
         assertThat(p.findRoles().size(), is(rolesSize));
@@ -234,7 +232,7 @@ public class PersistenceTest {
                 .roles(Optional.of(new HashSet<>())).build();
 
         assertThat(p.saveUser(dummyUser2.getLogin(), dummyUser2.getPassword(), new HashSet<>()), is(dummyUser2));
-        assertThat(p.findUser(dummyUser2.getLogin()), is(dummyUser2));
+        assertThat(p.findUser(dummyUser2.getLogin(), dummyUser2.getPassword()), is(dummyUser2));
 
         assertTrue(p.findTasks(dummyUser2.getLogin()).isEmpty());
         assertThat(p.findRoles().size(), is(rolesSize));
@@ -263,7 +261,7 @@ public class PersistenceTest {
         assertThat(p.saveUser(dummyUser2.getLogin(), dummyUser2.getPassword(), dummyUser2.getRoles().orElse(null)),
                 is(dummyUser2));
 
-        assertThat(p.findUser(dummyUser2.getLogin()), is(dummyUser2));
+        assertThat(p.findUser(dummyUser2.getLogin(), dummyUser2.getPassword()), is(dummyUser2));
         assertTrue(p.findTasks(dummyUser2.getLogin()).isEmpty());
 
         assertThat(p.findRole(dummyRole2.getRole()), is(dummyRole2));
@@ -274,8 +272,7 @@ public class PersistenceTest {
     @Test
     public void updateUser() {
         int rolesSize = p.findRoles().size();
-        assertThat(p.findUser(dummyUser.getLogin()), is(dummyUser));
-        System.out.println(p.findUser(dummyUser.getLogin()));
+        assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
 
         RoleDto dummyRole2 = new RoleDto("dummyRole2");
         UserDto dummyUser2 = dummyUser.toBuilder().login("dummyLogin2").password("dummyPassword2".toCharArray())
@@ -283,10 +280,9 @@ public class PersistenceTest {
         p.saveRole(dummyRole2.getRole());
 
         p.saveUser(dummyUser.getLogin(), dummyUser2.getPassword(), dummyUser2.getRoles().orElse(null));
-        assertThat(p.findUser(dummyUser.getLogin()), is(dummyUser.toBuilder().password(dummyUser2.getPassword())
-                .roles(dummyUser2.getRoles()).build()));
-        assertThat(p.findUser(dummyUser.getLogin()).getRoles().orElse(null).size(), is(1));
-        System.out.println(p.findUser(dummyUser.getLogin()));
+        assertThat(p.findUser(dummyUser.getLogin(), dummyUser2.getPassword()),
+                is(dummyUser.toBuilder().password(dummyUser2.getPassword()).roles(dummyUser2.getRoles()).build()));
+        assertThat(p.findUser(dummyUser.getLogin(), dummyUser2.getPassword()).getRoles().orElse(null).size(), is(1));
         assertThat(p.findRoles().size(), is(rolesSize + 1));
     }
 
@@ -339,7 +335,7 @@ public class PersistenceTest {
         int rolesSize = p.findRoles().size();
         int usersSize = p.findUsers().size();
         assertNotNull(p.findRole(dummyRole.getRole()));
-        assertThat(p.findUser(dummyUser.getLogin()), is(dummyUser));
+        assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
 
         p.deleteRole(dummyRole.getRole());
 

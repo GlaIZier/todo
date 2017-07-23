@@ -1,15 +1,13 @@
 package ru.glaizier.todo.model.dto;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Optional;
 import java.util.Set;
 
 @Data
 @ToString(exclude = "password")
+@EqualsAndHashCode(exclude = "password")
 @Builder(toBuilder = true)
 public class UserDto {
     @NonNull
