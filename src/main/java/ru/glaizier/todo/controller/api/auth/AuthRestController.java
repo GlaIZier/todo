@@ -21,7 +21,6 @@ import ru.glaizier.todo.persistence.Persistence;
 import ru.glaizier.todo.security.token.TokenService;
 
 // Todo add method security
-// Todo add different views for rest (html+json)?
 // Todo add swagger for rest api
 @RestController
 @RequestMapping(value = {"/api/v1/auth", "/api/auth"})

@@ -83,7 +83,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // Todo Forbid goto login page when logined
     // Todo add custom filter after logout to invalidate token
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests() // Todo here add authentication Message provider
+        http.authorizeRequests()
                 // secure /tasks
                 .antMatchers("/tasks").hasRole("USER")
                 .anyRequest().permitAll()

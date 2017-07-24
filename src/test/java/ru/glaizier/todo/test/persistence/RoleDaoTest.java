@@ -1,5 +1,11 @@
 package ru.glaizier.todo.test.persistence;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,14 +23,11 @@ import ru.glaizier.todo.model.domain.User;
 import ru.glaizier.todo.persistence.role.RoleDao;
 import ru.glaizier.todo.persistence.user.UserDao;
 
-import javax.transaction.Transactional;
 import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
+import javax.transaction.Transactional;
 
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -90,7 +93,7 @@ public class RoleDaoTest {
     @Test
     public void deleteRoleWithUserAssigned() throws Exception {
         User a = User.builder().login("a").password("p".toCharArray())
-                .roles(new HashSet<>(Arrays.asList(Role.USER, Role.ADMIN))).build();
+                .roles(new HashSet<>(Arrays.asList(Role.ADMIN, Role.USER))).build();
         assertThat(userDao.findUserByLogin("a"), is(a));
         roleDao.delete(admin.getRole());
         assertNull(roleDao.findRoleByRole(admin.getRole()));

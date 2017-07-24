@@ -1,17 +1,23 @@
 package ru.glaizier.todo.model.domain;
 
-import lombok.*;
-
-import javax.persistence.*;
-import java.util.Set;
-
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.LAZY;
+
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.ToString;
+
+import java.util.Set;
+
+import javax.persistence.*;
 
 @Getter
 @Setter
 // Exclude tasks to avoid cyclic dependencies between user and task
-@EqualsAndHashCode(exclude = "tasks")
+@EqualsAndHashCode(exclude = {"tasks", "password"})
 @ToString(exclude = {"tasks", "password"})
 @Entity
 @Table(name = "User")
