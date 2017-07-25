@@ -7,10 +7,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import ru.glaizier.todo.properties.PropertiesService;
 import ru.glaizier.todo.security.handler.LoginSuccessHandler;
@@ -50,21 +47,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new LoginSuccessHandler(tokenService, propertiesService.getApiTokenCookieName());
     }
 
-    @Bean
-    public UserDetailsService inMemoryUserDetailsService() throws Exception {
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withUsername("u").password("p").roles("USER").build());
-        manager.createUser(User.withUsername("a").password("p").roles("USER", "ADMIN").build());
-        return manager;
-//        userDao.getUsers().forEach(user ->
-//            manager.createUser(
-//                    User.withUsername(user.getLogin()).password(String.valueOf(user.getPassword()))
-//                            // Roles -> (to) Strings -> List of Strings -> array of Strings
-//                            .roles(user.getRoles().stream().map(Role::toString).collect(Collectors.toList())
-//                                    .toArray(new String[user.getRoles().size()]))
-//                            .build())
-//        );
-    }
+//    @Bean
+//    public UserDetailsService inMemoryUserDetailsService() throws Exception {
+//        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+//        manager.createUser(User.withUsername("u").password("p").roles("USER").build());
+//        manager.createUser(User.withUsername("a").password("p").roles("USER", "ADMIN").build());
+//        return manager;
+////        userDao.getUsers().forEach(user ->
+////            manager.createUser(
+////                    User.withUsername(user.getLogin()).password(String.valueOf(user.getPassword()))
+////                            // Roles -> (to) Strings -> List of Strings -> array of Strings
+////                            .roles(user.getRoles().stream().map(Role::toString).collect(Collectors.toList())
+////                                    .toArray(new String[user.getRoles().size()]))
+////                            .build())
+////        );
+//    }
 
     @Override
     // configure UserDetailsService
@@ -114,7 +111,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .rememberMeParameter("remember-me")
                 .rememberMeCookieName("todo-remember-me-cookie")
                 .tokenValiditySeconds(180)
-                .userDetailsService(inMemoryUserDetailsService()) // remember me requires explicitly defined UserDetailsService,
+//                .userDetailsService(inMemoryUserDetailsService()) // remember me requires explicitly defined UserDetailsService,
                 // when ApiWebSecurityConfigurationAdapter and FormWebSecurityConfigurationAdapter don't (still don't know why)
 
                 // Todo enable this force redirect to http after application will be done
@@ -126,6 +123,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // csrf
                 .and()
                 .csrf() // todo enable csrf, add csrf to login and register page markup and create logout using POST http method
-                .disable();
+                .disable()
+        ;
     }
 }

@@ -5,7 +5,7 @@ import static java.lang.String.format;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.glaizier.todo.init.annotation.PostProxy;
+import ru.glaizier.todo.init.annotation.PostContextUp;
 import ru.glaizier.todo.model.domain.Role;
 import ru.glaizier.todo.model.domain.Task;
 import ru.glaizier.todo.model.domain.User;
@@ -51,10 +51,9 @@ public class PersistenceService implements Persistence {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @PostProxy
+    @PostContextUp
     @Override
     public void initDb() {
-        System.out.println("3d phase");
         RoleDto userRole = new RoleDto(Role.USER.getRole());
         RoleDto adminRole = new RoleDto(Role.ADMIN.getRole());
         saveRole(userRole.getRole());
