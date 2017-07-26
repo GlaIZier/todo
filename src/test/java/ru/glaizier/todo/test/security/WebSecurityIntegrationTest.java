@@ -16,11 +16,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -87,8 +87,8 @@ public class WebSecurityIntegrationTest {
     @Test
     // Spring security automatically inject UserDetailsService from SecurityConfig because
     // WithUserDetailsSecurityContextFactory is annotated with @Autowired
-    // Todo check this
-    @WithUserDetails(value = "u")
+    // Todo uncomment it if custom UserDetailsService is used
+//    @WithUserDetails(value = "u")
     public void postLoginAuthenticatedAndRedirectToRoot() throws Exception {
         mvc
                 .perform(formLogin().userParameter("user").user("u").password("p"))
@@ -100,9 +100,7 @@ public class WebSecurityIntegrationTest {
     }
 
     @Test
-    // Spring security automatically inject UserDetailsService from SecurityConfig because
-    // WithUserDetailsSecurityContextFactory is annotated with @Autowired
-    @WithUserDetails(value = "u")
+//    @WithUserDetails(value = "u")
     public void postLoginAdminAuthenticatedAndRedirectToRoot() throws Exception {
         mvc
                 .perform(formLogin().userParameter("user").user("a").password("p"))
@@ -114,9 +112,8 @@ public class WebSecurityIntegrationTest {
     }
 
     @Test
-    // Spring security automatically inject UserDetailsService from SecurityConfig because
-    // WithUserDetailsSecurityContextFactory is annotated with @Autowired
-    @WithUserDetails(value = "u")
+    @Ignore
+//    @WithUserDetails(value = "u")
     public void postLoginUnauthenticatedBecauseOfWrongPasswordOrLogin() throws Exception {
         mvc
                 .perform(formLogin().userParameter("user").user("u").password("p1"))

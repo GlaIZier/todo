@@ -110,7 +110,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .key("todo-remember-me-key-random")
                 .rememberMeParameter("remember-me")
                 .rememberMeCookieName("todo-remember-me-cookie")
-                .tokenValiditySeconds(180)
+                .tokenValiditySeconds(60 * 60 * 24)
 //                .userDetailsService(inMemoryUserDetailsService()) // remember me requires explicitly defined UserDetailsService,
                 // when ApiWebSecurityConfigurationAdapter and FormWebSecurityConfigurationAdapter don't (still don't know why)
 
