@@ -104,15 +104,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // If it is added here then set-cookie header appears twice
                 .deleteCookies(propertiesService.getApiTokenCookieName())
 
-                // remember me
+                // Default in-memory hash implementation. This doesn't save remember-me cookie if server restarts.
+                // To enable saving between restarts table persistent_logins in db needs to be created and it will be
+                // better of course because we can provide some logic to invalidate tokens etc.
+                // http://jaspan.com/improved_persistent_login_cookie_best_practice
                 .and()
                 .rememberMe()
                 .key("todo-remember-me-key-random")
                 .rememberMeParameter("remember-me")
                 .rememberMeCookieName("todo-remember-me-cookie")
                 .tokenValiditySeconds(60 * 60 * 24)
-//                .userDetailsService(inMemoryUserDetailsService()) // remember me requires explicitly defined UserDetailsService,
-                // when ApiWebSecurityConfigurationAdapter and FormWebSecurityConfigurationAdapter don't (still don't know why)
 
                 // Todo enable this force redirect to http after application will be done
 //                .and()
