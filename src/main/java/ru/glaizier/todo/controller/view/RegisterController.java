@@ -44,10 +44,13 @@ public class RegisterController {
             @ModelAttribute("user") @Valid InputUser inputUser,
             Errors errors,
             BindingResult result) {
+        if (!errors.hasErrors()) {
+            if (persistence.findUser(inputUser.getLogin()) != null)
+                result.rejectValue("login", "message.regError", "This user already exists!");
+        }
+
         if (errors.hasErrors())
             return new ModelAndView("register", "user", inputUser);
-        if (persistence.findUser(inputUser.getLogin()) != null)
-            result.rejectValue("login", "message.regError");
 
         persistence.saveUser(inputUser.getLogin(), inputUser.getPassword());
         return new ModelAndView("redirect:/");

@@ -8,10 +8,10 @@ import javax.validation.constraints.Size;
 
 @Data
 public class InputUser {
-    @NotBlank
-    @Size(min = 1, max = 30)
+    @NotBlank(message = "Login must not be blank!")
+    @Size(min = 1, max = 30, message = "Login '${validatedValue}' must be between {min} and {max} characters long!")
     private String login;
-    @NotNull
-    @Size(min = 1, max = 30)
+    @NotNull(message = "Password must not be blank!")
+    @Size(min = 1, max = 30, message = "Password must be between {min} and {max} characters long!")
     private char[] password;
 }
