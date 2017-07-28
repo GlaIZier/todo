@@ -38,6 +38,9 @@ public interface Persistence {
     // Also is used to update user
     UserDto saveUser(String login, char[] rawPassword, Set<RoleDto> roles);
 
+    // Save user with role "ROLE_USER"
+    UserDto saveUser(String login, char[] rawPassword);
+
     void deleteUser(String login);
 
     List<RoleDto> findRoles();

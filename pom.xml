@@ -176,6 +176,13 @@
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        <!-- Mvc validation: @Valid... -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.4.1.Final</version>
+        </dependency>
+
         <!-- Spring data -->
         <dependency>
             <groupId>org.springframework.data</groupId>

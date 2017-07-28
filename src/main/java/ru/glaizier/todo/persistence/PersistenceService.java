@@ -19,6 +19,7 @@ import ru.glaizier.todo.persistence.user.UserDao;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -206,6 +207,11 @@ public class PersistenceService implements Persistence {
 
         return UserDto.builder().login(user.getLogin()).password(user.getPassword())
                 .roles(Optional.of(transformRoles(user.getRoles()))).build();
+    }
+
+    @Override
+    public UserDto saveUser(String login, char[] rawPassword) {
+        return saveUser(login, rawPassword, new HashSet<>(Collections.singletonList(RoleDto.USER)));
     }
 
     @Override
