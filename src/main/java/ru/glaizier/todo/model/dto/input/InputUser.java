@@ -1,4 +1,4 @@
-package ru.glaizier.todo.model.dto.api.input;
+package ru.glaizier.todo.model.dto.input;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;

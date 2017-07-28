@@ -15,8 +15,8 @@ import ru.glaizier.todo.controller.api.exception.ExceptionHandlingController;
 import ru.glaizier.todo.model.domain.Role;
 import ru.glaizier.todo.model.dto.RoleDto;
 import ru.glaizier.todo.model.dto.UserDto;
-import ru.glaizier.todo.model.dto.api.input.InputUser;
 import ru.glaizier.todo.model.dto.api.output.OutputData;
+import ru.glaizier.todo.model.dto.input.InputUser;
 import ru.glaizier.todo.persistence.Persistence;
 
 import java.util.Collections;

@@ -12,7 +12,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import ru.glaizier.todo.model.dto.api.input.InputUser;
+import ru.glaizier.todo.model.dto.input.InputUser;
 import ru.glaizier.todo.persistence.Persistence;
 
 import java.lang.invoke.MethodHandles;

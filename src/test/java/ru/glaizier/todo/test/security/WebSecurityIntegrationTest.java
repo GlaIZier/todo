@@ -16,7 +16,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,7 +111,6 @@ public class WebSecurityIntegrationTest {
     }
 
     @Test
-    @Ignore
 //    @WithUserDetails(value = "u")
     public void postLoginUnauthenticatedBecauseOfWrongPasswordOrLogin() throws Exception {
         mvc
