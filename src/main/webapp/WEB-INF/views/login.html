@@ -11,6 +11,7 @@
     <link rel="shortcut icon" th:href="@{/resources/icons/favicon.ico}">
 </head>
 <body>
+<div th:replace="general/menu :: menu">...</div>
 <div class="container">
     <form role="form" class="form-horizontal" th:action="@{/login}" method="POST">
         <a th:href="@{/}"><img alt="Todo" height="45px" th:src="@{/resources/icons/todo.png}"></a>

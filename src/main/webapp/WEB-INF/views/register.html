@@ -13,19 +13,23 @@
 <body>
 <div th:replace="general/menu :: menu">...</div>
 <div class="container">
-    <form class="form-horizontal" th:action="@{/register}" method="POST">
+    <form th:object="${user}" th:action="@{/register}" class="form-horizontal" method="POST">
         <h2>Please register</h2>
         <div>
             <label for="login" class="col-sm-3 control-label">Login</label>
             <div class="col-sm-9">
-                <input type="text" id="login" name="login" placeholder="Login" class="form-control" autofocus>
+                <input th:field="*{login}" type="text" id="login" placeholder="Login" class="form-control" autofocus>
+                <p th:each="error : ${#fields.errors('login')}" th:text="${error}" class="bg-danger">Validation
+                    error</p>
                 <!--<span class="help-block">All letters are acceptable</span>-->
             </div>
         </div>
         <div>
             <label for="password" class="col-sm-3 control-label">Password</label>
             <div class="col-sm-9">
-                <input type="password" id="password" name="password" placeholder="Password" class="form-control">
+                <input th:field="*{password}" type="password" id="password" placeholder="Password" class="form-control">
+                <p th:each="error : ${#fields.errors('password')}" th:text="${error}" class="bg-danger">Validation
+                    error</p>
             </div>
         </div>
         <div>

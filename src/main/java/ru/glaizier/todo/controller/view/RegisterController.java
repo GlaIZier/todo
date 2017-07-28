@@ -6,8 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 import ru.glaizier.todo.model.dto.api.input.InputUser;
 import ru.glaizier.todo.persistence.Persistence;
 
@@ -28,21 +32,25 @@ public class RegisterController {
     }
 
     @RequestMapping("/register")
-    public String show() {
+    public String show(Model model) {
+        InputUser userDto = new InputUser();
+        model.addAttribute("user", userDto);
         return "register";
     }
 
     @RequestMapping(value = "/register", method = POST)
     // Todo add validation, check scrf here
-    public String register(
-            @Valid InputUser inputUser,
-            Errors errors) {
-        if (errors.hasErrors()) {
-            log.info(errors.getAllErrors().get(0).getDefaultMessage());
-            return "register";
-        }
+    public ModelAndView register(
+            @ModelAttribute("user") @Valid InputUser inputUser,
+            Errors errors,
+            BindingResult result) {
+        if (errors.hasErrors())
+            return new ModelAndView("register", "user", inputUser);
+        if (persistence.findUser(inputUser.getLogin()) != null)
+            result.rejectValue("login", "message.regError");
+
         persistence.saveUser(inputUser.getLogin(), inputUser.getPassword());
-        return "redirect:/";
+        return new ModelAndView("redirect:/");
     }
 
 }
