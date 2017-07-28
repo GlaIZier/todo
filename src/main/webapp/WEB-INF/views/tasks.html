@@ -1,5 +1,5 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Todo</title>
     <link rel="stylesheet"
@@ -11,7 +11,7 @@
     <link rel="shortcut icon" th:href="@{/resources/icons/favicon.ico}">
 </head>
 <body>
-<div th:replace="menu :: menu">...</div>
+<div th:replace="general/menu :: menu">...</div>
 <div class="container">
     <div class="react-app">
         <header class="header">
@@ -39,6 +39,6 @@
     </div>
 </div>
 
-<script th:src="@{/resources/js/bootstrap/jquery.min.js}"></script>
+<script th:src="@{/resources/js/jquery/jquery.min.js}"></script>
 <script th:src="@{/resources/js/bootstrap/bootstrap.min.js}"></script>
 </body>

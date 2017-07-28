@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import ru.glaizier.todo.properties.PropertiesService;
 import ru.glaizier.todo.security.handler.LoginSuccessHandler;
 import ru.glaizier.todo.security.token.TokenService;
@@ -98,6 +99,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutUrl("/logout")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/")
                 .invalidateHttpSession(true)
                 // Session invalidation is called by default. remember-me-cookie is removed by default.
@@ -124,7 +126,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // csrf
                 .and()
                 .csrf() // todo enable csrf, add csrf to login and register page markup and create logout using POST http method
-                .disable()
+//                .disable()
         ;
     }
 }

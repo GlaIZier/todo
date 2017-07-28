@@ -11,9 +11,9 @@
     <link rel="shortcut icon" th:href="@{/resources/icons/favicon.ico}">
 </head>
 <body>
-<div th:replace="menu :: menu">...</div>
+<div th:replace="general/menu :: menu">...</div>
 <div class="container">
-    <form class="form-horizontal" role="form">
+    <form class="form-horizontal" th:action="@{/register}" method="POST">
         <h2>Please register</h2>
         <div>
             <label for="login" class="col-sm-3 control-label">Login</label>
@@ -36,6 +36,6 @@
     </form> <!-- /form -->
 </div> <!-- ./container -->
 
-<script th:src="@{/resources/js/bootstrap/jquery.min.js}"></script>
+<script th:src="@{/resources/js/jquery/jquery.min.js}"></script>
 <script th:src="@{/resources/js/bootstrap/bootstrap.min.js}"></script>
 </body>
