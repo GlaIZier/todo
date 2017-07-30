@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         RootConfig.class
 })
 @WebAppConfiguration
-public class RegisterControllerTest {
+public class TaskControllerTest {
     @Autowired
     private WebApplicationContext context;
 
@@ -40,9 +40,9 @@ public class RegisterControllerTest {
 
     @Test
     public void show() throws Exception {
-        mvc.perform(get("/register/"))
+        mvc.perform(get("/tasks/"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("register"));
+                .andExpect(view().name("tasks"));
     }
 
 }
