@@ -12,11 +12,16 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
+import ru.glaizier.todo.controller.view.RegisterController;
+import ru.glaizier.todo.persistence.Persistence;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {
@@ -43,6 +48,20 @@ public class RegisterControllerTest {
         mvc.perform(get("/register/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("register"));
+    }
+
+    @Test
+    // Also we can do this with @MockBean from Spring Boot Test package
+    public void processRegistrationOk() throws Exception {
+        Persistence persistence = mock(Persistence.class);
+        RegisterController controller =
+                new RegisterController(persistence);
+        MockMvc mockMvc = standaloneSetup(controller).build();
+        mockMvc.perform(post("/register/")
+                .param("login", "login")
+                .param("password", "password"))
+                .andExpect(redirectedUrl("/"));
+        verify(persistence).saveUser("login", "password".toCharArray());
     }
 
 }
