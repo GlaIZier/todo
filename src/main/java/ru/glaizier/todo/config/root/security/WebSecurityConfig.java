@@ -83,7 +83,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 // secure /tasks
-                .antMatchers("/tasks").hasRole("USER")
+                .antMatchers("/tasks/**").hasRole("USER")
                 .anyRequest().permitAll()
 
                 // login
