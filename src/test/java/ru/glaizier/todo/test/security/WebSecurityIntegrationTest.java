@@ -63,6 +63,17 @@ public class WebSecurityIntegrationTest {
     }
 
     @Test
+    public void getTasksSlashUnauthenticatedAndRedirectToLogin() throws Exception {
+        mvc
+                .perform(get("/tasks/"))
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("http://localhost/login"))
+                .andExpect(header().string("Location", equalTo("http://localhost/login")))
+                .andExpect(unauthenticated());
+    }
+
+    @Test
     @WithMockUser(value = "fake")
     public void getTasksAuthenticatedWhenFakeUserIsPresent() throws Exception {
         mvc
