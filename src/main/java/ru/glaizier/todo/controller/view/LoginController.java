@@ -14,6 +14,8 @@ public class LoginController {
     public String login(@RequestParam(required = false) String error,
                         HttpServletRequest httpServletRequest,
                         Model model) {
+        if (httpServletRequest.getUserPrincipal() != null)
+            return "redirect:/";
         httpServletRequest.getSession().setAttribute("requested-uri", httpServletRequest.getRequestURI());
         if (error != null)
             model.addAttribute("error", "Invalid login or password");
