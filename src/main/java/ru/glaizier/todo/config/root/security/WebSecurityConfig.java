@@ -126,8 +126,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 // csrf
                 .and()
-                .csrf() // todo enable csrf, add csrf to login and register page markup and create logout using POST http method
-//                .disable()
+                .csrf() // csrf is automatically added by Thymeleaf(?) to each post form like login and register
         ;
     }
 }
