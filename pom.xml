@@ -310,5 +310,14 @@
             <version>1.10.19</version>
             <scope>test</scope>
         </dependency>
+        <!--@Valid in Spring Mvc tests doesn't work without it. Maybe it's because hibernate validator waits
+        this dependency to be provided by container. So we need to attach it manually for tests
+        https://stackoverflow.com/questions/24049480/spring-mockmvc-doesnt-consider-validation-in-my-test -->
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.el</artifactId>
+            <version>3.0.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>
