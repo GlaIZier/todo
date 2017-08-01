@@ -52,7 +52,6 @@ public class TaskRestController extends ExceptionHandlingController {
 
     private final PropertiesService propertiesService;
 
-
     @RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<OutputData<List<OutputData<OutputTask>>>> getTasks(HttpServletRequest req) {
         String login = getLogin(req);

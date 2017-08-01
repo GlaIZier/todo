@@ -22,7 +22,6 @@ import ru.glaizier.todo.persistence.Persistence;
 import java.util.Collections;
 import java.util.HashSet;
 
-// Todo add method security
 // Todo add swagger for rest api
 @RestController
 @RequestMapping(value = {"/api/v1/users", "/api/users"})

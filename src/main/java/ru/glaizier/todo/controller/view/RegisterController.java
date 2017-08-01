@@ -39,7 +39,6 @@ public class RegisterController {
     }
 
     @RequestMapping(value = "/register", method = POST)
-    // Todo add validation, check scrf here
     public ModelAndView register(
             @ModelAttribute("user") @Valid InputUser inputUser,
             Errors errors,

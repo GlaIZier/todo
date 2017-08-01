@@ -78,7 +78,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    // Todo Forbid goto login page when logined
     // Todo add custom filter after logout to invalidate token
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()

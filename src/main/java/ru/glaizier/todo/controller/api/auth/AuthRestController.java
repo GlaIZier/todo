@@ -20,7 +20,6 @@ import ru.glaizier.todo.model.dto.input.InputUser;
 import ru.glaizier.todo.persistence.Persistence;
 import ru.glaizier.todo.security.token.TokenService;
 
-// Todo add method security
 // Todo add swagger for rest api
 @RestController
 @RequestMapping(value = {"/api/v1/auth", "/api/auth"})
