@@ -31,7 +31,7 @@ import ru.glaizier.todo.config.servlet.ServletConfig;
         RootConfig.class
 })
 @WebAppConfiguration
-public class AuthRestControllerIntegrationTest {
+public class AuthRestControllerTest {
     @Autowired
     private WebApplicationContext context;
 

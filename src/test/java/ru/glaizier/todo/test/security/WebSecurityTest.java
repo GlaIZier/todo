@@ -36,7 +36,7 @@ import ru.glaizier.todo.config.servlet.ServletConfig;
         RootConfig.class
 })
 @WebAppConfiguration
-public class WebSecurityIntegrationTest {
+public class WebSecurityTest {
 
     @Autowired
     private WebApplicationContext context;

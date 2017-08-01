@@ -41,7 +41,7 @@ public class PersistenceService implements Persistence {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private PersistenceService(
+    public PersistenceService(
             TaskDao taskDao,
             UserDao userDao,
             RoleDao roleDao,

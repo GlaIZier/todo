@@ -30,7 +30,7 @@ import ru.glaizier.todo.config.servlet.ServletConfig;
         RootConfig.class
 })
 @WebAppConfiguration
-public class UserRestControllerIntegrationTest {
+public class UserRestControllerTest {
 
     @Autowired
     private WebApplicationContext context;

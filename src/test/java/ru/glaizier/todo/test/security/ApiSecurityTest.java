@@ -30,7 +30,7 @@ import javax.servlet.http.Cookie;
         RootConfig.class
 })
 @WebAppConfiguration
-public class ApiSecurityIntegrationTest {
+public class ApiSecurityTest {
 
     private static final String testUri = "/api/me/tasks";
 
