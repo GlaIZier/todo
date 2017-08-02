@@ -2,18 +2,22 @@ package ru.glaizier.todo.config.root;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import ru.glaizier.todo.config.root.security.SecurityConfig;
 
 @Configuration
+@EnableAspectJAutoProxy
+// This also enables PropertyPlaceholderBFPP
+@PropertySource("classpath:profiles/environment.properties")
+
 @ComponentScan(basePackages = {
         "ru.glaizier.todo.persistence",
         "ru.glaizier.todo.properties",
-        "ru.glaizier.todo.init.context"
+        "ru.glaizier.todo.init.context",
+        "ru.glaizier.todo.log"
 })
-// This also enables PropertyPlaceholderBFPP
-@PropertySource("classpath:profiles/environment.properties")
 // Register additional configs for root
 @Import({
         SecurityConfig.class,

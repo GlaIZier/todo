@@ -176,12 +176,6 @@
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
         </dependency>
-        <!-- Mvc validation: @Valid... -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>5.4.1.Final</version>
-        </dependency>
 
         <!-- Spring data -->
         <dependency>
@@ -189,6 +183,14 @@
             <artifactId>spring-data-jpa</artifactId>
             <version>1.11.3.RELEASE</version>
         </dependency>
+
+        <!-- Aspects  -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
         <!--All security configs-->
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -201,6 +203,7 @@
             <artifactId>spring-security-web</artifactId>
             <version>${spring-security.version}</version>
         </dependency>
+
 
 
         <!-- compile only, when deployed container provide this -->
@@ -218,8 +221,14 @@
             <artifactId>hibernate-core</artifactId>
             <version>5.2.10.Final</version>
         </dependency>
+        <!-- Mvc validation: @Valid... -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.4.1.Final</version>
+        </dependency>
 
-
+        <!-- Views-->
         <dependency>
             <groupId>org.thymeleaf</groupId>
             <artifactId>thymeleaf</artifactId>

@@ -38,8 +38,6 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping(value = {"/api/v1/me/tasks", "/api/me/tasks"})
 // todo create react
-// Todo add method security
-
 // Ide shows error but this works
 @RequiredArgsConstructor(onConstructor_ = {
         @Autowired
