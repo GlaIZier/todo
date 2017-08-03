@@ -3,6 +3,7 @@ package ru.glaizier.todo.config.servlet;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -19,7 +20,11 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 @Configuration
 @EnableWebMvc
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true/*, jsr250Enabled = true, proxyTargetClass = true*/)
-@ComponentScan(basePackages = {"ru.glaizier.todo.controller"})
+@EnableAspectJAutoProxy
+@ComponentScan(basePackages = {
+        "ru.glaizier.todo.controller",
+        "ru.glaizier.todo.log"
+})
 public class ServletConfig extends WebMvcConfigurerAdapter {
 
     @Bean
