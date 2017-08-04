@@ -54,7 +54,6 @@ public class ApiTokenAuthenticationFilter extends GenericFilterBean {
             Optional<String> login = tokenService.verifyToken(optionalTokenCookie.get().getValue());
             if (login.isPresent()) {
                 req.getSession().setAttribute(propertiesService.getApiTokenSessionAttributeName(), login.get());
-                // Todo move to aspect
                 try {
                     MDC.put(LOGIN, login.get());
                     MDC.put(TOKEN, optionalTokenCookie.get().getValue());
@@ -94,7 +93,6 @@ public class ApiTokenAuthenticationFilter extends GenericFilterBean {
                                       HttpStatus httpStatus,
                                       OutputError error) throws IOException {
         try {
-            // Todo move to aspect
             MDC.put(TOKEN, token);
             log.error("Api authentication failed with HTTP status {}!", httpStatus);
 
