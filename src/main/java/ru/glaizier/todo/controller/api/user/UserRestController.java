@@ -1,7 +1,5 @@
 package ru.glaizier.todo.controller.api.user;
 
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +20,8 @@ import ru.glaizier.todo.persistence.Persistence;
 import java.util.Collections;
 import java.util.HashSet;
 
-// Todo add swagger for rest api
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 @RestController
 @RequestMapping(value = {"/api/v1/users", "/api/users"})
 // Ide shows error but this works
