@@ -9,6 +9,7 @@ Spring mvc todo list app
 mvn clean verify
 ```
 #### Memory db implementation
+Doesn't work for now
 ```
 mvn clean verify -DargLine="-Dspring.profiles.active=memory"
 ```
@@ -31,9 +32,14 @@ and go to
 ```
 localhost:8080/todo
 ```
-or
+or (doesn't work for now)
 ```
 https://localhost:8443/todo
 ```
 and skip the warning because no trust certificate is used in the application
+
+###Rest api
+```
+http://localhost:8080/todo/swagger-ui.html
+```
 
