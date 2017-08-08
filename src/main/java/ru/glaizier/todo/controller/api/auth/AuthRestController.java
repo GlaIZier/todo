@@ -20,7 +20,7 @@ import ru.glaizier.todo.model.dto.input.InputUser;
 import ru.glaizier.todo.persistence.Persistence;
 import ru.glaizier.todo.security.token.TokenService;
 
-// Todo add swagger for rest api
+// Todo check how to deal with _csrf for POST to rest api
 @RestController
 @RequestMapping(value = {"/api/v1/auth", "/api/auth"})
 // Ide shows error but this works

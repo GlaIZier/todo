@@ -67,12 +67,15 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
     }
 
     // Swagger bean
+    // http://localhost:8080/todo/swagger-ui.html#/
+    // http://localhost:8080/todo/v2/api-docs
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("ru.glaizier.todo.controller.api"))
+                // get only api paths without version inside
+                .paths(PathSelectors.regex("\\/api\\/(?!v\\d*)[\\S\\s]*"))
                 .build();
     }
 
