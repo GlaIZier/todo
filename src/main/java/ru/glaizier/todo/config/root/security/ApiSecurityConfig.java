@@ -39,7 +39,8 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    // Todo add here custom csrf protection:
     protected void configure(HttpSecurity http) throws Exception {
-        http.antMatcher("/api/**/me/**").addFilterBefore(apiFilter(), BasicAuthenticationFilter.class);
+        http.antMatcher("/api/**/me/**").addFilterBefore(apiFilter(), BasicAuthenticationFilter.class).csrf().disable();
     }
 }
