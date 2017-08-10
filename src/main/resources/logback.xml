@@ -28,10 +28,12 @@
     <!-- Uncomment if u need to understand what't happening in spring, hibernate -->
     <!--<logger name="org.springframework" level="DEBUG"/>-->
     <!--<logger name="org.hibernate" level="TRACE"/>-->
+    <!--<logger name="springfox" level="INFO"/>-->
     <logger name="org" level="INFO"/>
     <logger name="com" level="INFO"/>
 
-    <root>
+    <!-- Default level for loggers is INFO-->
+    <root level="INFO">
         <appender-ref ref="console"/>
         <appender-ref ref="file"/>
     </root>

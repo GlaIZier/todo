@@ -39,7 +39,10 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    // Todo add here custom csrf protection:
+    // Todo add here custom csrf protection
+    // https://blog.jdriven.com/2014/10/stateless-spring-security-part-1-stateless-csrf-protection/
+    // https://en.wikipedia.org/wiki/Same-origin_policy
+    // https://stackoverflow.com/questions/20862299/with-spring-security-3-2-0-release-how-can-i-get-the-csrf-token-in-a-page-that
     protected void configure(HttpSecurity http) throws Exception {
         http.antMatcher("/api/**/me/**").addFilterBefore(apiFilter(), BasicAuthenticationFilter.class).csrf().disable();
     }
