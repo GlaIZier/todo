@@ -16,11 +16,15 @@ import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
+import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.schema.ModelRef;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.Collections;
 
 @Configuration
 @EnableWebMvc
@@ -73,6 +77,15 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .globalOperationParameters(Collections.singletonList(
+                        new ParameterBuilder()
+                                .name("Header-Name")
+                                .description("Description")
+                                .modelRef(new ModelRef("string"))
+                                .parameterType("header")
+                                .required(false)
+                                .build()
+                ))
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("ru.glaizier.todo.controller.api"))
                 // get only api paths without version inside
