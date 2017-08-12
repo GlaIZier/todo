@@ -1,5 +1,6 @@
 package ru.glaizier.todo.config.servlet;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
+import ru.glaizier.todo.properties.PropertiesService;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -36,6 +38,13 @@ import java.util.Collections;
         "ru.glaizier.todo.log"
 })
 public class ServletConfig extends WebMvcConfigurerAdapter {
+
+    PropertiesService propertiesService;
+
+    @Autowired
+    public ServletConfig(PropertiesService propertiesService) {
+        this.propertiesService = propertiesService;
+    }
 
     @Bean
     public ViewResolver viewResolver(TemplateEngine templateEngine) {
@@ -79,9 +88,9 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
         return new Docket(DocumentationType.SWAGGER_2)
                 .globalOperationParameters(Collections.singletonList(
                         new ParameterBuilder()
-                                .name("Header-Name")
-                                .description("Description")
-                                .modelRef(new ModelRef("string"))
+                                .name(propertiesService.getApiTokenHeaderName())
+                                .description("Api authentication token")
+                                .modelRef(new ModelRef("String"))
                                 .parameterType("header")
                                 .required(false)
                                 .build()

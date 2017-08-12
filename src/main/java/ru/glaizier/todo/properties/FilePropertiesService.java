@@ -1,10 +1,6 @@
 package ru.glaizier.todo.properties;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,6 +14,9 @@ public class FilePropertiesService implements PropertiesService {
 
     @NonNull
     private final String apiTokenCookieName;
+
+    @NonNull
+    private final String apiTokenHeaderName;
 
     private final int apiTokenExpireDurationInSeconds;
 
@@ -37,12 +36,14 @@ public class FilePropertiesService implements PropertiesService {
     @Autowired
     private FilePropertiesService(
             @Value("${api.token.cookie.name}") String apiTokenCookieName,
+            @Value("${api.token.header.name}") String apiTokenHeaderName,
             @Value("${api.token.expire.seconds}") int apiTokenExpireDurationInSeconds,
             @Value("${api.token.signing.key}") String apiTokenSigningKey,
             @Value("${api.token.session.attribute.name}") String apiTokenSessionAttributeName,
             @Value("${password.encoder.secret}") String passwordEncoderSecret
     ) {
         this.apiTokenCookieName = apiTokenCookieName;
+        this.apiTokenHeaderName = apiTokenHeaderName;
         this.apiTokenExpireDurationInSeconds = apiTokenExpireDurationInSeconds;
         this.apiTokenSigningKey = apiTokenSigningKey;
         this.apiTokenSessionAttributeName = apiTokenSessionAttributeName;
