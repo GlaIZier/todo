@@ -8,7 +8,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.csrf.CsrfFilter;
 import ru.glaizier.todo.properties.PropertiesService;
+import ru.glaizier.todo.security.filter.ApiCsrfFilter;
 import ru.glaizier.todo.security.filter.ApiTokenAuthenticationFilter;
 import ru.glaizier.todo.security.token.TokenService;
 
@@ -38,12 +40,18 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
         return new ApiTokenAuthenticationFilter(tokenService, propertiesService);
     }
 
+    @Bean
+    public Filter apiCsrfFilter() {
+        return new ApiCsrfFilter(propertiesService);
+    }
+
     @Override
     // Todo add here custom csrf protection
     // https://blog.jdriven.com/2014/10/stateless-spring-security-part-1-stateless-csrf-protection/
     // https://en.wikipedia.org/wiki/Same-origin_policy
     // https://stackoverflow.com/questions/20862299/with-spring-security-3-2-0-release-how-can-i-get-the-csrf-token-in-a-page-that
     protected void configure(HttpSecurity http) throws Exception {
-        http.antMatcher("/api/**/me/**").addFilterBefore(apiFilter(), BasicAuthenticationFilter.class).csrf().disable();
+        http.antMatcher("/api/**/me/**").addFilterBefore(apiFilter(), BasicAuthenticationFilter.class)
+                .csrf().disable().addFilterBefore(apiCsrfFilter(), CsrfFilter.class);
     }
 }
