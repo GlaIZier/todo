@@ -2,7 +2,6 @@ package ru.glaizier.todo.test.controller.api.auth;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -49,8 +48,7 @@ public class AuthRestControllerTest {
     public void get200WhenAuthenticateUser() throws Exception {
         MvcResult mvcResult = mvc.perform(post("/api/auth")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .content("login=u&password=p")
-                .with(csrf()))
+                .content("login=u&password=p"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -63,8 +61,7 @@ public class AuthRestControllerTest {
     public void get400WhenAuthenticateUserWithEmptyLogin() throws Exception {
         mvc.perform(post("/api/auth")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .content("login=&password=testCreatedPassword")
-                .with(csrf()))
+                .content("login=&password=testCreatedPassword"))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("{\"error\":{\"code\":400,\"" +
@@ -75,8 +72,7 @@ public class AuthRestControllerTest {
     public void get400WhenAuthenticateUserWithEmptyPassword() throws Exception {
         mvc.perform(post("/api/auth")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .content("login=testCreatedLogin&password=")
-                .with(csrf()))
+                .content("login=testCreatedLogin&password="))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("{\"error\":{\"code\":400,\"" +
@@ -87,8 +83,7 @@ public class AuthRestControllerTest {
     public void get404WhenAuthenticateUserWithUnknownLogin() throws Exception {
         mvc.perform(post("/api/auth")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .content("login=testCreatedLogin&password=testCreatedPassword")
-                .with(csrf()))
+                .content("login=testCreatedLogin&password=testCreatedPassword"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("{\"error\":{\"code\":404," +
@@ -99,8 +94,7 @@ public class AuthRestControllerTest {
     public void get401WhenAuthenticateUserWithWrongCredentials() throws Exception {
         mvc.perform(post("/api/auth")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .content("login=u&password=testWrongPassword")
-                .with(csrf()))
+                .content("login=u&password=testWrongPassword"))
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().string("{\"error\":{\"code\":401," +

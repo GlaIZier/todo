@@ -17,7 +17,7 @@ import ru.glaizier.todo.security.token.TokenService;
 import javax.sql.DataSource;
 
 @Configuration
-@Order(2)
+@Order(3)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String USER_BY_LOGIN_QUERY = "select login, password, true as enabled from User where login=?";

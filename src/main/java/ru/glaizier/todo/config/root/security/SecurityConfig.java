@@ -12,8 +12,9 @@ import ru.glaizier.todo.security.token.TokenService;
 
 @EnableWebSecurity
 @Import({
-        WebSecurityConfig.class,
-        ApiSecurityConfig.class
+        ApiTasksSecurityConfig.class,
+        ApiSecurityConfig.class,
+        WebSecurityConfig.class
 })
 public class SecurityConfig {
 

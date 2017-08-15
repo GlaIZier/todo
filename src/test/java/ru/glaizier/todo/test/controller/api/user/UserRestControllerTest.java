@@ -1,6 +1,5 @@
 package ru.glaizier.todo.test.controller.api.user;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -52,8 +51,7 @@ public class UserRestControllerTest {
     public void get201WhenCreateTask() throws Exception {
         mvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .content("login=testCreatedLogin&password=testCreatedPassword")
-                .with(csrf()))
+                .content("login=testCreatedLogin&password=testCreatedPassword"))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().string("{\"data\":\"testCreatedLogin\"}"));
@@ -63,8 +61,7 @@ public class UserRestControllerTest {
     public void get400WhenCreateTaskWithEmptyLogin() throws Exception {
         mvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .content("login=&password=testCreatedPassword")
-                .with(csrf()))
+                .content("login=&password=testCreatedPassword"))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -73,8 +70,7 @@ public class UserRestControllerTest {
     public void get400WhenCreateTaskWithEmptyPassword() throws Exception {
         mvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .content("login=testCreatedLogin&password=")
-                .with(csrf()))
+                .content("login=testCreatedLogin&password="))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }

@@ -1,6 +1,5 @@
 package ru.glaizier.todo.test.controller.api.task;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -152,13 +151,45 @@ public class TaskRestControllerTest {
         mvc.perform(post("/api/me/tasks")
                 .content("todoCreatedWithinTaskTest3")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .with(csrf())
-                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
+
+                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
+                .header(propertiesService.getApiTokenHeaderName(), token))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", "/api/me/tasks/4"))
                 .andExpect(content().string("{\"data\":{\"id\":4,\"login\":\"u\"," +
                         "\"todo\":\"todoCreatedWithinTaskTest3\"},\"_link\":{\"self\":\"/api/me/tasks/4\"}}"));
+    }
+
+    @Test
+    public void get403WhenCreateTaskWithoutCsrfHeader() throws Exception {
+        String token = tokenService.createToken("u");
+
+
+        mvc.perform(post("/api/me/tasks")
+                .content("todoCreatedWithinTaskTest3")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
+                .andDo(print())
+                .andExpect(status().isForbidden())
+                .andExpect(content().string("{\"error\":{\"code\":403," +
+                        "\"message\":\"Missing or non-matching CSRF-token!\"}}"));
+    }
+
+    @Test
+    public void get403WhenCreateTaskWithWrongCsrfHeader() throws Exception {
+        String token = tokenService.createToken("u");
+
+
+        mvc.perform(post("/api/me/tasks")
+                .content("todoCreatedWithinTaskTest3")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
+                .header(propertiesService.getApiTokenHeaderName(), "wrongToken"))
+                .andDo(print())
+                .andExpect(status().isForbidden())
+                .andExpect(content().string("{\"error\":{\"code\":403," +
+                        "\"message\":\"Missing or non-matching CSRF-token!\"}}"));
     }
 
     @Test
@@ -168,8 +199,8 @@ public class TaskRestControllerTest {
         mvc.perform(post("/api/me/tasks")
                 .content("todo1")
 //                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .with(csrf())
-                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
+                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
+                .header(propertiesService.getApiTokenHeaderName(), token))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("{\"error\":{\"code\":404,\"" +
@@ -186,12 +217,26 @@ public class TaskRestControllerTest {
         mvc.perform(put("/api/me/tasks/1")
                 .content("todoUpdatedWithinTaskTest1")
 //                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .with(csrf())
-                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
+                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
+                .header(propertiesService.getApiTokenHeaderName(), token))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("{\"data\":{\"id\":1,\"login\":\"u\"," +
                         "\"todo\":\"todoUpdatedWithinTaskTest1\"}}"));
+    }
+
+    @Test
+    public void get403WhenUpdateTaskWithoutCsrfHeader() throws Exception {
+        String token = tokenService.createToken("u");
+
+        mvc.perform(put("/api/me/tasks/1")
+                .content("todoUpdatedWithinTaskTest1")
+//                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
+                .andDo(print())
+                .andExpect(status().isForbidden())
+                .andExpect(content().string("{\"error\":{\"code\":403," +
+                        "\"message\":\"Missing or non-matching CSRF-token!\"}}"));
     }
 
     @Test
@@ -201,8 +246,8 @@ public class TaskRestControllerTest {
         mvc.perform(put("/api/me/tasks/100")
                 .content("todoUpdatedWithinTaskTest100")
 //                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .with(csrf())
-                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
+                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
+                .header(propertiesService.getApiTokenHeaderName(), token))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("{\"error\":{\"code\":404," +
@@ -216,8 +261,8 @@ public class TaskRestControllerTest {
         mvc.perform(put("/api/me/tasks/1")
                 .content("todoUpdatedWithinTaskTest1")
 //                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .with(csrf())
-                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
+                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
+                .header(propertiesService.getApiTokenHeaderName(), token))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("{\"error\":{\"code\":404," +
@@ -232,11 +277,23 @@ public class TaskRestControllerTest {
         String token = tokenService.createToken("u");
 
         mvc.perform(delete("/api/me/tasks/1")
-                .with(csrf())
-                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
+                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
+                .header(propertiesService.getApiTokenHeaderName(), token))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("{\"data\":{\"id\":1,\"login\":\"u\",\"todo\":\"todo1\"}}"));
+    }
+
+    @Test
+    public void get403WhenDeleteTaskWithoutCsrfHeader() throws Exception {
+        String token = tokenService.createToken("u");
+
+        mvc.perform(delete("/api/me/tasks/1")
+                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
+                .andDo(print())
+                .andExpect(status().isForbidden())
+                .andExpect(content().string("{\"error\":{\"code\":403," +
+                        "\"message\":\"Missing or non-matching CSRF-token!\"}}"));
     }
 
     @Test
@@ -245,8 +302,8 @@ public class TaskRestControllerTest {
 
         mvc.perform(delete("/api/me/tasks/100")
                 .content("todoUpdatedWithinTaskTest100")
-                .with(csrf())
-                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
+                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
+                .header(propertiesService.getApiTokenHeaderName(), token))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("{\"error\":{\"code\":404," +
@@ -259,8 +316,8 @@ public class TaskRestControllerTest {
 
         mvc.perform(delete("/api/me/tasks/1")
                 .content("todoUpdatedWithinTaskTest1")
-                .with(csrf())
-                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
+                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
+                .header(propertiesService.getApiTokenHeaderName(), token))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("{\"error\":{\"code\":404," +
