@@ -15,4 +15,6 @@ public interface TokenService {
      * @return login for whom token has been created or Optional.empty() if verification has been failed
      */
     Optional<String> verifyToken(String token) throws TokenDecodingException;
+
+    void invalidateToken(String token);
 }

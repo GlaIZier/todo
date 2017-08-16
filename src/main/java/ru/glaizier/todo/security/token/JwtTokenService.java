@@ -1,5 +1,7 @@
 package ru.glaizier.todo.security.token;
 
+import static java.lang.String.format;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -19,8 +21,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static java.lang.String.format;
-
 public class JwtTokenService implements TokenService {
 
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -28,6 +28,7 @@ public class JwtTokenService implements TokenService {
     private static final String TODO_API_TOKEN_JWT_ISSUER = "todo-api-token-jwt-issuer";
 
     private final int expireDurationInSeconds;
+
 
     @NonNull
     private final Algorithm algorithm;
@@ -80,5 +81,11 @@ public class JwtTokenService implements TokenService {
             }
             return Optional.empty();
         }
+    }
+
+    // Todo start here
+    @Override
+    public void invalidateToken(String token) {
+
     }
 }
