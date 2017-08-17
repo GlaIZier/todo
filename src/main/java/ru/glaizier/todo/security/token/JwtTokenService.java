@@ -19,6 +19,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 public class JwtTokenService implements TokenService {
@@ -29,6 +30,8 @@ public class JwtTokenService implements TokenService {
 
     private final int expireDurationInSeconds;
 
+    // token to expiration date
+    private final ConcurrentHashMap<String, Date> invalidatedTokens = new ConcurrentHashMap<>();
 
     @NonNull
     private final Algorithm algorithm;
@@ -64,12 +67,13 @@ public class JwtTokenService implements TokenService {
 
     @Override
     public Optional<String> verifyToken(String token) throws TokenDecodingException {
-        JWTVerifier verifier = JWT.require(algorithm)
-                .withIssuer(TODO_API_TOKEN_JWT_ISSUER)
-                .build();
         try {
-            DecodedJWT verify = verifier.verify(token);
-            return Optional.of(verify.getSubject());
+            if (invalidatedTokens.containsKey(token))
+                return Optional.empty();
+
+            DecodedJWT decodedJwt = decodeJwt(token);
+            return Optional.of(decodedJwt.getSubject());
+
         } catch (JWTDecodeException e) {
             throw new TokenDecodingException("Token decoding failed!", e);
         } catch (JWTVerificationException e) {
@@ -83,9 +87,27 @@ public class JwtTokenService implements TokenService {
         }
     }
 
-    // Todo start here
+    private DecodedJWT decodeJwt(String token) throws JWTVerificationException {
+        JWTVerifier verifier = JWT.require(algorithm)
+                .withIssuer(TODO_API_TOKEN_JWT_ISSUER)
+                .build();
+        return verifier.verify(token);
+    }
+
     @Override
     public void invalidateToken(String token) {
-
+        try {
+            DecodedJWT decodedJwt = decodeJwt(token);
+            invalidatedTokens.put(token, decodedJwt.getExpiresAt());
+        } catch (Exception e) {
+            try {
+                MDC.put(MdcConstants.TOKEN, token);
+                log.error("Error during token invalidation: {}. Skipping invalidation...", e.getMessage());
+            } finally {
+                MDC.clear();
+            }
+        }
     }
+
+    // Todo make @Schedule to clean up tokens
 }
