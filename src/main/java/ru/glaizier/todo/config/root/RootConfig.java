@@ -4,6 +4,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import ru.glaizier.todo.config.root.security.SecurityConfig;
 
 @Configuration
@@ -19,5 +21,7 @@ import ru.glaizier.todo.config.root.security.SecurityConfig;
         SecurityConfig.class,
         DbConfig.class
 })
+@EnableAsync
+@EnableScheduling
 public class RootConfig {
 }

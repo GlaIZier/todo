@@ -17,4 +17,6 @@ public interface TokenService {
     Optional<String> verifyToken(String token) throws TokenDecodingException;
 
     void invalidateToken(String token);
+
+    void cleanUpInvalidatedTokens();
 }

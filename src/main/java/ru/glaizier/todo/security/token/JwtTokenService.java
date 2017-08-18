@@ -12,6 +12,7 @@ import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.springframework.scheduling.annotation.Scheduled;
 import ru.glaizier.todo.log.MdcConstants;
 
 import java.io.UnsupportedEncodingException;
@@ -98,6 +99,9 @@ public class JwtTokenService implements TokenService {
     public void invalidateToken(String token) {
         try {
             DecodedJWT decodedJwt = decodeJwt(token);
+            Date now = new Date();
+            if (decodedJwt.getExpiresAt().before(now))
+                return;
             invalidatedTokens.put(token, decodedJwt.getExpiresAt());
         } catch (Exception e) {
             try {
@@ -109,5 +113,10 @@ public class JwtTokenService implements TokenService {
         }
     }
 
-    // Todo make @Schedule to clean up tokens
+    // Once per day
+    @Scheduled(fixedRate = 24 * 60 * 60 * 1000)
+    public void cleanUpInvalidatedTokens() {
+        Date now = new Date();
+        invalidatedTokens.entrySet().removeIf(next -> next.getValue().before(now));
+    }
 }
