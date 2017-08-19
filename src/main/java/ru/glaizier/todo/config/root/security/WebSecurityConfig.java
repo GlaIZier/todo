@@ -105,6 +105,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // Session invalidation is called by default. remember-me-cookie is removed by default.
                 // If it is added here then set-cookie header appears twice
                 .deleteCookies(propertiesService.getApiTokenCookieName())
+                .addLogoutHandler((req, resp, auth) -> {
+                    System.out.println("Logout");
+                })
 
                 // Default in-memory hash implementation. This doesn't save remember-me cookie if server restarts.
                 // To enable saving between restarts table persistent_logins in db needs to be created and it will be
