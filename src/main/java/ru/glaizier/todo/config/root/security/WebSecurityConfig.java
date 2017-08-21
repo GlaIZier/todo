@@ -9,8 +9,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import ru.glaizier.todo.properties.PropertiesService;
+import ru.glaizier.todo.security.handler.ApiLogoutHandler;
 import ru.glaizier.todo.security.handler.LoginSuccessHandler;
 import ru.glaizier.todo.security.token.TokenService;
 
@@ -48,6 +50,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new LoginSuccessHandler(tokenService, propertiesService.getApiTokenCookieName());
     }
 
+    @Bean
+    public LogoutHandler apiLogoutHandler() {
+        return new ApiLogoutHandler(tokenService, propertiesService.getApiTokenCookieName());
+    }
+
 //    @Bean
 //    public UserDetailsService inMemoryUserDetailsService() throws Exception {
 //        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
@@ -78,7 +85,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    // Todo add custom filter after logout to invalidate token
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 // secure /tasks
@@ -104,10 +110,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 // Session invalidation is called by default. remember-me-cookie is removed by default.
                 // If it is added here then set-cookie header appears twice
-                .deleteCookies(propertiesService.getApiTokenCookieName())
-                .addLogoutHandler((req, resp, auth) -> {
-                    System.out.println("Logout");
-                })
+//                .deleteCookies(propertiesService.getApiTokenCookieName())
+                .addLogoutHandler(apiLogoutHandler())
 
                 // Default in-memory hash implementation. This doesn't save remember-me cookie if server restarts.
                 // To enable saving between restarts table persistent_logins in db needs to be created and it will be
