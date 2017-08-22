@@ -1,13 +1,12 @@
 package ru.glaizier.todo.controller.api.auth;
 
-import static java.lang.String.format;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.glaizier.todo.controller.api.exception.ApiNotFoundException;
@@ -15,10 +14,17 @@ import ru.glaizier.todo.controller.api.exception.ApiUnauthorizedException;
 import ru.glaizier.todo.controller.api.exception.ExceptionHandlingController;
 import ru.glaizier.todo.controller.api.user.UserRestController;
 import ru.glaizier.todo.model.dto.api.output.OutputData;
+import ru.glaizier.todo.model.dto.api.output.OutputResponse;
 import ru.glaizier.todo.model.dto.api.output.OutputUser;
 import ru.glaizier.todo.model.dto.input.InputUser;
 import ru.glaizier.todo.persistence.Persistence;
 import ru.glaizier.todo.security.token.TokenService;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import static java.lang.String.format;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 @RequestMapping(value = {"/api/v1/auth", "/api/auth"})
@@ -32,9 +38,11 @@ public class AuthRestController extends ExceptionHandlingController {
 
     private final TokenService tokenService;
 
-    @RequestMapping(method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
+    private final LogoutHandler logoutHandler;
+
+    @RequestMapping(value = "/login", method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public ResponseEntity<OutputData<OutputUser>> authenticateUser(InputUser inputUser) {
+    public ResponseEntity<OutputData<OutputUser>> loginUser(InputUser inputUser) {
         UserRestController.checkUserIsNotEmpty(inputUser);
 
         if (persistence.findUser(inputUser.getLogin()) == null)
@@ -46,6 +54,16 @@ public class AuthRestController extends ExceptionHandlingController {
         String token = tokenService.createToken(inputUser.getLogin());
 
         OutputData<OutputUser> outputData = new OutputData<>(new OutputUser(inputUser.getLogin(), token));
+        return new ResponseEntity<>(outputData, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/logout", method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+    public ResponseEntity<OutputData<OutputResponse>> logoutUser(HttpServletRequest req, HttpServletResponse resp, Authentication auth, String token) {
+        logoutHandler.logout(req, resp, auth);
+        tokenService.invalidateToken(token);
+
+        OutputData<OutputResponse> outputData = new OutputData<>(OutputResponse.OK);
         return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 }

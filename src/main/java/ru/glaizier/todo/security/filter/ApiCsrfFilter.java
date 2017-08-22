@@ -1,7 +1,5 @@
 package ru.glaizier.todo.security.filter;
 
-import static ru.glaizier.todo.log.MdcConstants.TOKEN;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,19 +7,20 @@ import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ru.glaizier.todo.model.dto.api.Error;
+import ru.glaizier.todo.model.dto.api.HttpResponse;
 import ru.glaizier.todo.model.dto.api.output.OutputError;
 import ru.glaizier.todo.properties.PropertiesService;
-
-import java.io.IOException;
-import java.lang.invoke.MethodHandles;
-import java.util.regex.Pattern;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.lang.invoke.MethodHandles;
+import java.util.regex.Pattern;
+
+import static ru.glaizier.todo.log.MdcConstants.TOKEN;
 
 public class ApiCsrfFilter extends OncePerRequestFilter {
 
@@ -55,7 +54,7 @@ public class ApiCsrfFilter extends OncePerRequestFilter {
 
             if (csrfTokenValue == null || !csrfTokenValue.equals(csrfCookieValue)) {
                 writeErrorToResponse(csrfTokenValue, response, HttpStatus.FORBIDDEN,
-                        new OutputError(new Error(HttpStatus.FORBIDDEN.value(), "Missing or non-matching CSRF-token!")));
+                        new OutputError(new HttpResponse(HttpStatus.FORBIDDEN.value(), "Missing or non-matching CSRF-token!")));
                 return;
             }
 

@@ -1,13 +1,5 @@
 package ru.glaizier.todo.test.controller.api.auth;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +15,14 @@ import org.springframework.web.context.WebApplicationContext;
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 // Almost the same as SpringJUnit4ClassRunner
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {
@@ -31,6 +31,9 @@ import ru.glaizier.todo.config.servlet.ServletConfig;
 })
 @WebAppConfiguration
 public class AuthRestControllerTest {
+
+    private static final String LOGIN_PATH = "/api/auth/login";
+
     @Autowired
     private WebApplicationContext context;
 
@@ -46,7 +49,7 @@ public class AuthRestControllerTest {
 
     @Test
     public void get200WhenAuthenticateUser() throws Exception {
-        MvcResult mvcResult = mvc.perform(post("/api/auth")
+        MvcResult mvcResult = mvc.perform(post(LOGIN_PATH)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .content("login=u&password=p"))
                 .andDo(print())
@@ -59,7 +62,7 @@ public class AuthRestControllerTest {
 
     @Test
     public void get400WhenAuthenticateUserWithEmptyLogin() throws Exception {
-        mvc.perform(post("/api/auth")
+        mvc.perform(post(LOGIN_PATH)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .content("login=&password=testCreatedPassword"))
                 .andDo(print())
@@ -70,7 +73,7 @@ public class AuthRestControllerTest {
 
     @Test
     public void get400WhenAuthenticateUserWithEmptyPassword() throws Exception {
-        mvc.perform(post("/api/auth")
+        mvc.perform(post(LOGIN_PATH)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .content("login=testCreatedLogin&password="))
                 .andDo(print())
@@ -81,7 +84,7 @@ public class AuthRestControllerTest {
 
     @Test
     public void get404WhenAuthenticateUserWithUnknownLogin() throws Exception {
-        mvc.perform(post("/api/auth")
+        mvc.perform(post(LOGIN_PATH)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .content("login=testCreatedLogin&password=testCreatedPassword"))
                 .andDo(print())
@@ -92,7 +95,7 @@ public class AuthRestControllerTest {
 
     @Test
     public void get401WhenAuthenticateUserWithWrongCredentials() throws Exception {
-        mvc.perform(post("/api/auth")
+        mvc.perform(post(LOGIN_PATH)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .content("login=u&password=testWrongPassword"))
                 .andDo(print())

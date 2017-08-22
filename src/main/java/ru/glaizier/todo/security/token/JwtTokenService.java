@@ -1,7 +1,5 @@
 package ru.glaizier.todo.security.token;
 
-import static java.lang.String.format;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -22,6 +20,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+
+import static java.lang.String.format;
 
 public class JwtTokenService implements TokenService {
 
@@ -106,7 +106,7 @@ public class JwtTokenService implements TokenService {
         } catch (Exception e) {
             try {
                 MDC.put(MdcConstants.TOKEN, token);
-                log.error("Error during token invalidation: {}. Skipping invalidation...", e.getMessage());
+                log.error("HttpResponse during token invalidation: {}. Skipping invalidation...", e.getMessage());
             } finally {
                 MDC.clear();
             }
