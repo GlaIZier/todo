@@ -135,6 +135,45 @@ public class AuthRestControllerTest {
                 .andExpect(cookie().maxAge(propertiesService.getApiTokenCookieName(), 0));
 
         Mockito.verify(tokenService, times(2)).invalidateToken(any());
-//        assertThat(content.matches("\\{\"data\":\\{\"login\":\"u\",\"token\":\".+\\..+\\..+\"\\}\\}"), is(true));
+    }
+
+    @Test
+    public void get403WhenLogoutUserWithoutCookie() throws Exception {
+        String token = tokenService.createToken("testUser");
+        mvc.perform(post(LOGOUT_PATH)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .content("token=" + token)
+                .header(propertiesService.getApiTokenHeaderName(), token))
+                .andDo(print())
+                .andExpect(status().isForbidden())
+                .andExpect(content().string("{\"error\":{\"code\":403," +
+                        "\"message\":\"Missing or non-matching CSRF-token!\"}}"));
+    }
+
+    @Test
+    public void get403WhenLogoutUserWithoutHeader() throws Exception {
+        String token = tokenService.createToken("testUser");
+        mvc.perform(post(LOGOUT_PATH)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .content("token=" + token)
+                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
+                .andDo(print())
+                .andExpect(status().isForbidden())
+                .andExpect(content().string("{\"error\":{\"code\":403," +
+                        "\"message\":\"Missing or non-matching CSRF-token!\"}}"));
+    }
+
+    @Test
+    public void get403WhenCookieNotEqualToHeader() throws Exception {
+        String token = tokenService.createToken("testUser");
+        mvc.perform(post(LOGOUT_PATH)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .content("token=" + token)
+                .header(propertiesService.getApiTokenHeaderName(), "Some value")
+                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
+                .andDo(print())
+                .andExpect(status().isForbidden())
+                .andExpect(content().string("{\"error\":{\"code\":403," +
+                        "\"message\":\"Missing or non-matching CSRF-token!\"}}"));
     }
 }
