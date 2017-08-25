@@ -61,7 +61,6 @@ public class AuthRestController extends ExceptionHandlingController {
             consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     public ResponseEntity<OutputResponse> logoutUser(HttpServletRequest req, HttpServletResponse resp, Authentication auth, String token) {
         logoutHandler.logout(req, resp, auth);
-        tokenService.invalidateToken(token);
 
         return new ResponseEntity<>(OutputResponse.OK, HttpStatus.OK);
     }

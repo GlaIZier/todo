@@ -3,7 +3,6 @@ package ru.glaizier.todo.test.controller.api.auth;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.times;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -134,7 +133,7 @@ public class AuthRestControllerTest {
                 .andExpect(content().string("{\"response\":{\"code\":200,\"message\":\"OK\"}}"))
                 .andExpect(cookie().maxAge(propertiesService.getApiTokenCookieName(), 0));
 
-        Mockito.verify(tokenService, times(2)).invalidateToken(any());
+        Mockito.verify(tokenService).invalidateToken(any());
     }
 
     @Test
