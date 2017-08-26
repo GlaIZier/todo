@@ -6,12 +6,12 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.util.StringUtils;
 import ru.glaizier.todo.security.token.TokenService;
 
+import java.util.Optional;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Optional;
 
-// Todo read about SavedRequestAwareAuthenticationSuccessHandler and other extends
 public class ApiLogoutHandler implements LogoutHandler {
 
     @NonNull

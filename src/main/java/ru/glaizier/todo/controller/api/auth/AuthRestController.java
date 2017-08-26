@@ -1,5 +1,8 @@
 package ru.glaizier.todo.controller.api.auth;
 
+import static java.lang.String.format;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,9 +25,6 @@ import ru.glaizier.todo.security.token.TokenService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import static java.lang.String.format;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 @RequestMapping(value = {"/api/v1/auth", "/api/auth"})
@@ -57,13 +57,11 @@ public class AuthRestController extends ExceptionHandlingController {
         return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/logout", method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
+    @RequestMapping(value = "/me/logout", method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public ResponseEntity<OutputData<OutputResponse>> logoutUser(HttpServletRequest req, HttpServletResponse resp, Authentication auth, String token) {
+    public ResponseEntity<OutputResponse> logoutUser(HttpServletRequest req, HttpServletResponse resp, Authentication auth, String token) {
         logoutHandler.logout(req, resp, auth);
-        tokenService.invalidateToken(token);
 
-        OutputData<OutputResponse> outputData = new OutputData<>(OutputResponse.OK);
-        return new ResponseEntity<>(outputData, HttpStatus.OK);
+        return new ResponseEntity<>(OutputResponse.OK, HttpStatus.OK);
     }
 }
