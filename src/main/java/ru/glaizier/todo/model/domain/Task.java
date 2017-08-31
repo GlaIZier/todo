@@ -25,7 +25,10 @@ public class Task {
     private Integer id;
 
     @NonNull
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY/*, cascade= {
+            CascadeType.DETACH
+    }*/
+    )
     @JoinColumn(name = "login",
             referencedColumnName = "login",
             nullable = false,
