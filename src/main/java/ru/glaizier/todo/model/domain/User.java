@@ -20,7 +20,7 @@ import javax.persistence.*;
 @EqualsAndHashCode(exclude = {"tasks", "password"})
 @ToString(exclude = {"tasks", "password"})
 @Entity
-@Table(name = "User")
+@Table(name = "User", schema = "todo")
 public class User {
     @NonNull
     @Id
@@ -39,7 +39,7 @@ public class User {
 //            CascadeType.ALL
 //    }
     )
-    @JoinTable(name = "Authorization",
+    @JoinTable(name = "Authorization", schema = "todo",
             joinColumns = @JoinColumn(name = "login", referencedColumnName = "login", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "role", referencedColumnName = "role", nullable = false),
             foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),

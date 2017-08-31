@@ -42,4 +42,12 @@ and skip the warning because no trust certificate is used in the application
 ```
 http://localhost:8080/todo/swagger-ui.html
 ```
-
+### Postgresql docker
+Run docker with relative volume mount, bridge ports, name postgres and remove container after finish
+```$xslt
+docker run --rm -p 5432:5432 -v $PWD/init:/docker-entrypoint-initdb.d --name postgres postgres:9.6.1
+```
+Connect to db
+```bash
+psql -U todoer -d tododb -h localhost
+```

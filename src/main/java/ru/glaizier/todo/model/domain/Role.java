@@ -17,7 +17,7 @@ import javax.persistence.*;
 @EqualsAndHashCode(exclude = "users")
 @ToString(exclude = "users")
 @Entity
-@Table(name = "Role")
+@Table(name = "Role", schema = "todo")
 public class Role {
     public static Role USER = new Role("ROLE_USER");
     public static Role ADMIN = new Role("ROLE_ADMIN");
@@ -32,7 +32,7 @@ public class Role {
 //            CascadeType.REMOVE
 //    }
     )
-    @JoinTable(name = "Authorization",
+    @JoinTable(name = "Authorization", schema = "todo",
             joinColumns = @JoinColumn(name = "role", referencedColumnName = "role", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "login", referencedColumnName = "login", nullable = false),
             foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),

@@ -22,8 +22,8 @@ import javax.sql.DataSource;
 @Order(3)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private static final String USER_BY_LOGIN_QUERY = "select login, password, true as enabled from User where login=?";
-    private static final String AUTHORITY_BY_LOGIN_QUERY = "select login, role from Authorization where login=?";
+    private static final String USER_BY_LOGIN_QUERY = "select login, password, true as enabled from todo.User where login=?";
+    private static final String AUTHORITY_BY_LOGIN_QUERY = "select login, role from todo.Authorization where login=?";
 
     private final PropertiesService propertiesService;
 

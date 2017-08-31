@@ -16,10 +16,10 @@ import javax.persistence.*;
 @EqualsAndHashCode()
 @ToString()
 @Entity
-@Table(name = "Task")
+@Table(name = "Task", schema = "todo")
 public class Task {
     @Id
-    // check for postgres generated table: https://stackoverflow.com/questions/39807483/sequence-hibernate-sequence-not-found-sql-statement
+    // Todo check for postgres generated table: https://stackoverflow.com/questions/39807483/sequence-hibernate-sequence-not-found-sql-statement
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private Integer id;

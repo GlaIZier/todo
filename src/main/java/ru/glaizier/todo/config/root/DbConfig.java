@@ -27,6 +27,7 @@ public class DbConfig {
 
     @Bean
     @Profile("default")
+//    @Profile("prod")
     public DataSource localDataSource() {
         return new EmbeddedDatabaseBuilder()
                 .generateUniqueName(false)
@@ -41,6 +42,7 @@ public class DbConfig {
 
     @Bean
     @Profile("default")
+//    @Profile("prod")
     public JpaVendorAdapter localJpaVendorAdapter() {
         HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
         adapter.setDatabase(Database.HSQL);
@@ -52,6 +54,7 @@ public class DbConfig {
 
     @Bean("entityManagerFactory")
     @Profile("default")
+//    @Profile("prod")
     public LocalContainerEntityManagerFactoryBean localEntityManagerFactory() {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setDataSource(localDataSource());
@@ -69,19 +72,19 @@ public class DbConfig {
 
     @Bean
     @Profile("prod")
+//    @Profile("default")
     public DataSource prodDataSource() {
         DriverManagerDataSource dataSourceConfig = new DriverManagerDataSource();
         dataSourceConfig.setDriverClassName("org.postgresql.Driver");
-
         dataSourceConfig.setUrl("jdbc:postgresql://localhost:5432/tododb");
         dataSourceConfig.setUsername("todoer");
         dataSourceConfig.setPassword("password");
-
         return dataSourceConfig;
     }
 
     @Bean
     @Profile("prod")
+//    @Profile("default")
     public JpaVendorAdapter prodJpaVendorAdapter() {
         HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
         adapter.setDatabase(Database.POSTGRESQL);
@@ -93,6 +96,7 @@ public class DbConfig {
 
     @Bean("entityManagerFactory")
     @Profile("prod")
+//    @Profile("default")
     public LocalContainerEntityManagerFactoryBean prodEntityManagerFactory() {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setDataSource(prodDataSource());
