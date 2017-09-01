@@ -5,7 +5,6 @@ import static java.lang.String.format;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.glaizier.todo.init.annotation.PostContextUp;
 import ru.glaizier.todo.model.domain.Role;
 import ru.glaizier.todo.model.domain.Task;
 import ru.glaizier.todo.model.domain.User;
@@ -18,7 +17,6 @@ import ru.glaizier.todo.persistence.task.TaskDao;
 import ru.glaizier.todo.persistence.user.UserDao;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -50,24 +48,6 @@ public class PersistenceService implements Persistence {
         this.userDao = userDao;
         this.roleDao = roleDao;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    @PostContextUp
-    @Override
-    public void initDb() {
-        RoleDto userRole = new RoleDto(Role.USER.getRole());
-        RoleDto adminRole = new RoleDto(Role.ADMIN.getRole());
-        saveRole(userRole.getRole());
-        saveRole(adminRole.getRole());
-
-        HashSet<RoleDto> uRoles = new HashSet<>(Arrays.asList(userRole));
-        HashSet<RoleDto> aRoles = new HashSet<>(Arrays.asList(userRole, adminRole));
-        UserDto u = saveUser("u", "p".toCharArray(), uRoles);
-        UserDto a = saveUser("a", "p".toCharArray(), aRoles);
-
-        saveTask(u.getLogin(), "todo1");
-        saveTask(u.getLogin(), "todo2");
-        saveTask(a.getLogin(), "todo1");
     }
 
     @Override
