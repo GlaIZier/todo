@@ -57,3 +57,9 @@ Connect to db
 ```bash
 psql -U todoer -d tododb -h localhost
 ```
+
+### Additional info
+If there are some problems that mvn couldn't find some resources try first
+```bash
+mvn clean compile
+```
