@@ -1,11 +1,5 @@
 package ru.glaizier.todo.test.persistence;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -26,13 +20,15 @@ import ru.glaizier.todo.model.dto.UserDto;
 import ru.glaizier.todo.persistence.Persistence;
 import ru.glaizier.todo.persistence.exception.AccessDeniedException;
 
+import javax.transaction.Transactional;
 import java.lang.invoke.MethodHandles;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.*;
 
 /**
  * Run these tests with prod db when needed
@@ -87,10 +83,11 @@ public class ProdPersistenceTest {
     @Test
     @Ignore
     public void saveTask() {
-        TaskDto dummyTask2 = dummyTask.toBuilder().id(5).user(Optional.empty()).todo("dummyTodo2").build();
-        assertThat(p.saveTask(dummyUser.getLogin(), dummyTask2.getTodo()), is(dummyTask2));
+        TaskDto dummyTask2 = dummyTask.toBuilder().user(Optional.empty()).todo("dummyTodo2").build();
+        assertThat(p.saveTask(dummyUser.getLogin(), dummyTask2.getTodo()).getTodo(), is(dummyTask2.getTodo()));
         assertThat(p.findTasks(dummyUser.getLogin()).size(), is(2));
-        assertThat(p.findTasks(dummyUser.getLogin()).get(1), is(dummyTask2));
+        assertThat(p.findTasks(dummyUser.getLogin()).get(1).getTodo(), is(dummyTask2.getTodo()));
+        assertFalse(p.findTasks(dummyUser.getLogin()).get(1).getUser().isPresent());
     }
 
     @Test()
