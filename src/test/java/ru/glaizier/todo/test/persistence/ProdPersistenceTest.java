@@ -99,13 +99,13 @@ public class ProdPersistenceTest {
     @Test
     @Ignore
     public void getTaskOnGetTask() {
-        assertThat(p.findTask(dummyTask.getId()), is(dummyTask));
+        assertThat(p.findTask(dummyTask.getId()).getTodo(), is(dummyTask.getTodo()));
     }
 
     @Test
     @Ignore
     public void getNullOnGetTaskForUnknownId() {
-        assertNull(p.findTask(100));
+        assertNull(p.findTask(100000));
     }
 
     @Test
