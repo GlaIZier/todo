@@ -99,7 +99,7 @@ public class ProdPersistenceTest {
     @Test
     @Ignore
     public void getTaskOnGetTask() {
-        assertThat(p.findTask(dummyTask.getId()).getTodo(), is(dummyTask.getTodo()));
+        assertThat(p.findTask(p.findTasks(dummyUser.getLogin()).get(0).getId()).getTodo(), is(dummyTask.getTodo()));
     }
 
     @Test
