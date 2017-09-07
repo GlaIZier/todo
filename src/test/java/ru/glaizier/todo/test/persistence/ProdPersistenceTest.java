@@ -111,8 +111,8 @@ public class ProdPersistenceTest {
     @Test
     @Ignore
     public void getTaskOnGetTaskByIdAndLogin() {
-        assertThat(p.findTask(dummyTask.getId(), dummyUser.getLogin()),
-                is(dummyTask.toBuilder().user(Optional.empty()).build()));
+        assertThat(p.findTask(p.findTasks(dummyUser.getLogin()).get(0).getId(), dummyUser.getLogin()).getTodo(),
+                is(dummyTask.getTodo()));
     }
 
     @Test
