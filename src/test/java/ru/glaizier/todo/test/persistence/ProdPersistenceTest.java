@@ -118,15 +118,15 @@ public class ProdPersistenceTest {
     @Test
     @Ignore
     public void getNullOnGetTaskByIdAndLoginForUnknownLogin() {
-        assertNull(p.findTask(dummyTask.getId(), "nonExistingLogin"));
+        assertNull(p.findTask(p.findTasks(dummyUser.getLogin()).get(0).getId(), "nonExistingLogin"));
     }
 
-    @Test(expected = AccessDeniedException.class)
-    @Ignore
-    public void getExceptionOnGetTaskByIdAndLoginForWrongLogin() {
-        p.saveUser(wrongDummyUser.getLogin(), wrongDummyUser.getPassword(), wrongDummyUser.getRoles().orElse(null));
-        p.findTask(4, wrongDummyUser.getLogin());
-    }
+//    @Test(expected = AccessDeniedException.class)
+//    @Ignore
+//    public void getExceptionOnGetTaskByIdAndLoginForWrongLogin() {
+//        p.saveUser(wrongDummyUser.getLogin(), wrongDummyUser.getPassword(), wrongDummyUser.getRoles().orElse(null));
+//        p.findTask(p.findTasks(dummyUser.getLogin()).get(0).getId(), wrongDummyUser.getLogin());
+//    }
 
     @Test
     @Ignore
