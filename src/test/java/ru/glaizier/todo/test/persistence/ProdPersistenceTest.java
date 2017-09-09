@@ -121,23 +121,22 @@ public class ProdPersistenceTest {
         assertNull(p.findTask(p.findTasks(dummyUser.getLogin()).get(0).getId(), "nonExistingLogin"));
     }
 
-//    @Test(expected = AccessDeniedException.class)
-//    @Ignore
-//    public void getExceptionOnGetTaskByIdAndLoginForWrongLogin() {
-//        p.saveUser(wrongDummyUser.getLogin(), wrongDummyUser.getPassword(), wrongDummyUser.getRoles().orElse(null));
-//        p.findTask(p.findTasks(dummyUser.getLogin()).get(0).getId(), wrongDummyUser.getLogin());
-//    }
-
-    @Test
+    @Test(expected = AccessDeniedException.class)
     @Ignore
-    public void updateTask() {
-        String updatedTodo = "dummyTodo2";
-        TaskDto updatedTask = dummyTask.toBuilder().todo(updatedTodo).user(Optional.empty()).build();
-        assertThat(p.updateTask(dummyUser.getLogin(), dummyTask.getId(), updatedTodo),
-                is(updatedTask));
-        assertThat(p.findTask(4, dummyUser.getLogin()), is(updatedTask));
-        assertThat(p.findTasks(dummyUser.getLogin()).size(), is(1));
+    public void getExceptionOnGetTaskByIdAndLoginForWrongLogin() {
+        p.saveUser(wrongDummyUser.getLogin(), wrongDummyUser.getPassword(), wrongDummyUser.getRoles().orElse(null));
+        p.findTask(p.findTasks(dummyUser.getLogin()).get(0).getId(), wrongDummyUser.getLogin());
     }
+
+//    @Test
+//    @Ignore
+//    public void updateTask() {
+//        String updatedTodo = "dummyTodo2";
+//        assertThat(p.updateTask(dummyUser.getLogin(), p.findTasks(dummyUser.getLogin()).get(0).getId(), updatedTodo).getTodo(),
+//                is(updatedTodo));
+//        assertThat(p.findTask(p.findTasks(dummyUser.getLogin()).get(0).getId(), dummyUser.getLogin()).getTodo(), is(updatedTodo));
+//        assertThat(p.findTasks(dummyUser.getLogin()).size(), is(1));
+//    }
 
     @Test()
     @Ignore
