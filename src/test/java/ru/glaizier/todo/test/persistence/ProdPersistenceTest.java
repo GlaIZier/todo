@@ -128,22 +128,22 @@ public class ProdPersistenceTest {
         p.findTask(p.findTasks(dummyUser.getLogin()).get(0).getId(), wrongDummyUser.getLogin());
     }
 
-//    @Test
-//    @Ignore
-//    public void updateTask() {
-//        String updatedTodo = "dummyTodo2";
-//        assertThat(p.updateTask(dummyUser.getLogin(), p.findTasks(dummyUser.getLogin()).get(0).getId(), updatedTodo).getTodo(),
-//                is(updatedTodo));
-//        assertThat(p.findTask(p.findTasks(dummyUser.getLogin()).get(0).getId(), dummyUser.getLogin()).getTodo(), is(updatedTodo));
-//        assertThat(p.findTasks(dummyUser.getLogin()).size(), is(1));
-//    }
-
-    @Test()
+    @Test
     @Ignore
-    public void getNullOnUpdateTaskForUnknownUser() {
+    public void updateTask() {
         String updatedTodo = "dummyTodo2";
-        assertNull(p.updateTask("nonExistingLogin", dummyTask.getId(), updatedTodo));
+        assertThat(p.updateTask(dummyUser.getLogin(), p.findTasks(dummyUser.getLogin()).get(0).getId(), updatedTodo).getTodo(),
+                is(updatedTodo));
+        assertThat(p.findTask(p.findTasks(dummyUser.getLogin()).get(0).getId(), dummyUser.getLogin()).getTodo(), is(updatedTodo));
+        assertThat(p.findTasks(dummyUser.getLogin()).size(), is(1));
     }
+
+//    @Test()
+//    @Ignore
+//    public void getNullOnUpdateTaskForUnknownUser() {
+//        String updatedTodo = "dummyTodo2";
+//        assertNull(p.updateTask("nonExistingLogin", p.findTasks(dummyUser.getLogin()).get(0).getId(), updatedTodo));
+//    }
 
     @Test(expected = AccessDeniedException.class)
     @Ignore
