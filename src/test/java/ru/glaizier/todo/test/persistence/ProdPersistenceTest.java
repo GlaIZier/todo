@@ -152,16 +152,16 @@ public class ProdPersistenceTest {
         p.updateTask(wrongDummyUser.getLogin(), p.findTasks(dummyUser.getLogin()).get(0).getId(), updatedTodo);
     }
 
-//    @Test
-//    @Ignore
-//    public void deleteTaskById() {
-//        Integer id = p.findTasks(dummyUser.getLogin()).get(0).getId();
-//        assertThat(p.deleteTask(id).getTodo(), is(dummyTask.getTodo()));
-//        assertNull(p.findTask(id));
-//        assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
-//        assertThat(p.findRole(dummyRole.getRole()), is(dummyRole));
-//        assertTrue(p.findTasks(dummyUser.getLogin()).isEmpty());
-//    }
+    @Test
+    @Ignore
+    public void deleteTaskById() {
+        Integer id = p.findTasks(dummyUser.getLogin()).get(0).getId();
+        assertThat(p.deleteTask(id).getTodo(), is(dummyTask.getTodo()));
+        assertNull(p.findTask(id));
+        assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
+        assertThat(p.findRole(dummyRole.getRole()), is(dummyRole));
+        assertTrue(p.findTasks(dummyUser.getLogin()).isEmpty());
+    }
 
 //    @Test
 //    @Ignore
