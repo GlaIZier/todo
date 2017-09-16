@@ -182,13 +182,13 @@ public class ProdPersistenceTest {
         assertTrue(p.findTasks(dummyUser.getLogin()).isEmpty());
     }
 
-//    @Test
-//    @Ignore
-//    public void getNullOnRemoveTaskByIdAndLoginWhenLoginNotExists() {
-//        assertNull(p.deleteTask(p.findTasks(dummyUser.getLogin()).get(0).getId(), wrongDummyUser.getLogin()));
-//        assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
-//        assertThat(p.findRole(dummyRole.getRole()), is(dummyRole));
-//    }
+    @Test
+    @Ignore
+    public void getNullOnRemoveTaskByIdAndLoginWhenLoginNotExists() {
+        assertNull(p.deleteTask(p.findTasks(dummyUser.getLogin()).get(0).getId(), wrongDummyUser.getLogin()));
+        assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
+        assertThat(p.findRole(dummyRole.getRole()), is(dummyRole));
+    }
 
 //    @Test(expected = AccessDeniedException.class)
 //    @Ignore
