@@ -190,12 +190,12 @@ public class ProdPersistenceTest {
         assertThat(p.findRole(dummyRole.getRole()), is(dummyRole));
     }
 
-//    @Test(expected = AccessDeniedException.class)
-//    @Ignore
-//    public void getExceptionOnRemoveTaskByIdAndLoginWhenWrongLogin() {
-//        p.saveUser(wrongDummyUser.getLogin(), wrongDummyUser.getPassword(), wrongDummyUser.getRoles().orElse(null));
-//        assertNull(p.deleteTask(4, wrongDummyUser.getLogin()));
-//    }
+    @Test(expected = AccessDeniedException.class)
+    @Ignore
+    public void getExceptionOnRemoveTaskByIdAndLoginWhenWrongLogin() {
+        p.saveUser(wrongDummyUser.getLogin(), wrongDummyUser.getPassword(), wrongDummyUser.getRoles().orElse(null));
+        assertNull(p.deleteTask(p.findTasks(dummyUser.getLogin()).get(0).getId(), wrongDummyUser.getLogin()));
+    }
 
     // Users
 //    @Test
