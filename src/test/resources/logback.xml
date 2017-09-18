@@ -24,6 +24,8 @@
         </rollingPolicy>
     </appender>
 
+    <logger name="ru.glaizier.todo" level="DEBUG"/>
+
     <!-- Default level for loggers is INFO-->
     <root level="ERROR">
         <appender-ref ref="console"/>

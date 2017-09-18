@@ -45,7 +45,7 @@ http://localhost:8080/todo/swagger-ui.html
 ### Postgresql docker
 Pull image
 ```bash
-
+docker pull postgres:9.6.1
 ```
 
 Run docker with relative volume mount, bridge ports, name postgres and remove container after finish

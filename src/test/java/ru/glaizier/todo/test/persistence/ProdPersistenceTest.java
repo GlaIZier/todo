@@ -1,5 +1,11 @@
 package ru.glaizier.todo.test.persistence;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -7,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -19,15 +26,13 @@ import ru.glaizier.todo.model.dto.UserDto;
 import ru.glaizier.todo.persistence.Persistence;
 import ru.glaizier.todo.persistence.exception.AccessDeniedException;
 
-import javax.transaction.Transactional;
 import java.lang.invoke.MethodHandles;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import javax.transaction.Transactional;
 
 /**
  * Run these tests with prod db when needed
@@ -198,127 +203,127 @@ public class ProdPersistenceTest {
     }
 
     // Users
-//    @Test
-//    @Ignore
-//    public void findUsers() {
-//        int usersSize = p.findUsers().size();
-//        UserDto dummyUser2 = dummyUser.toBuilder().login("dummyLogin2").password("dummyPassword2".toCharArray())
-//                .roles(Optional.of(new HashSet<>(Collections.singletonList(dummyRole)))).build();
-//        p.saveUser(dummyUser2.getLogin(), dummyUser2.getPassword(), new HashSet<>(Collections.singletonList(dummyRole)));
-//        assertThat(p.findUsers().size(), is(usersSize + 1));
-//    }
+    @Test
+    @Ignore
+    public void findUsers() {
+        int usersSize = p.findUsers().size();
+        UserDto dummyUser2 = dummyUser.toBuilder().login("dummyLogin2").password("dummyPassword2".toCharArray())
+                .roles(Optional.of(new HashSet<>(Collections.singletonList(dummyRole)))).build();
+        p.saveUser(dummyUser2.getLogin(), dummyUser2.getPassword(), new HashSet<>(Collections.singletonList(dummyRole)));
+        assertThat(p.findUsers().size(), is(usersSize + 1));
+    }
 
-//    @Test
-//    @Ignore
-//    public void findUserByLogin() {
-//        assertThat(p.findUser(dummyUser.getLogin()), is(dummyUser));
-//        assertThat(p.findUser(dummyUser.getLogin()), is(p.findUser(dummyUser.getLogin(), dummyUser.getPassword())));
-//    }
+    @Test
+    @Ignore
+    public void findUserByLogin() {
+        assertThat(p.findUser(dummyUser.getLogin()), is(dummyUser));
+        assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
+    }
 
-//    @Test
-//    @Ignore
-//    public void getNullForNonExistUserOnFindUserByLogin() {
-//        assertNull(p.findUser("nonExistingLogin"));
-//    }
+    @Test
+    @Ignore
+    public void getNullForNonExistUserOnFindUserByLogin() {
+        assertNull(p.findUser("nonExistingLogin"));
+    }
 
-//    @Test
-//    @Ignore
-//    public void findUserByLoginAndPassword() {
-//        assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()),
-//                is(dummyUser));
-//    }
+    @Test
+    @Ignore
+    public void findUserByLoginAndPassword() {
+        assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()),
+                is(dummyUser));
+    }
 
-//    @Test
-//    @Ignore
-//    public void getNullForWrongPasswordOnFindUserByLoginAndPassword() {
-//        assertNull(p.findUser(dummyUser.getLogin(), wrongDummyUser.getPassword()));
-//    }
+    @Test
+    @Ignore
+    public void getNullForWrongPasswordOnFindUserByLoginAndPassword() {
+        assertNull(p.findUser(dummyUser.getLogin(), wrongDummyUser.getPassword()));
+    }
 
-//    @Test
-//    @Ignore
-//    public void getNullForNonExistUserOnFindUserByLoginAndPassword() {
-//        assertNull(p.findUser("nonExistingLogin", wrongDummyUser.getPassword()));
-//    }
+    @Test
+    @Ignore
+    public void getNullForNonExistUserOnFindUserByLoginAndPassword() {
+        assertNull(p.findUser("nonExistingLogin", wrongDummyUser.getPassword()));
+    }
 
-//    @Test
-//    @Ignore
-//    public void saveUser() {
-//        int rolesSize = p.findRoles().size();
-//        UserDto dummyUser2 = dummyUser.toBuilder().login("dummyLogin2").password("dummyPassword2".toCharArray())
-//                .roles(Optional.of(new HashSet<>(Collections.singletonList(dummyRole)))).build();
-//
-//        assertThat(p.saveUser(dummyUser2.getLogin(), dummyUser2.getPassword(), new HashSet<>(Collections.singletonList(dummyRole))),
-//                is(dummyUser2));
-//        assertThat(p.findUser(dummyUser2.getLogin(), dummyUser2.getPassword()), is(dummyUser2));
-//
-//        assertTrue(p.findTasks(dummyUser2.getLogin()).isEmpty());
-//        assertThat(p.findRoles().size(), is(rolesSize));
-//    }
+    @Test
+    @Ignore
+    public void saveUser() {
+        int rolesSize = p.findRoles().size();
+        UserDto dummyUser2 = dummyUser.toBuilder().login("dummyLogin2").password("dummyPassword2".toCharArray())
+                .roles(Optional.of(new HashSet<>(Collections.singletonList(dummyRole)))).build();
 
-//    @Test
-//    @Ignore
-//    public void saveUserWithNoRoles() {
-//        int rolesSize = p.findRoles().size();
-//        UserDto dummyUser2 = dummyUser.toBuilder().login("dummyLogin2").password("dummyPassword2".toCharArray())
-//                .roles(Optional.of(new HashSet<>())).build();
-//
-//        assertThat(p.saveUser(dummyUser2.getLogin(), dummyUser2.getPassword(), new HashSet<>()), is(dummyUser2));
-//        assertThat(p.findUser(dummyUser2.getLogin(), dummyUser2.getPassword()), is(dummyUser2));
-//
-//        assertTrue(p.findTasks(dummyUser2.getLogin()).isEmpty());
-//        assertThat(p.findRoles().size(), is(rolesSize));
-//    }
+        assertThat(p.saveUser(dummyUser2.getLogin(), dummyUser2.getPassword(), new HashSet<>(Collections.singletonList(dummyRole))),
+                is(dummyUser2));
+        assertThat(p.findUser(dummyUser2.getLogin(), dummyUser2.getPassword()), is(dummyUser2));
 
-//    @Test(expected = JpaObjectRetrievalFailureException.class)
-//    @Ignore
-//    public void getExceptionOnSaveUserWithNonExistingRole() {
-//        UserDto dummyUser2 = dummyUser.toBuilder().login("dummyLogin2").password("dummyPassword2".toCharArray())
-//                .roles(Optional.of(new HashSet<>(Collections.singletonList(new RoleDto("nonExistingRole"))))).build();
-//        p.saveUser(dummyUser2.getLogin(), dummyUser2.getPassword(), dummyUser2.getRoles().orElse(null));
-//    }
+        assertTrue(p.findTasks(dummyUser2.getLogin()).isEmpty());
+        assertThat(p.findRoles().size(), is(rolesSize));
+    }
 
-//    @Test
-//    @Ignore
-//    public void saveUserWithNewRole() {
-//        int rolesSize = p.findRoles().size();
-//        RoleDto dummyRole2 = new RoleDto("dummyRole2");
-//        UserDto dummyUser2 = dummyUser.toBuilder().login("dummyLogin2").password("dummyPassword2".toCharArray())
-//                .roles(Optional.of(new HashSet<>(Collections.singletonList(new RoleDto("dummyRole2"))))).build();
-//        assertNull(p.findRole(dummyRole2.getRole()));
-//        try {
-//            p.saveUser(dummyUser2.getLogin(), dummyUser2.getPassword(), dummyUser2.getRoles().orElse(null));
-//        } catch (JpaObjectRetrievalFailureException e) {
-//            log.info(e.getMessage() + ". Creating new role...");
-//        }
-//        p.saveRole(dummyRole2.getRole());
-//        assertThat(p.saveUser(dummyUser2.getLogin(), dummyUser2.getPassword(), dummyUser2.getRoles().orElse(null)),
-//                is(dummyUser2));
-//
-//        assertThat(p.findUser(dummyUser2.getLogin(), dummyUser2.getPassword()), is(dummyUser2));
-//        assertTrue(p.findTasks(dummyUser2.getLogin()).isEmpty());
-//
-//        assertThat(p.findRole(dummyRole2.getRole()), is(dummyRole2));
-//        assertThat(p.findRoles().size(), is(rolesSize + 1));
-//    }
+    @Test
+    @Ignore
+    public void saveUserWithNoRoles() {
+        int rolesSize = p.findRoles().size();
+        UserDto dummyUser2 = dummyUser.toBuilder().login("dummyLogin2").password("dummyPassword2".toCharArray())
+                .roles(Optional.of(new HashSet<>())).build();
+
+        assertThat(p.saveUser(dummyUser2.getLogin(), dummyUser2.getPassword(), new HashSet<>()), is(dummyUser2));
+        assertThat(p.findUser(dummyUser2.getLogin(), dummyUser2.getPassword()), is(dummyUser2));
+
+        assertTrue(p.findTasks(dummyUser2.getLogin()).isEmpty());
+        assertThat(p.findRoles().size(), is(rolesSize));
+    }
+
+    @Test(expected = JpaObjectRetrievalFailureException.class)
+    @Ignore
+    public void getExceptionOnSaveUserWithNonExistingRole() {
+        UserDto dummyUser2 = dummyUser.toBuilder().login("dummyLogin2").password("dummyPassword2".toCharArray())
+                .roles(Optional.of(new HashSet<>(Collections.singletonList(new RoleDto("nonExistingRole"))))).build();
+        p.saveUser(dummyUser2.getLogin(), dummyUser2.getPassword(), dummyUser2.getRoles().orElse(null));
+    }
+
+    @Test
+    @Ignore
+    public void saveUserWithNewRole() {
+        int rolesSize = p.findRoles().size();
+        RoleDto dummyRole2 = new RoleDto("dummyRole2");
+        UserDto dummyUser2 = dummyUser.toBuilder().login("dummyLogin2").password("dummyPassword2".toCharArray())
+                .roles(Optional.of(new HashSet<>(Collections.singletonList(new RoleDto("dummyRole2"))))).build();
+        assertNull(p.findRole(dummyRole2.getRole()));
+        try {
+            p.saveUser(dummyUser2.getLogin(), dummyUser2.getPassword(), dummyUser2.getRoles().orElse(null));
+        } catch (JpaObjectRetrievalFailureException e) {
+            log.info(e.getMessage() + ". Creating new role...");
+        }
+        p.saveRole(dummyRole2.getRole());
+        assertThat(p.saveUser(dummyUser2.getLogin(), dummyUser2.getPassword(), dummyUser2.getRoles().orElse(null)),
+                is(dummyUser2));
+
+        assertThat(p.findUser(dummyUser2.getLogin(), dummyUser2.getPassword()), is(dummyUser2));
+        assertTrue(p.findTasks(dummyUser2.getLogin()).isEmpty());
+
+        assertThat(p.findRole(dummyRole2.getRole()), is(dummyRole2));
+        assertThat(p.findRoles().size(), is(rolesSize + 1));
+    }
 
 
-//    @Test
-//    @Ignore
-//    public void updateUser() {
-//        int rolesSize = p.findRoles().size();
-//        assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
-//
-//        RoleDto dummyRole2 = new RoleDto("dummyRole2");
-//        UserDto dummyUser2 = dummyUser.toBuilder().login("dummyLogin2").password("dummyPassword2".toCharArray())
-//                .roles(Optional.of(new HashSet<>(Collections.singletonList(new RoleDto("dummyRole2"))))).build();
-//        p.saveRole(dummyRole2.getRole());
-//
-//        p.saveUser(dummyUser.getLogin(), dummyUser2.getPassword(), dummyUser2.getRoles().orElse(null));
-//        assertThat(p.findUser(dummyUser.getLogin(), dummyUser2.getPassword()),
-//                is(dummyUser.toBuilder().password(dummyUser2.getPassword()).roles(dummyUser2.getRoles()).build()));
-//        assertThat(p.findUser(dummyUser.getLogin(), dummyUser2.getPassword()).getRoles().orElse(null).size(), is(1));
-//        assertThat(p.findRoles().size(), is(rolesSize + 1));
-//    }
+    @Test
+    @Ignore
+    public void updateUser() {
+        int rolesSize = p.findRoles().size();
+        assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
+
+        RoleDto dummyRole2 = new RoleDto("dummyRole2");
+        UserDto dummyUser2 = dummyUser.toBuilder().login("dummyLogin2").password("dummyPassword2".toCharArray())
+                .roles(Optional.of(new HashSet<>(Collections.singletonList(new RoleDto("dummyRole2"))))).build();
+        p.saveRole(dummyRole2.getRole());
+
+        p.saveUser(dummyUser.getLogin(), dummyUser2.getPassword(), dummyUser2.getRoles().orElse(null));
+        assertThat(p.findUser(dummyUser.getLogin(), dummyUser2.getPassword()),
+                is(dummyUser.toBuilder().password(dummyUser2.getPassword()).roles(dummyUser2.getRoles()).build()));
+        assertThat(p.findUser(dummyUser.getLogin(), dummyUser2.getPassword()).getRoles().orElse(null).size(), is(1));
+        assertThat(p.findRoles().size(), is(rolesSize + 1));
+    }
 
 
 //    @Test
@@ -331,42 +336,42 @@ public class ProdPersistenceTest {
 //    }
 
     // Roles
-//    @Test
-//    @Ignore
-//    public void findRoles() {
-//        int rolesSize = p.findRoles().size();
-//        RoleDto dummyRole2 = new RoleDto("dummyRole2");
-//        assertNull(p.findRole(dummyRole2.getRole()));
-//        assertThat(p.saveRole(dummyRole2.getRole()), is(dummyRole2));
-//        assertThat(p.findRoles().size(), is(rolesSize + 1));
-//    }
+    @Test
+    @Ignore
+    public void findRoles() {
+        int rolesSize = p.findRoles().size();
+        RoleDto dummyRole2 = new RoleDto("dummyRole2");
+        assertNull(p.findRole(dummyRole2.getRole()));
+        assertThat(p.saveRole(dummyRole2.getRole()), is(dummyRole2));
+        assertThat(p.findRoles().size(), is(rolesSize + 1));
+    }
 
-//    @Test
-//    @Ignore
-//    public void findRole() {
-//        assertThat(p.findRole(dummyRole.getRole()), is(dummyRole));
-//    }
+    @Test
+    @Ignore
+    public void findRole() {
+        assertThat(p.findRole(dummyRole.getRole()), is(dummyRole));
+    }
 
-//    @Test
-//    @Ignore
-//    public void getNullForNonExistRoleOnFindRoleByRole() {
-//        assertNull(p.findRole("nonExistingRole"));
-//    }
+    @Test
+    @Ignore
+    public void getNullForNonExistRoleOnFindRoleByRole() {
+        assertNull(p.findRole("nonExistingRole"));
+    }
 
-//    @Test
-//    @Ignore
-//    public void saveRole() {
-//        int rolesSize = p.findRoles().size();
-//        int usersSize = p.findUsers().size();
-//
-//        RoleDto dummyRole2 = new RoleDto("dummyRole2");
-//        assertNull(p.findRole(dummyRole2.getRole()));
-//        assertThat(p.saveRole(dummyRole2.getRole()), is(dummyRole2));
-//        assertThat(p.findRole(dummyRole2.getRole()), is(dummyRole2));
-//
-//        assertThat(p.findRoles().size(), is(rolesSize + 1));
-//        assertThat(p.findUsers().size(), is(usersSize));
-//    }
+    @Test
+    @Ignore
+    public void saveRole() {
+        int rolesSize = p.findRoles().size();
+        int usersSize = p.findUsers().size();
+
+        RoleDto dummyRole2 = new RoleDto("dummyRole2");
+        assertNull(p.findRole(dummyRole2.getRole()));
+        assertThat(p.saveRole(dummyRole2.getRole()), is(dummyRole2));
+        assertThat(p.findRole(dummyRole2.getRole()), is(dummyRole2));
+
+        assertThat(p.findRoles().size(), is(rolesSize + 1));
+        assertThat(p.findUsers().size(), is(usersSize));
+    }
 
 //    @Test
 //    @Ignore
