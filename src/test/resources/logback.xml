@@ -16,7 +16,7 @@
             <pattern>[%date{"yyyy-MM-dd'T'HH:mm:ss,SSSXXX"}] [%thread] %level %logger - %msg%n</pattern>
         </encoder>
 
-        <File>logs/todo.log</File>
+        <File>logs/todo-tests.log</File>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>logs/todo.%d{yyyy-MM-dd}.log</fileNamePattern>
@@ -26,7 +26,7 @@
 
     <logger name="ru.glaizier.todo" level="DEBUG"/>
 
-    <!-- Default level for loggers is INFO-->
+    <!-- Default level for loggers is DEBUG-->
     <root level="ERROR">
         <appender-ref ref="console"/>
         <appender-ref ref="file"/>

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<configuration>
+<!-- Debug true let us see logger config messages even in case of no errors-->
+<!-- Scan true let logback auto reload config in case of changes-->
+<!-- Packaging data true let logback show jar files in stack trace-->
+<configuration debug="true" scan="true" packagingData="true">
     <conversionRule conversionWord="mdc_values" converterClass="ru.glaizier.todo.log.MdcConverter"/>
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -29,10 +32,10 @@
     <!--<logger name="org.springframework" level="DEBUG"/>-->
     <!--<logger name="org.hibernate" level="TRACE"/>-->
     <!--<logger name="springfox" level="INFO"/>-->
-    <logger name="org" level="INFO"/>
-    <logger name="com" level="INFO"/>
+    <!--<logger name="org" level="INFO"/>-->
+    <!--<logger name="com" level="INFO"/>-->
 
-    <!-- Default level for loggers is INFO-->
+    <!-- Default level for loggers is DEBUG-->
     <root level="INFO">
         <appender-ref ref="console"/>
         <appender-ref ref="file"/>
