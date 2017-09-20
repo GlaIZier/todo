@@ -12,6 +12,8 @@ public interface TaskDao extends JpaRepository<Task, Integer>/*, OverrideTaskDao
 
 //    Task findTaskByIdAndLogin(Integer id, String login);
 
+    List<Task> findAll();
+
     List<Task> findTasksByUser(User user);
 
     Task findTaskById(Integer id);

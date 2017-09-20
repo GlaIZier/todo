@@ -1,5 +1,12 @@
 package ru.glaizier.todo.test.persistence;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,15 +28,12 @@ import ru.glaizier.todo.persistence.role.RoleDao;
 import ru.glaizier.todo.persistence.task.TaskDao;
 import ru.glaizier.todo.persistence.user.UserDao;
 
-import javax.transaction.Transactional;
 import java.lang.invoke.MethodHandles;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
+import javax.transaction.Transactional;
 
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -68,7 +72,12 @@ public class TaskDaoTest {
 
 
     @Test
-    public void getTasks() {
+    public void findAll() {
+        assertThat(taskDao.findAll().size(), is(4));
+    }
+
+    @Test
+    public void findByUser() {
         List<Task> tasks = taskDao.findTasksByUser(dummyUser);
         assertThat(tasks.size(), is(1));
         assertThat(tasks.get(0), is(dummyTask));

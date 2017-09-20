@@ -68,6 +68,14 @@ public class PersistenceTest {
     // Tasks
     @Test
     public void getTasks() {
+        List<TaskDto> tasks = p.findTasks();
+        assertThat(tasks.size(), is(4));
+        assertThat(tasks.get(3), is(dummyTask));
+//        tasks.forEach((t) -> log.debug(t.toString()));
+    }
+
+    @Test
+    public void getTasksByLogin() {
         List<TaskDto> tasks = p.findTasks(dummyUser.getLogin());
         assertThat(tasks.size(), is(1));
         assertThat(tasks.get(0), is(dummyTask.toBuilder().user(Optional.empty()).build()));

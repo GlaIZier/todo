@@ -51,6 +51,20 @@ public class PersistenceService implements Persistence {
     }
 
     @Override
+    public List<TaskDto> findTasks() {
+        List<Task> tasks = taskDao.findAll();
+        if (tasks == null)
+            return new ArrayList<>();
+        return tasks.stream().collect(ArrayList::new,
+                (acc, t) -> {
+                    User user = t.getUser();
+                    Set<Role> roles = user.getRoles();
+                    UserDto userDto = UserDto.builder().login(user.getLogin()).password(user.getPassword()).roles(Optional.of(transformRoles(roles))).build();
+                    acc.add(new TaskDto(t.getId(), Optional.of(userDto), t.getTodo()));
+                }, ArrayList::addAll);
+    }
+
+    @Override
     public List<TaskDto> findTasks(String login) {
         User user = userDao.findUserByLogin(login);
         if (user == null)

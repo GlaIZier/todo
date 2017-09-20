@@ -13,6 +13,8 @@ public interface Persistence {
     // All methods return null when login wasn't found
     // and throw exception in case of errors or security problems
 
+    List<TaskDto> findTasks();
+
     List<TaskDto> findTasks(String login);
 
     TaskDto findTask(Integer id);
