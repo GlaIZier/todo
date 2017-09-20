@@ -156,6 +156,7 @@ public class PersistenceTest {
         assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
         assertThat(p.findRole(dummyRole.getRole()), is(dummyRole));
         assertTrue(p.findTasks(dummyUser.getLogin()).isEmpty());
+        assertThat(p.findTasks().size(), is(3));
     }
 
     @Test
@@ -190,11 +191,11 @@ public class PersistenceTest {
     // Users
     @Test
     public void findUsers() {
-        int usersSize = p.findUsers().size();
+        assertThat(p.findUsers().size(), is(3));
         UserDto dummyUser2 = dummyUser.toBuilder().login("dummyLogin2").password("dummyPassword2".toCharArray())
                 .roles(Optional.of(new HashSet<>(Collections.singletonList(dummyRole)))).build();
         p.saveUser(dummyUser2.getLogin(), dummyUser2.getPassword(), new HashSet<>(Collections.singletonList(dummyRole)));
-        assertThat(p.findUsers().size(), is(usersSize + 1));
+        assertThat(p.findUsers().size(), is(4));
     }
 
     @Test
@@ -307,6 +308,8 @@ public class PersistenceTest {
         p.deleteUser(dummyUser.getLogin());
         assertNull(p.findUser(dummyUser.getLogin()));
         assertThat(p.findRoles().size(), is(rolesSize));
+        assertThat(p.findTasks().size(), is(3));
+        assertNull(p.findTasks(dummyUser.getLogin()));
     }
 
     // Roles
