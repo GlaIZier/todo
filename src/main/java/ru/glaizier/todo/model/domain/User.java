@@ -1,6 +1,5 @@
 package ru.glaizier.todo.model.domain;
 
-import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.LAZY;
 
 import lombok.Builder;
@@ -31,7 +30,7 @@ public class User {
     @Column(nullable = false, length = 30)
     private char[] password;
 
-    @OneToMany(fetch = LAZY, mappedBy = "user", cascade = PERSIST)
+    @OneToMany(fetch = LAZY, mappedBy = "user"/*, cascade = PERSIST*/)
     private Set<Task> tasks;
 
     @ManyToMany(fetch = LAZY
