@@ -2,6 +2,7 @@ package ru.glaizier.todo.test.persistence;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -326,14 +327,17 @@ public class ProdPersistenceTest {
     }
 
 
-//    @Test
-//    @Ignore
-//    public void deleteUser() {
-//        assertNotNull(p.findUser(dummyUser.getLogin()));
-//        p.deleteUser(dummyUser.getLogin());
-//        assertNull(p.findUser(dummyUser.getLogin()));
+    @Test
+    @Ignore
+    // Todo check exception
+    public void deleteUser() {
+        assertNotNull(p.findUser(dummyUser.getLogin()));
+        p.deleteUser(dummyUser.getLogin());
+        assertNull(p.findUser(dummyUser.getLogin()));
+        // Here exception is thrown about unsaved transient object. Don't know why yet
+//        assertThat(p.findUsers().size(), is(0));
 //        assertThat(p.findRole(dummyRole.getRole()), is(dummyRole));
-//    }
+    }
 
     // Roles
     @Test
@@ -373,20 +377,22 @@ public class ProdPersistenceTest {
         assertThat(p.findUsers().size(), is(usersSize));
     }
 
-//    @Test
-//    @Ignore
-//    public void deleteRole() {
-//        int rolesSize = p.findRoles().size();
-//        int usersSize = p.findUsers().size();
-//        assertNotNull(p.findRole(dummyRole.getRole()));
-//        assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
-//
-//        p.deleteRole(dummyRole.getRole());
-//
-//        assertNull(p.findRole(dummyRole.getRole()));
-//        assertThat(p.findRoles().size(), is(rolesSize - 1));
+    @Test
+    @Ignore
+    // Todo check why it is cached
+    public void deleteRole() {
+        int rolesSize = p.findRoles().size();
+        int usersSize = p.findUsers().size();
+        assertNotNull(p.findRole(dummyRole.getRole()));
+        assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
+
+        p.deleteRole(dummyRole.getRole());
+
+        assertNull(p.findRole(dummyRole.getRole()));
+        assertThat(p.findRoles().size(), is(rolesSize - 1));
+        // Here we still have dummy role inside dummyUser. Probably it is cached in hibernate.
 //        assertThat(p.findUser(dummyUser.getLogin()), is(dummyUser.toBuilder().roles(Optional.of(new HashSet<>())).build()));
-//        assertThat(p.findUsers().size(), is(usersSize));
-//    }
+        assertThat(p.findUsers().size(), is(usersSize));
+    }
 
 }
