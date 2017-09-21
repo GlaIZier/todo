@@ -19,7 +19,7 @@ import javax.persistence.*;
 @Table(name = "Task", schema = "todo")
 public class Task {
     @Id
-    // Todo check for postgres generated table: https://stackoverflow.com/questions/39807483/sequence-hibernate-sequence-not-found-sql-statement
+    // https://stackoverflow.com/questions/39807483/sequence-hibernate-sequence-not-found-sql-statement
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private Integer id;

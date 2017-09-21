@@ -22,6 +22,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableJpaRepositories(basePackages = "ru.glaizier.todo.persistence")
 @EnableTransactionManagement
+@Profile({"default", "prod"})
 // Todo create postgres docker prod datasource
 public class DbConfig {
 
@@ -65,6 +66,7 @@ public class DbConfig {
 
     // uncomment to select from embedded db in console
 //    @PostConstruct
+//    @Profile("default")
 //    public void startDBManager() {
 //        //hsqldb
 //        DatabaseManagerSwing.main(new String[]{"--url", "jdbc:hsqldb:mem:MemoryTaskDb", "--user", "sa", "--password", ""});
@@ -106,6 +108,7 @@ public class DbConfig {
     }
 
     @Bean
+    @Profile({"default", "prod"})
     public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
         JpaTransactionManager txManager = new JpaTransactionManager();
         txManager.setEntityManagerFactory(emf);

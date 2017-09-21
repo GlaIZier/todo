@@ -5,46 +5,43 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import ru.glaizier.todo.model.dto.RoleDto;
+import ru.glaizier.todo.persistence.Persistence;
 import ru.glaizier.todo.properties.PropertiesService;
 import ru.glaizier.todo.security.handler.ApiLogoutHandler;
 import ru.glaizier.todo.security.handler.LoginSuccessHandler;
 import ru.glaizier.todo.security.token.TokenService;
 
-import javax.sql.DataSource;
+import java.util.stream.Collectors;
 
 @Configuration
 @Order(3)
-@Profile({"default", "prod"})
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    private static final String USER_BY_LOGIN_QUERY = "select login, password, true as enabled from todo.User where login=?";
-    private static final String AUTHORITY_BY_LOGIN_QUERY = "select login, role from todo.Authorization where login=?";
+@Profile("memory")
+public class MemoryWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PropertiesService propertiesService;
 
     private final TokenService tokenService;
 
-    private final DataSource dataSource;
+    private final Persistence persistence;
 
-    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public WebSecurityConfig(
+    public MemoryWebSecurityConfig(
             TokenService tokenService,
             PropertiesService propertiesService,
-            DataSource dataSource,
-            PasswordEncoder passwordEncoder) {
+            Persistence persistence) {
         this.propertiesService = propertiesService;
         this.tokenService = tokenService;
-        this.dataSource = dataSource;
-        this.passwordEncoder = passwordEncoder;
+        this.persistence = persistence;
     }
 
     @Bean
@@ -57,33 +54,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new ApiLogoutHandler(tokenService, propertiesService.getApiTokenCookieName());
     }
 
-//    @Bean
-//    public UserDetailsService inMemoryUserDetailsService() throws Exception {
-//        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+    @Bean
+    public UserDetailsService inMemoryUserDetailsService() throws Exception {
+        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
 //        manager.createUser(User.withUsername("u").password("p").roles("USER").build());
 //        manager.createUser(User.withUsername("a").password("p").roles("USER", "ADMIN").build());
-//        return manager;
-////        userDao.getUsers().forEach(user ->
-////            manager.createUser(
-////                    User.withUsername(user.getLogin()).password(String.valueOf(user.getPassword()))
-////                            // Roles -> (to) Strings -> List of Strings -> array of Strings
-////                            .roles(user.getRoles().stream().map(Role::toString).collect(Collectors.toList())
-////                                    .toArray(new String[user.getRoles().size()]))
-////                            .build())
-////        );
-//    }
-
-    @Override
-    // configure UserDetailsService
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication()
-                .dataSource(dataSource)
-                .usersByUsernameQuery(USER_BY_LOGIN_QUERY)
-                .authoritiesByUsernameQuery(AUTHORITY_BY_LOGIN_QUERY)
-                .passwordEncoder(passwordEncoder);
-//        auth.userDetailsService(inMemoryUserDetailsService());
-        // Don't erase password after authentication
-        auth.eraseCredentials(false);
+        persistence.findUsers().forEach(user ->
+                manager.createUser(
+                        User.withUsername(user.getLogin()).password(String.valueOf(user.getPassword()))
+                                // Roles -> (to) Strings -> List of Strings -> array of Strings
+                                .roles(user.getRoles().orElseThrow(IllegalStateException::new).stream().map(RoleDto::getRole).collect(Collectors.toList())
+                                        .toArray(new String[user.getRoles().orElseThrow(IllegalStateException::new).size()]))
+                                .build())
+        );
+        return manager;
     }
 
     @Override

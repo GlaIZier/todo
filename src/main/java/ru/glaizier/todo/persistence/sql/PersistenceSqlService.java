@@ -1,6 +1,7 @@
 package ru.glaizier.todo.persistence.sql;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import ru.glaizier.todo.model.dto.Authorization;
 import ru.glaizier.todo.persistence.exception.PersistenceException;
@@ -16,6 +17,7 @@ import javax.sql.DataSource;
 
 
 @Service
+@Profile({"default", "prod"})
 public class PersistenceSqlService implements PersistenceSql {
 
     private DataSource dataSource;

@@ -37,7 +37,8 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(value = {"/api/v1/me/tasks", "/api/me/tasks"})
-// todo create react
+// Todo create web application
+// Todo create react
 // Ide shows error but this works
 @RequiredArgsConstructor(onConstructor_ = {
         @Autowired

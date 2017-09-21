@@ -3,6 +3,7 @@ package ru.glaizier.todo.persistence;
 import static java.lang.String.format;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.glaizier.todo.model.domain.Role;
@@ -28,6 +29,7 @@ import javax.transaction.Transactional;
 
 @Service
 @Transactional
+@Profile({"default", "prod"})
 public class PersistenceService implements Persistence {
 
     private final TaskDao taskDao;
