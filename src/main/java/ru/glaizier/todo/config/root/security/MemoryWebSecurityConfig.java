@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
@@ -25,6 +26,8 @@ import java.util.stream.Collectors;
 @Configuration
 @Order(3)
 @Profile("memory")
+// Todo add hierarchy
+// Todo add update userDetailsManager when saveUser, updateUser and deleteUser
 public class MemoryWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PropertiesService propertiesService;
@@ -32,7 +35,6 @@ public class MemoryWebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final TokenService tokenService;
 
     private final Persistence persistence;
-
 
     @Autowired
     public MemoryWebSecurityConfig(
@@ -62,13 +64,25 @@ public class MemoryWebSecurityConfig extends WebSecurityConfigurerAdapter {
         persistence.findUsers().forEach(user ->
                 manager.createUser(
                         User.withUsername(user.getLogin()).password(String.valueOf(user.getPassword()))
-                                // Roles -> (to) Strings -> List of Strings -> array of Strings
-                                .roles(user.getRoles().orElseThrow(IllegalStateException::new).stream().map(RoleDto::getRole).collect(Collectors.toList())
+                                // Roles -> (to) Strings -> Remove ROLE_ from strings -> List of Strings -> array of Strings
+                                .roles(user.getRoles().orElseThrow(IllegalStateException::new).stream()
+                                        .map(RoleDto::getRole)
+                                        .map(r -> r.replaceFirst("ROLE_", ""))
+                                        .collect(Collectors.toList())
                                         .toArray(new String[user.getRoles().orElseThrow(IllegalStateException::new).size()]))
                                 .build())
         );
         return manager;
     }
+
+    @Override
+    // configure UserDetailsService
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(inMemoryUserDetailsService());
+        // Don't erase password after authentication
+        auth.eraseCredentials(false);
+    }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

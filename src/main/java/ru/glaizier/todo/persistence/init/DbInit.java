@@ -14,7 +14,7 @@ import java.util.HashSet;
 import javax.annotation.PostConstruct;
 
 @Configuration
-@Profile("default")
+@Profile({"default"/*, "memory"*/})
 public class DbInit {
 
     private Persistence persistence;
