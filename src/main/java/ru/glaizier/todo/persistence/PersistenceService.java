@@ -131,6 +131,9 @@ public class PersistenceService implements Persistence {
             return null;
 
         Task task = taskDao.findTaskById(id);
+        if (task == null)
+            return null;
+
         if (!task.getUser().getLogin().equals(login))
             throw new AccessDeniedException(format("User with login %s doesn't have rights to access task with %d id!",
                     login, id));

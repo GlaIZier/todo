@@ -1,6 +1,11 @@
 package ru.glaizier.todo.persistence.memory;
 
+import static java.lang.String.format;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.glaizier.todo.model.dto.RoleDto;
 import ru.glaizier.todo.model.dto.TaskDto;
@@ -9,6 +14,7 @@ import ru.glaizier.todo.persistence.Persistence;
 import ru.glaizier.todo.persistence.exception.AccessDeniedException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -18,10 +24,10 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Service
 @Profile("memory")
-// Todo add update userDetailsManager when saveUser, updateUser and deleteUser
 public class MemoryPersistenceService implements Persistence {
 
     private final ConcurrentMap<String, ConcurrentMap<Integer, TaskDto>> loginToIdToTask = new ConcurrentHashMap<>();
@@ -31,6 +37,15 @@ public class MemoryPersistenceService implements Persistence {
     private final ConcurrentMap<String, RoleDto> nameToRole = new ConcurrentHashMap<>();
 
     private AtomicInteger lastId = new AtomicInteger(0);
+
+    private final InMemoryUserDetailsManager userDetailsManager;
+
+    private final Object userDetailsLock = new Object();
+
+    @Autowired
+    public MemoryPersistenceService(InMemoryUserDetailsManager userDetailsManager) {
+        this.userDetailsManager = userDetailsManager;
+    }
 
     @Override
     public List<TaskDto> findTasks() {
@@ -43,17 +58,25 @@ public class MemoryPersistenceService implements Persistence {
 
     @Override
     public List<TaskDto> findTasks(String login) {
-        return null;
+        return new ArrayList<>(loginToIdToTask.get(login).values());
     }
 
     @Override
     public TaskDto findTask(Integer id) {
-        return null;
+        return loginToIdToTask.values().stream()
+                .filter(idToTask -> idToTask.get(id) != null)
+                .findFirst()
+                .orElseGet(ConcurrentHashMap::new)
+                .get(id);
     }
 
     @Override
     public TaskDto findTask(Integer id, String login) throws AccessDeniedException {
-        return null;
+        try {
+            return loginToIdToTask.get(login).get(id);
+        } catch (NullPointerException e) {
+            return null;
+        }
     }
 
     @Override
@@ -72,17 +95,48 @@ public class MemoryPersistenceService implements Persistence {
 
     @Override
     public TaskDto updateTask(String login, Integer id, String todo) throws AccessDeniedException {
-        return null;
+        Objects.requireNonNull(login);
+        Objects.requireNonNull(id);
+        Objects.requireNonNull(todo);
+
+        UserDto userByLogin = loginToUser.get(login);
+        if (userByLogin == null)
+            return null;
+
+        TaskDto task = findTask(id);
+        if (task == null)
+            return null;
+
+        if (!task.getUser().orElseThrow(IllegalStateException::new).getLogin().equals(login))
+            throw new AccessDeniedException(format("User with login %s doesn't have rights to access task with %d id!",
+                    login, id));
+
+        TaskDto updatedTask = TaskDto.builder().id(id).user(task.getUser()).todo(todo).build();
+        loginToIdToTask.get(login).put(id, updatedTask);
+        return updatedTask;
     }
 
     @Override
     public TaskDto deleteTask(Integer id) {
-        return null;
+        TaskDto task = findTask(id);
+        if (task == null) {
+            return null;
+        }
+
+        loginToIdToTask.values().stream()
+                .filter(idToTask -> idToTask.get(id) != null)
+                .findFirst()
+                .orElseThrow(IllegalStateException::new)
+                .remove(id);
+
+        return task;
     }
 
     @Override
     public TaskDto deleteTask(Integer id, String login) throws AccessDeniedException {
-        return null;
+        if (findTask(id, login) == null)
+            return null;
+        return deleteTask(id);
     }
 
     @Override
@@ -92,12 +146,15 @@ public class MemoryPersistenceService implements Persistence {
 
     @Override
     public UserDto findUser(String login) {
-        return null;
+        return loginToUser.get(login);
     }
 
     @Override
     public UserDto findUser(String login, char[] rawPassword) {
-        return null;
+        UserDto user = findUser(login);
+        if (user == null || !Arrays.equals(user.getPassword(), rawPassword))
+            return null;
+        return user;
     }
 
     @Override
@@ -105,6 +162,8 @@ public class MemoryPersistenceService implements Persistence {
         Objects.requireNonNull(login);
         Objects.requireNonNull(rawPassword);
         Objects.requireNonNull(roles);
+        if (roles.isEmpty())
+            throw new IllegalArgumentException("Roles are empty!");
         for (RoleDto role : roles)
             if (findRole(role.getRole()) == null)
                 throw new IllegalArgumentException("Role hasn't been found " + role.getRole());
@@ -113,6 +172,27 @@ public class MemoryPersistenceService implements Persistence {
         loginToUser.put(login, newUser);
         loginToIdToTask.put(login, new ConcurrentHashMap<>());
 
+        synchronized (userDetailsLock) {
+            if (!userDetailsManager.userExists(login))
+                userDetailsManager.createUser(
+                        User.withUsername(newUser.getLogin()).password(String.valueOf(newUser.getPassword()))
+                                // Roles -> (to) Strings -> Remove ROLE_ from strings -> List of Strings -> array of Strings
+                                .roles(newUser.getRoles().orElseThrow(IllegalStateException::new).stream()
+                                        .map(RoleDto::getRole)
+                                        .map(r -> r.replaceFirst("ROLE_", ""))
+                                        .collect(Collectors.toList())
+                                        .toArray(new String[newUser.getRoles().orElseThrow(IllegalStateException::new).size()]))
+                                .build());
+            else
+                userDetailsManager.updateUser(User.withUsername(newUser.getLogin()).password(String.valueOf(newUser.getPassword()))
+                        // Roles -> (to) Strings -> Remove ROLE_ from strings -> List of Strings -> array of Strings
+                        .roles(newUser.getRoles().orElseThrow(IllegalStateException::new).stream()
+                                .map(RoleDto::getRole)
+                                .map(r -> r.replaceFirst("ROLE_", ""))
+                                .collect(Collectors.toList())
+                                .toArray(new String[newUser.getRoles().orElseThrow(IllegalStateException::new).size()]))
+                        .build());
+        }
         return newUser;
     }
 
@@ -123,12 +203,15 @@ public class MemoryPersistenceService implements Persistence {
 
     @Override
     public void deleteUser(String login) {
-
+        loginToUser.remove(login);
+        synchronized (userDetailsLock) {
+            userDetailsManager.deleteUser(login);
+        }
     }
 
     @Override
     public List<RoleDto> findRoles() {
-        return null;
+        return new ArrayList<>(nameToRole.values());
     }
 
     @Override
@@ -145,6 +228,6 @@ public class MemoryPersistenceService implements Persistence {
 
     @Override
     public void deleteRole(String role) {
-
+        nameToRole.remove(role);
     }
 }

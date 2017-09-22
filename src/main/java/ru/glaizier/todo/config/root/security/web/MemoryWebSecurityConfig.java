@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
@@ -33,7 +32,7 @@ public class MemoryWebSecurityConfig extends WebSecurityConfigAdapter {
     }
 
     @Bean
-    public UserDetailsService inMemoryUserDetailsService() throws Exception {
+    public InMemoryUserDetailsManager inMemoryUserDetailsService() throws Exception {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
 //        manager.createUser(User.withUsername("u").password("p").roles("USER").build());
 //        manager.createUser(User.withUsername("a").password("p").roles("USER", "ADMIN").build());
