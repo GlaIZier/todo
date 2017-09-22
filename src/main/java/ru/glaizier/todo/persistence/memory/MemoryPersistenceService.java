@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @Profile("memory")
+// Todo add update userDetailsManager when saveUser, updateUser and deleteUser
 public class MemoryPersistenceService implements Persistence {
 
     private final ConcurrentMap<String, ConcurrentMap<Integer, TaskDto>> loginToIdToTask = new ConcurrentHashMap<>();

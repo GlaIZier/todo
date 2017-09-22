@@ -16,44 +16,28 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import ru.glaizier.todo.model.dto.RoleDto;
 import ru.glaizier.todo.persistence.Persistence;
-import ru.glaizier.todo.properties.PropertiesService;
-import ru.glaizier.todo.security.handler.ApiLogoutHandler;
-import ru.glaizier.todo.security.handler.LoginSuccessHandler;
-import ru.glaizier.todo.security.token.TokenService;
 
 import java.util.stream.Collectors;
 
 @Configuration
 @Order(3)
 @Profile("memory")
-// Todo add hierarchy
-// Todo add update userDetailsManager when saveUser, updateUser and deleteUser
 public class MemoryWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final PropertiesService propertiesService;
+    private final AuthenticationSuccessHandler authenticationSuccessHandler;
 
-    private final TokenService tokenService;
+    private final LogoutHandler apiLogoutHandler;
 
     private final Persistence persistence;
 
     @Autowired
     public MemoryWebSecurityConfig(
-            TokenService tokenService,
-            PropertiesService propertiesService,
+            AuthenticationSuccessHandler authenticationSuccessHandler,
+            LogoutHandler apiLogoutHandler,
             Persistence persistence) {
-        this.propertiesService = propertiesService;
-        this.tokenService = tokenService;
+        this.authenticationSuccessHandler = authenticationSuccessHandler;
+        this.apiLogoutHandler = apiLogoutHandler;
         this.persistence = persistence;
-    }
-
-    @Bean
-    public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return new LoginSuccessHandler(tokenService, propertiesService.getApiTokenCookieName());
-    }
-
-    @Bean
-    public LogoutHandler apiLogoutHandler() {
-        return new ApiLogoutHandler(tokenService, propertiesService.getApiTokenCookieName());
     }
 
     @Bean
@@ -98,7 +82,7 @@ public class MemoryWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/login?error")
                 .usernameParameter("user")
                 .passwordParameter("password")
-                .successHandler(authenticationSuccessHandler())
+                .successHandler(authenticationSuccessHandler)
 
                 // logout
                 .and()
@@ -111,7 +95,7 @@ public class MemoryWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // Session invalidation is called by default. remember-me-cookie is removed by default.
                 // If it is added here then set-cookie header appears twice
 //                .deleteCookies(propertiesService.getApiTokenCookieName())
-                .addLogoutHandler(apiLogoutHandler())
+                .addLogoutHandler(apiLogoutHandler)
 
                 // Default in-memory hash implementation. This doesn't save remember-me cookie if server restarts.
                 // To enable saving between restarts table persistent_logins in db needs to be created and it will be

@@ -6,7 +6,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 import ru.glaizier.todo.properties.PropertiesService;
+import ru.glaizier.todo.security.handler.ApiLogoutHandler;
+import ru.glaizier.todo.security.handler.LoginSuccessHandler;
 import ru.glaizier.todo.security.token.JwtTokenService;
 import ru.glaizier.todo.security.token.TokenService;
 
@@ -35,6 +39,16 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new StandardPasswordEncoder(propertiesService.getPasswordEncoderSecret());
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return new LoginSuccessHandler(tokenService(), propertiesService.getApiTokenCookieName());
+    }
+
+    @Bean
+    public LogoutHandler apiLogoutHandler() {
+        return new ApiLogoutHandler(tokenService(), propertiesService.getApiTokenCookieName());
     }
 
 }
