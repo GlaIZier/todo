@@ -8,7 +8,6 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -47,7 +46,7 @@ import javax.transaction.Transactional;
 @WebAppConfiguration
 @ActiveProfiles("prod")
 @Transactional
-@Ignore
+//@Ignore
 public class ProdPersistenceTest {
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -140,6 +139,12 @@ public class ProdPersistenceTest {
                 is(updatedTodo));
         assertThat(p.findTask(p.findTasks(dummyUser.getLogin()).get(0).getId(), dummyUser.getLogin()).getTodo(), is(updatedTodo));
         assertThat(p.findTasks(dummyUser.getLogin()).size(), is(1));
+    }
+
+    @Test
+    public void getNullOnUpdateTaskForUnknownId() {
+        String updatedTodo = "dummyTodo2";
+        assertNull(p.updateTask(dummyUser.getLogin(), 10000, updatedTodo));
     }
 
     @Test()

@@ -136,6 +136,12 @@ public class DefaultPersistenceTest {
         assertThat(p.findTasks(dummyUser.getLogin()).size(), is(1));
     }
 
+    @Test
+    public void getNullOnUpdateTaskForUnknownId() {
+        String updatedTodo = "dummyTodo2";
+        assertNull(p.updateTask(dummyUser.getLogin(), 10000, updatedTodo));
+    }
+
     @Test()
     public void getNullOnUpdateTaskForUnknownUser() {
         String updatedTodo = "dummyTodo2";
