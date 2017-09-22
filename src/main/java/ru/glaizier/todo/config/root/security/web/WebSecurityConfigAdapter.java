@@ -1,58 +1,24 @@
-package ru.glaizier.todo.config.root.security;
+package ru.glaizier.todo.config.root.security.web;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.core.annotation.Order;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import javax.sql.DataSource;
-
-@Configuration
-@Order(3)
-@Profile({"default", "prod"})
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    private static final String USER_BY_LOGIN_QUERY = "select login, password, true as enabled from todo.User where login=?";
-    private static final String AUTHORITY_BY_LOGIN_QUERY = "select login, role from todo.Authorization where login=?";
+public abstract class WebSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 
     private final AuthenticationSuccessHandler authenticationSuccessHandler;
 
     private final LogoutHandler apiLogoutHandler;
 
-    private final DataSource dataSource;
-
-    private final PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public WebSecurityConfig(
+    public WebSecurityConfigAdapter(
             AuthenticationSuccessHandler authenticationSuccessHandler,
-            LogoutHandler apiLogoutHandler,
-            DataSource dataSource,
-            PasswordEncoder passwordEncoder) {
+            LogoutHandler apiLogoutHandler) {
         this.authenticationSuccessHandler = authenticationSuccessHandler;
         this.apiLogoutHandler = apiLogoutHandler;
-        this.dataSource = dataSource;
-        this.passwordEncoder = passwordEncoder;
     }
 
-    @Override
-    // configure UserDetailsService
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication()
-                .dataSource(dataSource)
-                .usersByUsernameQuery(USER_BY_LOGIN_QUERY)
-                .authoritiesByUsernameQuery(AUTHORITY_BY_LOGIN_QUERY)
-                .passwordEncoder(passwordEncoder);
-        // Don't erase password after authentication
-        auth.eraseCredentials(false);
-    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

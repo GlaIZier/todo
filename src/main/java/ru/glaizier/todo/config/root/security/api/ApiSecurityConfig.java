@@ -1,4 +1,4 @@
-package ru.glaizier.todo.config.root.security;
+package ru.glaizier.todo.config.root.security.api;
 
 
 import org.springframework.context.annotation.Configuration;
