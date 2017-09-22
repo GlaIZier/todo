@@ -8,7 +8,6 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -47,6 +46,7 @@ import javax.transaction.Transactional;
 @WebAppConfiguration
 @ActiveProfiles("prod")
 @Transactional
+//@Ignore
 public class ProdPersistenceTest {
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -72,16 +72,14 @@ public class ProdPersistenceTest {
 
     // Tasks
     @Test
-    @Ignore
     public void getTasks() {
         List<TaskDto> tasks = p.findTasks();
         assertThat(tasks.size(), is(1));
-        assertThat(tasks.get(0), is(dummyTask));
+        assertThat(tasks.get(0).getTodo(), is(dummyTask.getTodo()));
 //        tasks.forEach((t) -> log.debug(t.toString()));
     }
 
     @Test
-    @Ignore
     public void getTasksByLogin() {
         List<TaskDto> tasks = p.findTasks(dummyUser.getLogin());
         assertThat(tasks.size(), is(1));
@@ -89,13 +87,11 @@ public class ProdPersistenceTest {
     }
 
     @Test
-    @Ignore
     public void getNullOnGetTasksForUnknownUser() {
         assertNull(p.findTasks("nonExistingLogin"));
     }
 
     @Test
-    @Ignore
     public void saveTask() {
         TaskDto dummyTask2 = dummyTask.toBuilder().user(Optional.empty()).todo("dummyTodo2").build();
         assertThat(p.saveTask(dummyUser.getLogin(), dummyTask2.getTodo()).getTodo(), is(dummyTask2.getTodo()));
@@ -105,45 +101,38 @@ public class ProdPersistenceTest {
     }
 
     @Test()
-    @Ignore
     public void getNullOnSaveTaskForUnknownUser() {
         assertNull(p.saveTask("nonExistingLogin", dummyTask.getTodo()));
     }
 
     @Test
-    @Ignore
     public void getTaskOnGetTask() {
         assertThat(p.findTask(p.findTasks(dummyUser.getLogin()).get(0).getId()).getTodo(), is(dummyTask.getTodo()));
     }
 
     @Test
-    @Ignore
     public void getNullOnGetTaskForUnknownId() {
         assertNull(p.findTask(100000));
     }
 
     @Test
-    @Ignore
     public void getTaskOnGetTaskByIdAndLogin() {
         assertThat(p.findTask(p.findTasks(dummyUser.getLogin()).get(0).getId(), dummyUser.getLogin()).getTodo(),
                 is(dummyTask.getTodo()));
     }
 
     @Test
-    @Ignore
     public void getNullOnGetTaskByIdAndLoginForUnknownLogin() {
         assertNull(p.findTask(p.findTasks(dummyUser.getLogin()).get(0).getId(), "nonExistingLogin"));
     }
 
     @Test(expected = AccessDeniedException.class)
-    @Ignore
     public void getExceptionOnGetTaskByIdAndLoginForWrongLogin() {
         p.saveUser(wrongDummyUser.getLogin(), wrongDummyUser.getPassword(), wrongDummyUser.getRoles().orElse(null));
         p.findTask(p.findTasks(dummyUser.getLogin()).get(0).getId(), wrongDummyUser.getLogin());
     }
 
     @Test
-    @Ignore
     public void updateTask() {
         String updatedTodo = "dummyTodo2";
         assertThat(p.updateTask(dummyUser.getLogin(), p.findTasks(dummyUser.getLogin()).get(0).getId(), updatedTodo).getTodo(),
@@ -153,14 +142,12 @@ public class ProdPersistenceTest {
     }
 
     @Test()
-    @Ignore
     public void getNullOnUpdateTaskForUnknownUser() {
         String updatedTodo = "dummyTodo2";
         assertNull(p.updateTask("nonExistingLogin", p.findTasks(dummyUser.getLogin()).get(0).getId(), updatedTodo));
     }
 
     @Test(expected = AccessDeniedException.class)
-    @Ignore
     public void getExceptionOnUpdateTaskForUnknownUser() {
         String updatedTodo = "dummyTodo2";
         p.saveUser(wrongDummyUser.getLogin(), wrongDummyUser.getPassword(), wrongDummyUser.getRoles().orElse(null));
@@ -168,7 +155,6 @@ public class ProdPersistenceTest {
     }
 
     @Test
-    @Ignore
     public void deleteTaskById() {
         Integer id = p.findTasks(dummyUser.getLogin()).get(0).getId();
         assertThat(p.deleteTask(id).getTodo(), is(dummyTask.getTodo()));
@@ -179,7 +165,6 @@ public class ProdPersistenceTest {
     }
 
     @Test
-    @Ignore
     public void getNullOnRemoveTaskByIdWhenTaskNotExists() {
         assertNull(p.deleteTask(100));
         assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
@@ -187,7 +172,6 @@ public class ProdPersistenceTest {
     }
 
     @Test
-    @Ignore
     public void removeTaskByIdAndLogin() {
         Integer id = p.findTasks(dummyUser.getLogin()).get(0).getId();
         assertThat(p.deleteTask(id, dummyUser.getLogin()).getTodo(), is(dummyTask.getTodo()));
@@ -198,7 +182,6 @@ public class ProdPersistenceTest {
     }
 
     @Test
-    @Ignore
     public void getNullOnRemoveTaskByIdAndLoginWhenLoginNotExists() {
         assertNull(p.deleteTask(p.findTasks(dummyUser.getLogin()).get(0).getId(), wrongDummyUser.getLogin()));
         assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
@@ -206,7 +189,6 @@ public class ProdPersistenceTest {
     }
 
     @Test(expected = AccessDeniedException.class)
-    @Ignore
     public void getExceptionOnRemoveTaskByIdAndLoginWhenWrongLogin() {
         p.saveUser(wrongDummyUser.getLogin(), wrongDummyUser.getPassword(), wrongDummyUser.getRoles().orElse(null));
         assertNull(p.deleteTask(p.findTasks(dummyUser.getLogin()).get(0).getId(), wrongDummyUser.getLogin()));
@@ -214,7 +196,6 @@ public class ProdPersistenceTest {
 
     // Users
     @Test
-    @Ignore
     public void findUsers() {
         int usersSize = p.findUsers().size();
         UserDto dummyUser2 = dummyUser.toBuilder().login("dummyLogin2").password("dummyPassword2".toCharArray())
@@ -224,39 +205,33 @@ public class ProdPersistenceTest {
     }
 
     @Test
-    @Ignore
     public void findUserByLogin() {
         assertThat(p.findUser(dummyUser.getLogin()), is(dummyUser));
         assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
     }
 
     @Test
-    @Ignore
     public void getNullForNonExistUserOnFindUserByLogin() {
         assertNull(p.findUser("nonExistingLogin"));
     }
 
     @Test
-    @Ignore
     public void findUserByLoginAndPassword() {
         assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()),
                 is(dummyUser));
     }
 
     @Test
-    @Ignore
     public void getNullForWrongPasswordOnFindUserByLoginAndPassword() {
         assertNull(p.findUser(dummyUser.getLogin(), wrongDummyUser.getPassword()));
     }
 
     @Test
-    @Ignore
     public void getNullForNonExistUserOnFindUserByLoginAndPassword() {
         assertNull(p.findUser("nonExistingLogin", wrongDummyUser.getPassword()));
     }
 
     @Test
-    @Ignore
     public void saveUser() {
         int rolesSize = p.findRoles().size();
         UserDto dummyUser2 = dummyUser.toBuilder().login("dummyLogin2").password("dummyPassword2".toCharArray())
@@ -271,7 +246,6 @@ public class ProdPersistenceTest {
     }
 
     @Test
-    @Ignore
     public void saveUserWithNoRoles() {
         int rolesSize = p.findRoles().size();
         UserDto dummyUser2 = dummyUser.toBuilder().login("dummyLogin2").password("dummyPassword2".toCharArray())
@@ -285,7 +259,6 @@ public class ProdPersistenceTest {
     }
 
     @Test(expected = JpaObjectRetrievalFailureException.class)
-    @Ignore
     public void getExceptionOnSaveUserWithNonExistingRole() {
         UserDto dummyUser2 = dummyUser.toBuilder().login("dummyLogin2").password("dummyPassword2".toCharArray())
                 .roles(Optional.of(new HashSet<>(Collections.singletonList(new RoleDto("nonExistingRole"))))).build();
@@ -293,7 +266,6 @@ public class ProdPersistenceTest {
     }
 
     @Test
-    @Ignore
     public void saveUserWithNewRole() {
         int rolesSize = p.findRoles().size();
         RoleDto dummyRole2 = new RoleDto("dummyRole2");
@@ -318,7 +290,6 @@ public class ProdPersistenceTest {
 
 
     @Test
-    @Ignore
     public void updateUser() {
         int rolesSize = p.findRoles().size();
         assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
@@ -337,7 +308,6 @@ public class ProdPersistenceTest {
 
 
     @Test
-    @Ignore
     // Todo check exception
     public void deleteUser() {
         assertNotNull(p.findUser(dummyUser.getLogin()));
@@ -350,7 +320,6 @@ public class ProdPersistenceTest {
 
     // Roles
     @Test
-    @Ignore
     public void findRoles() {
         int rolesSize = p.findRoles().size();
         RoleDto dummyRole2 = new RoleDto("dummyRole2");
@@ -360,19 +329,16 @@ public class ProdPersistenceTest {
     }
 
     @Test
-    @Ignore
     public void findRole() {
         assertThat(p.findRole(dummyRole.getRole()), is(dummyRole));
     }
 
     @Test
-    @Ignore
     public void getNullForNonExistRoleOnFindRoleByRole() {
         assertNull(p.findRole("nonExistingRole"));
     }
 
     @Test
-    @Ignore
     public void saveRole() {
         int rolesSize = p.findRoles().size();
         int usersSize = p.findUsers().size();
@@ -387,7 +353,6 @@ public class ProdPersistenceTest {
     }
 
     @Test
-    @Ignore
     // Todo check why it is cached
     public void deleteRole() {
         int rolesSize = p.findRoles().size();
