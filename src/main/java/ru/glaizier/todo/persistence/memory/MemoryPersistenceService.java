@@ -1,7 +1,5 @@
 package ru.glaizier.todo.persistence.memory;
 
-import static java.lang.String.format;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.userdetails.User;
@@ -13,21 +11,18 @@ import ru.glaizier.todo.model.dto.UserDto;
 import ru.glaizier.todo.persistence.Persistence;
 import ru.glaizier.todo.persistence.exception.AccessDeniedException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import javax.annotation.PostConstruct;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
+
 @Service
 @Profile("memory")
+// Todo refactor package structure in persistence
 public class MemoryPersistenceService implements Persistence {
 
     private final ConcurrentMap<String, ConcurrentMap<Integer, TaskDto>> loginToIdToTask = new ConcurrentHashMap<>();
@@ -45,6 +40,24 @@ public class MemoryPersistenceService implements Persistence {
     @Autowired
     public MemoryPersistenceService(InMemoryUserDetailsManager userDetailsManager) {
         this.userDetailsManager = userDetailsManager;
+    }
+
+    @PostConstruct
+    // Todo do we need it?
+    public void initMemoryDetailsManager() {
+        //        manager.createUser(User.withUsername("u").password("p").roles("USER").build());
+//        manager.createUser(User.withUsername("a").password("p").roles("USER", "ADMIN").build());
+        findUsers().forEach(user ->
+                userDetailsManager.createUser(
+                        User.withUsername(user.getLogin()).password(String.valueOf(user.getPassword()))
+                                // Roles -> (to) Strings -> Remove ROLE_ from strings -> List of Strings -> array of Strings
+                                .roles(user.getRoles().orElseThrow(IllegalStateException::new).stream()
+                                        .map(RoleDto::getRole)
+                                        .map(r -> r.replaceFirst("ROLE_", ""))
+                                        .collect(Collectors.toList())
+                                        .toArray(new String[user.getRoles().orElseThrow(IllegalStateException::new).size()]))
+                                .build())
+        );
     }
 
     @Override
