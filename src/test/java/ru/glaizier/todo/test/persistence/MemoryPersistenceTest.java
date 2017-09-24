@@ -1,12 +1,5 @@
 package ru.glaizier.todo.test.persistence;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -15,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -33,10 +27,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.*;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
+
 /**
  * Run these tests with memory stub db when needed
  */
-//@DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
+@DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {
         ServletConfig.class,
@@ -81,7 +79,7 @@ public class MemoryPersistenceTest {
     public void getTasksById() {
         List<TaskDto> tasks = p.findTasks(dummyUser.getLogin());
         assertThat(tasks.size(), is(1));
-        assertThat(tasks.get(0).getTodo(), is(dummyTask.getTodo()));
+        assertThat(tasks.get(0), is(dummyTask));
     }
 
     @Test

@@ -24,6 +24,19 @@ public class MemoryWebSecurityConfig extends WebSecurityConfigAdapter {
 
     @Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsService() throws Exception {
+//        manager.createUser(User.withUsername("u").password("p").roles("USER").build());
+//        manager.createUser(User.withUsername("a").password("p").roles("USER", "ADMIN").build());
+//        persistence.findUsers().forEach(user ->
+//                userDetailsManager.createUser(
+//                        User.withUsername(user.getLogin()).password(String.valueOf(user.getPassword()))
+//                                // Roles -> (to) Strings -> Remove ROLE_ from strings -> List of Strings -> array of Strings
+//                                .roles(user.getRoles().orElseThrow(IllegalStateException::new).stream()
+//                                        .map(RoleDto::getRole)
+//                                        .map(r -> r.replaceFirst("ROLE_", ""))
+//                                        .collect(Collectors.toList())
+//                                        .toArray(new String[user.getRoles().orElseThrow(IllegalStateException::new).size()]))
+//                                .build())
+//        );
         return new InMemoryUserDetailsManager();
     }
 

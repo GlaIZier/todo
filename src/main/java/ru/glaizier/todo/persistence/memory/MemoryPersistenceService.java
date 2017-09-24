@@ -11,7 +11,6 @@ import ru.glaizier.todo.model.dto.UserDto;
 import ru.glaizier.todo.persistence.Persistence;
 import ru.glaizier.todo.persistence.exception.AccessDeniedException;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -40,24 +39,6 @@ public class MemoryPersistenceService implements Persistence {
     @Autowired
     public MemoryPersistenceService(InMemoryUserDetailsManager userDetailsManager) {
         this.userDetailsManager = userDetailsManager;
-    }
-
-    @PostConstruct
-    // Todo do we need it?
-    public void initMemoryDetailsManager() {
-        //        manager.createUser(User.withUsername("u").password("p").roles("USER").build());
-//        manager.createUser(User.withUsername("a").password("p").roles("USER", "ADMIN").build());
-        findUsers().forEach(user ->
-                userDetailsManager.createUser(
-                        User.withUsername(user.getLogin()).password(String.valueOf(user.getPassword()))
-                                // Roles -> (to) Strings -> Remove ROLE_ from strings -> List of Strings -> array of Strings
-                                .roles(user.getRoles().orElseThrow(IllegalStateException::new).stream()
-                                        .map(RoleDto::getRole)
-                                        .map(r -> r.replaceFirst("ROLE_", ""))
-                                        .collect(Collectors.toList())
-                                        .toArray(new String[user.getRoles().orElseThrow(IllegalStateException::new).size()]))
-                                .build())
-        );
     }
 
     @Override

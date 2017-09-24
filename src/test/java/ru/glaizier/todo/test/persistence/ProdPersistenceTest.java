@@ -1,12 +1,5 @@
 package ru.glaizier.todo.test.persistence;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -27,17 +20,20 @@ import ru.glaizier.todo.model.dto.UserDto;
 import ru.glaizier.todo.persistence.Persistence;
 import ru.glaizier.todo.persistence.exception.AccessDeniedException;
 
+import javax.transaction.Transactional;
 import java.lang.invoke.MethodHandles;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.*;
 
 /**
  * Run these tests with prod db when needed
  */
+// We use @Transactional so before each method we rollback changes, so we don't need to use DirtiesContext
 //@DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {
