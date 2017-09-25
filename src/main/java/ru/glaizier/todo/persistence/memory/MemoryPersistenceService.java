@@ -1,7 +1,10 @@
 package ru.glaizier.todo.persistence.memory;
 
+import static java.lang.String.format;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.stereotype.Service;
@@ -11,17 +14,25 @@ import ru.glaizier.todo.model.dto.UserDto;
 import ru.glaizier.todo.persistence.Persistence;
 import ru.glaizier.todo.persistence.exception.AccessDeniedException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import static java.lang.String.format;
+import javax.persistence.EntityNotFoundException;
 
 @Service
 @Profile("memory")
 // Todo refactor package structure in persistence
+// Todo when delete user and role. Delete all tasks with this user and roles from user
 public class MemoryPersistenceService implements Persistence {
 
     private final ConcurrentMap<String, ConcurrentMap<Integer, TaskDto>> loginToIdToTask = new ConcurrentHashMap<>();
@@ -52,7 +63,8 @@ public class MemoryPersistenceService implements Persistence {
 
     @Override
     public List<TaskDto> findTasks(String login) {
-        return new ArrayList<>(loginToIdToTask.get(login).values());
+        ConcurrentMap<Integer, TaskDto> idToTask = loginToIdToTask.get(login);
+        return (idToTask == null) ? null : new ArrayList<>(idToTask.values());
     }
 
     @Override
@@ -66,11 +78,15 @@ public class MemoryPersistenceService implements Persistence {
 
     @Override
     public TaskDto findTask(Integer id, String login) throws AccessDeniedException {
-        try {
-            return loginToIdToTask.get(login).get(id);
-        } catch (NullPointerException e) {
+        UserDto user = findUser(login);
+        if (user == null)
             return null;
-        }
+        TaskDto task = findTask(id);
+        if (task == null)
+            return null;
+        if (!task.getUser().orElseThrow(IllegalStateException::new).getLogin().equals(login))
+            throw new AccessDeniedException(format("Can't get task with this %s id for %s", String.valueOf(id), login));
+        return task;
     }
 
     @Override
@@ -156,11 +172,11 @@ public class MemoryPersistenceService implements Persistence {
         Objects.requireNonNull(login);
         Objects.requireNonNull(rawPassword);
         Objects.requireNonNull(roles);
-        if (roles.isEmpty())
-            throw new IllegalArgumentException("Roles are empty!");
+//        if (roles.isEmpty())
+//            throw new IllegalArgumentException("Roles are empty!");
         for (RoleDto role : roles)
             if (findRole(role.getRole()) == null)
-                throw new IllegalArgumentException("Role hasn't been found " + role.getRole());
+                throw new JpaObjectRetrievalFailureException(new EntityNotFoundException("Role hasn't been found " + role.getRole()));
 
         UserDto newUser = UserDto.builder().login(login).password(rawPassword).roles(Optional.of(roles)).build();
         loginToUser.put(login, newUser);

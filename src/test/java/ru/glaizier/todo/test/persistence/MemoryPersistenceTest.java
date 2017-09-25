@@ -1,5 +1,12 @@
 package ru.glaizier.todo.test.persistence;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -26,10 +33,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 
 /**
  * Run these tests with memory stub db when needed
@@ -89,11 +92,11 @@ public class MemoryPersistenceTest {
 
     @Test
     public void saveTask() {
-        TaskDto dummyTask2 = dummyTask.toBuilder().user(Optional.empty()).todo("dummyTodo2").build();
-        assertThat(p.saveTask(dummyUser.getLogin(), dummyTask2.getTodo()).getTodo(), is(dummyTask2.getTodo()));
+        TaskDto dummyTask2 = dummyTask.toBuilder().id(2).user(Optional.of(dummyUser)).todo("dummyTodo2").build();
+        assertThat(p.saveTask(dummyUser.getLogin(), dummyTask2.getTodo()), is(dummyTask2));
         assertThat(p.findTasks(dummyUser.getLogin()).size(), is(2));
-        assertThat(p.findTasks(dummyUser.getLogin()).get(1).getTodo(), is(dummyTask2.getTodo()));
-        assertFalse(p.findTasks(dummyUser.getLogin()).get(1).getUser().isPresent());
+        assertThat(p.findTasks(dummyUser.getLogin()).get(1), is(dummyTask2));
+        assertTrue(p.findTasks(dummyUser.getLogin()).get(1).getUser().isPresent());
     }
 
     @Test()
@@ -103,7 +106,7 @@ public class MemoryPersistenceTest {
 
     @Test
     public void getTaskOnGetTask() {
-        assertThat(p.findTask(p.findTasks(dummyUser.getLogin()).get(0).getId()).getTodo(), is(dummyTask.getTodo()));
+        assertThat(p.findTask(p.findTasks(dummyUser.getLogin()).get(0).getId()), is(dummyTask));
     }
 
     @Test
@@ -113,8 +116,8 @@ public class MemoryPersistenceTest {
 
     @Test
     public void getTaskOnGetTaskByIdAndLogin() {
-        assertThat(p.findTask(p.findTasks(dummyUser.getLogin()).get(0).getId(), dummyUser.getLogin()).getTodo(),
-                is(dummyTask.getTodo()));
+        assertThat(p.findTask(p.findTasks(dummyUser.getLogin()).get(0).getId(), dummyUser.getLogin()),
+                is(dummyTask));
     }
 
     @Test
@@ -131,9 +134,10 @@ public class MemoryPersistenceTest {
     @Test
     public void updateTask() {
         String updatedTodo = "dummyTodo2";
-        assertThat(p.updateTask(dummyUser.getLogin(), p.findTasks(dummyUser.getLogin()).get(0).getId(), updatedTodo).getTodo(),
-                is(updatedTodo));
-        assertThat(p.findTask(p.findTasks(dummyUser.getLogin()).get(0).getId(), dummyUser.getLogin()).getTodo(), is(updatedTodo));
+        TaskDto updatedTask = dummyTask.toBuilder().todo(updatedTodo).user(dummyTask.getUser()).build();
+        assertThat(p.updateTask(dummyUser.getLogin(), dummyTask.getId(), updatedTodo),
+                is(updatedTask));
+        assertThat(p.findTask(1, dummyUser.getLogin()), is(updatedTask));
         assertThat(p.findTasks(dummyUser.getLogin()).size(), is(1));
     }
 
@@ -153,7 +157,7 @@ public class MemoryPersistenceTest {
     @Test
     public void deleteTaskById() {
         Integer id = p.findTasks(dummyUser.getLogin()).get(0).getId();
-        assertThat(p.deleteTask(id).getTodo(), is(dummyTask.getTodo()));
+        assertThat(p.deleteTask(id), is(dummyTask));
         assertNull(p.findTask(id));
         assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
         assertThat(p.findRole(dummyRole.getRole()), is(dummyRole));
@@ -161,16 +165,16 @@ public class MemoryPersistenceTest {
     }
 
     @Test
-    public void getNullOnRemoveTaskByIdWhenTaskNotExists() {
+    public void getNullOnDeleteTaskByIdWhenTaskNotExists() {
         assertNull(p.deleteTask(100));
         assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
         assertThat(p.findRole(dummyRole.getRole()), is(dummyRole));
     }
 
     @Test
-    public void removeTaskByIdAndLogin() {
+    public void deleteTaskByIdAndLogin() {
         Integer id = p.findTasks(dummyUser.getLogin()).get(0).getId();
-        assertThat(p.deleteTask(id, dummyUser.getLogin()).getTodo(), is(dummyTask.getTodo()));
+        assertThat(p.deleteTask(id, dummyUser.getLogin()), is(dummyTask));
         assertNull(p.findTask(id, dummyUser.getLogin()));
         assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
         assertThat(p.findRole(dummyRole.getRole()), is(dummyRole));
@@ -308,9 +312,8 @@ public class MemoryPersistenceTest {
         assertNotNull(p.findUser(dummyUser.getLogin()));
         p.deleteUser(dummyUser.getLogin());
         assertNull(p.findUser(dummyUser.getLogin()));
-        // Here exception is thrown about unsaved transient object. Don't know why yet
-//        assertThat(p.findUsers().size(), is(0));
-//        assertThat(p.findRole(dummyRole.getRole()), is(dummyRole));
+        assertThat(p.findUsers().size(), is(0));
+        assertThat(p.findRole(dummyRole.getRole()), is(dummyRole));
     }
 
     // Roles
@@ -358,8 +361,7 @@ public class MemoryPersistenceTest {
 
         assertNull(p.findRole(dummyRole.getRole()));
         assertThat(p.findRoles().size(), is(rolesSize - 1));
-        // Here we still have dummy role inside dummyUser. Probably it is cached in hibernate.
-//        assertThat(p.findUser(dummyUser.getLogin()), is(dummyUser.toBuilder().roles(Optional.of(new HashSet<>())).build()));
+        assertThat(p.findUser(dummyUser.getLogin()), is(dummyUser.toBuilder().roles(Optional.of(new HashSet<>())).build()));
         assertThat(p.findUsers().size(), is(usersSize));
     }
 
