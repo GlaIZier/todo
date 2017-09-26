@@ -32,7 +32,6 @@ import javax.persistence.EntityNotFoundException;
 @Service
 @Profile("memory")
 // Todo refactor package structure in persistence
-// Todo when delete user and role. Delete all tasks with this user and roles from user
 public class MemoryPersistenceService implements Persistence {
 
     private final ConcurrentMap<String, ConcurrentMap<Integer, TaskDto>> loginToIdToTask = new ConcurrentHashMap<>();
@@ -217,6 +216,7 @@ public class MemoryPersistenceService implements Persistence {
         synchronized (userDetailsLock) {
             userDetailsManager.deleteUser(login);
         }
+        loginToIdToTask.remove(login);
     }
 
     @Override
@@ -238,6 +238,11 @@ public class MemoryPersistenceService implements Persistence {
 
     @Override
     public void deleteRole(String role) {
-        nameToRole.remove(role);
+        RoleDto removedRole = nameToRole.remove(role);
+        loginToUser.values().forEach(userDto -> {
+            if (userDto.getRoles().isPresent()) {
+                userDto.getRoles().get().remove(removedRole);
+            }
+        });
     }
 }

@@ -8,7 +8,6 @@ import static org.junit.Assert.assertTrue;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -45,7 +44,6 @@ import java.util.Optional;
 })
 @WebAppConfiguration
 @ActiveProfiles("memory")
-@Ignore
 public class MemoryPersistenceTest {
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -312,8 +310,9 @@ public class MemoryPersistenceTest {
         assertNotNull(p.findUser(dummyUser.getLogin()));
         p.deleteUser(dummyUser.getLogin());
         assertNull(p.findUser(dummyUser.getLogin()));
-        assertThat(p.findUsers().size(), is(0));
-        assertThat(p.findRole(dummyRole.getRole()), is(dummyRole));
+        assertThat(p.findRoles().size(), is(1));
+        assertThat(p.findTasks().size(), is(0));
+        assertNull(p.findTasks(dummyUser.getLogin()));
     }
 
     // Roles
@@ -338,31 +337,32 @@ public class MemoryPersistenceTest {
 
     @Test
     public void saveRole() {
-        int rolesSize = p.findRoles().size();
-        int usersSize = p.findUsers().size();
-
         RoleDto dummyRole2 = new RoleDto("dummyRole2");
         assertNull(p.findRole(dummyRole2.getRole()));
         assertThat(p.saveRole(dummyRole2.getRole()), is(dummyRole2));
         assertThat(p.findRole(dummyRole2.getRole()), is(dummyRole2));
 
-        assertThat(p.findRoles().size(), is(rolesSize + 1));
-        assertThat(p.findUsers().size(), is(usersSize));
+        assertThat(p.findRoles().size(), is(2));
+        assertThat(p.findUsers().size(), is(1));
     }
 
     @Test
     public void deleteRole() {
-        int rolesSize = p.findRoles().size();
-        int usersSize = p.findUsers().size();
         assertNotNull(p.findRole(dummyRole.getRole()));
+        assertThat(p.findRoles().size(), is(1));
         assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
+        assertThat(p.findUsers().size(), is(1));
+        assertThat(p.findTasks(dummyUser.getLogin()).get(0).getUser().orElseThrow(IllegalStateException::new)
+                .getRoles().orElseThrow(IllegalStateException::new).size(), is(1));
 
         p.deleteRole(dummyRole.getRole());
 
         assertNull(p.findRole(dummyRole.getRole()));
-        assertThat(p.findRoles().size(), is(rolesSize - 1));
+        assertThat(p.findRoles().size(), is(0));
         assertThat(p.findUser(dummyUser.getLogin()), is(dummyUser.toBuilder().roles(Optional.of(new HashSet<>())).build()));
-        assertThat(p.findUsers().size(), is(usersSize));
+        assertThat(p.findUsers().size(), is(1));
+        assertThat(p.findTasks(dummyUser.getLogin()).get(0).getUser().orElseThrow(IllegalStateException::new)
+                .getRoles().orElseThrow(IllegalStateException::new).size(), is(0));
     }
 
 }

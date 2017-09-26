@@ -41,6 +41,7 @@ import java.util.Optional;
 @WebAppConfiguration
 // We don't use @Transactional here because Hibernate cache results and don't flush requests to the db before it ensures that transaction is succeed
 // But because of the dirty context after each method we always create new instance of inmemory db so we are fine
+// Todo check delete tests. Check that all connected entities are deleted
 public class DefaultPersistenceTest {
 
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());

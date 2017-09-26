@@ -1,5 +1,12 @@
 package ru.glaizier.todo.test.persistence;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -20,15 +27,13 @@ import ru.glaizier.todo.model.dto.UserDto;
 import ru.glaizier.todo.persistence.Persistence;
 import ru.glaizier.todo.persistence.exception.AccessDeniedException;
 
-import javax.transaction.Transactional;
 import java.lang.invoke.MethodHandles;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import javax.transaction.Transactional;
 
 /**
  * Run these tests with prod db when needed
@@ -44,6 +49,7 @@ import static org.junit.Assert.*;
 @ActiveProfiles("prod")
 @Transactional
 @Ignore
+// Todo check when delete user and role. Delete all tasks with this user and roles from user
 public class ProdPersistenceTest {
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
