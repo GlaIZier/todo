@@ -49,7 +49,6 @@ import javax.transaction.Transactional;
 @ActiveProfiles("prod")
 @Transactional
 @Ignore
-// Todo check when delete user and role. Delete all tasks with this user and roles from user
 public class ProdPersistenceTest {
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -166,11 +165,14 @@ public class ProdPersistenceTest {
     @Test
     public void deleteTaskById() {
         Integer id = p.findTasks(dummyUser.getLogin()).get(0).getId();
+        assertThat(p.findTasks().size(), is(1));
         assertThat(p.deleteTask(id).getTodo(), is(dummyTask.getTodo()));
         assertNull(p.findTask(id));
         assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
         assertThat(p.findRole(dummyRole.getRole()), is(dummyRole));
         assertTrue(p.findTasks(dummyUser.getLogin()).isEmpty());
+        assertThat(p.findTasks().size(), is(0));
+
     }
 
     @Test
@@ -183,11 +185,14 @@ public class ProdPersistenceTest {
     @Test
     public void removeTaskByIdAndLogin() {
         Integer id = p.findTasks(dummyUser.getLogin()).get(0).getId();
+        assertThat(p.findTasks().size(), is(1));
         assertThat(p.deleteTask(id, dummyUser.getLogin()).getTodo(), is(dummyTask.getTodo()));
+
         assertNull(p.findTask(id, dummyUser.getLogin()));
         assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
         assertThat(p.findRole(dummyRole.getRole()), is(dummyRole));
         assertTrue(p.findTasks(dummyUser.getLogin()).isEmpty());
+        assertThat(p.findTasks().size(), is(0));
     }
 
     @Test
@@ -325,6 +330,7 @@ public class ProdPersistenceTest {
         // Here exception is thrown about unsaved transient object. Don't know why yet
 //        assertThat(p.findUsers().size(), is(0));
 //        assertThat(p.findRole(dummyRole.getRole()), is(dummyRole));
+//        assertThat(p.findTasks().size(), is(0));
     }
 
     // Roles
@@ -368,6 +374,7 @@ public class ProdPersistenceTest {
         int usersSize = p.findUsers().size();
         assertNotNull(p.findRole(dummyRole.getRole()));
         assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
+        assertThat(p.findTasks().size(), is(1));
 
         p.deleteRole(dummyRole.getRole());
 
@@ -376,6 +383,7 @@ public class ProdPersistenceTest {
         // Here we still have dummy role inside dummyUser. Probably it is cached in hibernate.
 //        assertThat(p.findUser(dummyUser.getLogin()), is(dummyUser.toBuilder().roles(Optional.of(new HashSet<>())).build()));
         assertThat(p.findUsers().size(), is(usersSize));
+        assertThat(p.findTasks().size(), is(1));
     }
 
 }
