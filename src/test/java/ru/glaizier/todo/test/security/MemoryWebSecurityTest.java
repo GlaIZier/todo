@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -28,7 +29,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
+import ru.glaizier.todo.model.domain.Role;
+import ru.glaizier.todo.model.dto.RoleDto;
+import ru.glaizier.todo.persistence.Persistence;
 import ru.glaizier.todo.properties.PropertiesService;
+
+import java.util.Arrays;
+import java.util.HashSet;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -37,13 +44,17 @@ import ru.glaizier.todo.properties.PropertiesService;
         RootConfig.class
 })
 @WebAppConfiguration
-public class WebSecurityTest {
+@ActiveProfiles("memory")
+public class MemoryWebSecurityTest {
 
     @Autowired
     private WebApplicationContext context;
 
     @Autowired
     private PropertiesService propertiesService;
+
+    @Autowired
+    private Persistence persistence;
 
     private MockMvc mvc;
 
@@ -53,6 +64,20 @@ public class WebSecurityTest {
                 .webAppContextSetup(context)
                 .apply(springSecurity())
                 .build();
+
+        createMockData();
+    }
+
+    private void createMockData() {
+        RoleDto userRole = new RoleDto(Role.USER.getRole());
+        RoleDto adminRole = new RoleDto(Role.ADMIN.getRole());
+        persistence.saveRole(userRole.getRole());
+        persistence.saveRole(adminRole.getRole());
+
+        HashSet<RoleDto> uRoles = new HashSet<>(Arrays.asList(userRole));
+        HashSet<RoleDto> aRoles = new HashSet<>(Arrays.asList(userRole, adminRole));
+        persistence.saveUser("u", "p".toCharArray(), uRoles);
+        persistence.saveUser("a", "p".toCharArray(), aRoles);
     }
 
     @Test
@@ -101,8 +126,6 @@ public class WebSecurityTest {
     }
 
     @Test
-    // Spring security automatically inject UserDetailsService from SecurityConfig because
-    // WithUserDetailsSecurityContextFactory is annotated with @Autowired
     public void postLoginAuthenticatedAndRedirectToRoot() throws Exception {
         mvc
                 .perform(formLogin().userParameter("user").user("u").password("p"))

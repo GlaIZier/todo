@@ -8,10 +8,14 @@ import ru.glaizier.todo.model.dto.RoleDto;
 import ru.glaizier.todo.model.dto.UserDto;
 import ru.glaizier.todo.persistence.Persistence;
 
-import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import javax.annotation.PostConstruct;
+
+/**
+ * Class to init db with test data for hsql implementation. Tests use this information.
+ */
 @Component
 @Profile({"default"/*, "memory"*/})
 public class DbInit {
