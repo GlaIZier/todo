@@ -37,6 +37,7 @@ import ru.glaizier.todo.properties.PropertiesService;
         RootConfig.class
 })
 @WebAppConfiguration
+// Todo test with memory implementation?
 public class WebSecurityTest {
 
     @Autowired

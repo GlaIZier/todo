@@ -41,7 +41,6 @@ import java.util.Optional;
 @WebAppConfiguration
 // We don't use @Transactional here because Hibernate cache results and don't flush requests to the db before it ensures that transaction is succeed
 // But because of the dirty context after each method we always create new instance of inmemory db so we are fine
-// Todo check delete tests. Check that all connected entities are deleted
 public class DefaultPersistenceTest {
 
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -174,7 +173,7 @@ public class DefaultPersistenceTest {
     }
 
     @Test
-    public void removeTaskByIdAndLogin() {
+    public void deleteTaskByIdAndLogin() {
         assertThat(p.deleteTask(4, dummyUser.getLogin()), is(dummyTask));
         assertNull(p.findTask(4, dummyUser.getLogin()));
         assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
@@ -358,7 +357,9 @@ public class DefaultPersistenceTest {
         int rolesSize = p.findRoles().size();
         int usersSize = p.findUsers().size();
         assertNotNull(p.findRole(dummyRole.getRole()));
+        assertThat(p.findRoles().size(), is(rolesSize));
         assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
+        assertThat(p.findUsers().size(), is(usersSize));
 
         p.deleteRole(dummyRole.getRole());
 
