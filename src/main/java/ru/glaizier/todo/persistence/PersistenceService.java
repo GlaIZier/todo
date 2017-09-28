@@ -13,9 +13,6 @@ import ru.glaizier.todo.model.dto.RoleDto;
 import ru.glaizier.todo.model.dto.TaskDto;
 import ru.glaizier.todo.model.dto.UserDto;
 import ru.glaizier.todo.persistence.exception.AccessDeniedException;
-import ru.glaizier.todo.persistence.role.RoleDao;
-import ru.glaizier.todo.persistence.task.TaskDao;
-import ru.glaizier.todo.persistence.user.UserDao;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -24,9 +24,9 @@ import ru.glaizier.todo.config.servlet.ServletConfig;
 import ru.glaizier.todo.model.domain.Role;
 import ru.glaizier.todo.model.domain.Task;
 import ru.glaizier.todo.model.domain.User;
-import ru.glaizier.todo.persistence.role.RoleDao;
-import ru.glaizier.todo.persistence.task.TaskDao;
-import ru.glaizier.todo.persistence.user.UserDao;
+import ru.glaizier.todo.persistence.RoleDao;
+import ru.glaizier.todo.persistence.TaskDao;
+import ru.glaizier.todo.persistence.UserDao;
 
 import java.lang.invoke.MethodHandles;
 import java.util.Collections;

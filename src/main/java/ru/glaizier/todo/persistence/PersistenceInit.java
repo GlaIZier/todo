@@ -1,4 +1,4 @@
-package ru.glaizier.todo.persistence.init;
+package ru.glaizier.todo.persistence;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import ru.glaizier.todo.model.domain.Role;
 import ru.glaizier.todo.model.dto.RoleDto;
 import ru.glaizier.todo.model.dto.UserDto;
-import ru.glaizier.todo.persistence.Persistence;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -18,12 +17,12 @@ import javax.annotation.PostConstruct;
  */
 @Component
 @Profile({"default"/*, "memory"*/})
-public class DbInit {
+public class PersistenceInit {
 
     private Persistence persistence;
 
     @Autowired
-    public DbInit(Persistence persistence) {
+    public PersistenceInit(Persistence persistence) {
         this.persistence = persistence;
     }
 

@@ -5,6 +5,7 @@ import ru.glaizier.todo.model.domain.User;
 
 import java.util.Set;
 
+// Todo remove it
 public interface Db {
 
     void addUser(User user);

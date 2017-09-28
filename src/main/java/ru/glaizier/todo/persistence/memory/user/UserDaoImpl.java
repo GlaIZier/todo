@@ -1,6 +1,4 @@
-package ru.glaizier.todo.persistence.memory;
-
-import ru.glaizier.todo.persistence.user.OverrideUserDao;
+package ru.glaizier.todo.persistence.memory.user;
 
 //@Repository
 //@Profile("memory")

@@ -31,7 +31,6 @@ import javax.persistence.EntityNotFoundException;
 
 @Service
 @Profile("memory")
-// Todo refactor package structure in persistence
 public class MemoryPersistenceService implements Persistence {
 
     private final ConcurrentMap<String, ConcurrentMap<Integer, TaskDto>> loginToIdToTask = new ConcurrentHashMap<>();

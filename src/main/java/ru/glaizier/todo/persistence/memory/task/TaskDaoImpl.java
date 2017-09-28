@@ -1,8 +1,7 @@
-package ru.glaizier.todo.persistence.memory;
+package ru.glaizier.todo.persistence.memory.task;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.glaizier.todo.persistence.task.OverrideTaskDao;
 
 import java.lang.invoke.MethodHandles;
 

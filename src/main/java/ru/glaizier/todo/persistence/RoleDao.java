@@ -1,4 +1,4 @@
-package ru.glaizier.todo.persistence.role;
+package ru.glaizier.todo.persistence;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.glaizier.todo.model.domain.Role;

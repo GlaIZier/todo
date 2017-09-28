@@ -1,4 +1,4 @@
-package ru.glaizier.todo.persistence.role;
+package ru.glaizier.todo.persistence.memory.role;
 
 public interface OverrideRoleDao {
 

@@ -1,4 +1,4 @@
-package ru.glaizier.todo.persistence.user;
+package ru.glaizier.todo.persistence.memory.user;
 
 public interface OverrideUserDao {
 
