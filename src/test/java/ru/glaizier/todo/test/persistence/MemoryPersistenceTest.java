@@ -195,11 +195,10 @@ public class MemoryPersistenceTest {
     // Users
     @Test
     public void findUsers() {
-        int usersSize = p.findUsers().size();
         UserDto dummyUser2 = dummyUser.toBuilder().login("dummyLogin2").password("dummyPassword2".toCharArray())
                 .roles(Optional.of(new HashSet<>(Collections.singletonList(dummyRole)))).build();
         p.saveUser(dummyUser2.getLogin(), dummyUser2.getPassword(), new HashSet<>(Collections.singletonList(dummyRole)));
-        assertThat(p.findUsers().size(), is(usersSize + 1));
+        assertThat(p.findUsers().size(), is(2));
     }
 
     @Test
@@ -231,21 +230,20 @@ public class MemoryPersistenceTest {
 
     @Test
     public void saveUser() {
-        int rolesSize = p.findRoles().size();
         UserDto dummyUser2 = dummyUser.toBuilder().login("dummyLogin2").password("dummyPassword2".toCharArray())
                 .roles(Optional.of(new HashSet<>(Collections.singletonList(dummyRole)))).build();
 
         assertThat(p.saveUser(dummyUser2.getLogin(), dummyUser2.getPassword(), new HashSet<>(Collections.singletonList(dummyRole))),
                 is(dummyUser2));
-        assertThat(p.findUser(dummyUser2.getLogin(), dummyUser2.getPassword()), is(dummyUser2));
 
+        assertThat(p.findUser(dummyUser2.getLogin(), dummyUser2.getPassword()), is(dummyUser2));
+        assertThat(p.findUsers().size(), is(2));
         assertTrue(p.findTasks(dummyUser2.getLogin()).isEmpty());
-        assertThat(p.findRoles().size(), is(rolesSize));
+        assertThat(p.findRoles().size(), is(1));
     }
 
     @Test
     public void saveUserWithNoRoles() {
-        int rolesSize = p.findRoles().size();
         UserDto dummyUser2 = dummyUser.toBuilder().login("dummyLogin2").password("dummyPassword2".toCharArray())
                 .roles(Optional.of(new HashSet<>())).build();
 
@@ -253,7 +251,7 @@ public class MemoryPersistenceTest {
         assertThat(p.findUser(dummyUser2.getLogin(), dummyUser2.getPassword()), is(dummyUser2));
 
         assertTrue(p.findTasks(dummyUser2.getLogin()).isEmpty());
-        assertThat(p.findRoles().size(), is(rolesSize));
+        assertThat(p.findRoles().size(), is(1));
     }
 
     @Test(expected = JpaObjectRetrievalFailureException.class)
@@ -265,7 +263,6 @@ public class MemoryPersistenceTest {
 
     @Test
     public void saveUserWithNewRole() {
-        int rolesSize = p.findRoles().size();
         RoleDto dummyRole2 = new RoleDto("dummyRole2");
         UserDto dummyUser2 = dummyUser.toBuilder().login("dummyLogin2").password("dummyPassword2".toCharArray())
                 .roles(Optional.of(new HashSet<>(Collections.singletonList(new RoleDto("dummyRole2"))))).build();
@@ -283,13 +280,12 @@ public class MemoryPersistenceTest {
         assertTrue(p.findTasks(dummyUser2.getLogin()).isEmpty());
 
         assertThat(p.findRole(dummyRole2.getRole()), is(dummyRole2));
-        assertThat(p.findRoles().size(), is(rolesSize + 1));
+        assertThat(p.findRoles().size(), is(2));
     }
 
 
     @Test
     public void updateUser() {
-        int rolesSize = p.findRoles().size();
         assertThat(p.findUser(dummyUser.getLogin(), dummyUser.getPassword()), is(dummyUser));
 
         RoleDto dummyRole2 = new RoleDto("dummyRole2");
@@ -301,7 +297,7 @@ public class MemoryPersistenceTest {
         assertThat(p.findUser(dummyUser.getLogin(), dummyUser2.getPassword()),
                 is(dummyUser.toBuilder().password(dummyUser2.getPassword()).roles(dummyUser2.getRoles()).build()));
         assertThat(p.findUser(dummyUser.getLogin(), dummyUser2.getPassword()).getRoles().orElse(null).size(), is(1));
-        assertThat(p.findRoles().size(), is(rolesSize + 1));
+        assertThat(p.findRoles().size(), is(2));
     }
 
 
@@ -318,11 +314,10 @@ public class MemoryPersistenceTest {
     // Roles
     @Test
     public void findRoles() {
-        int rolesSize = p.findRoles().size();
         RoleDto dummyRole2 = new RoleDto("dummyRole2");
         assertNull(p.findRole(dummyRole2.getRole()));
         assertThat(p.saveRole(dummyRole2.getRole()), is(dummyRole2));
-        assertThat(p.findRoles().size(), is(rolesSize + 1));
+        assertThat(p.findRoles().size(), is(2));
     }
 
     @Test
