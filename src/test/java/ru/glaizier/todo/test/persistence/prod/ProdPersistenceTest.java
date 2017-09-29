@@ -1,4 +1,4 @@
-package ru.glaizier.todo.test.persistence;
+package ru.glaizier.todo.test.persistence.prod;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;

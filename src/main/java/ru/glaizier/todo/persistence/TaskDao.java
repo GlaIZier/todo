@@ -3,10 +3,11 @@ package ru.glaizier.todo.persistence;
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.glaizier.todo.model.domain.Task;
 import ru.glaizier.todo.model.domain.User;
+import ru.glaizier.todo.persistence.memory.task.OverrideTaskDao;
 
 import java.util.List;
 
-public interface TaskDao extends JpaRepository<Task, Integer>/*, OverrideTaskDao */ {
+public interface TaskDao extends JpaRepository<Task, Integer>, OverrideTaskDao {
 
 //    List<Task> findTasksByLogin(String login);
 
