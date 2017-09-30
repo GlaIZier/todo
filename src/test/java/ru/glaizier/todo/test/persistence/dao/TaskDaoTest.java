@@ -1,11 +1,4 @@
-package ru.glaizier.todo.test.persistence;
-
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
+package ru.glaizier.todo.test.persistence.dao;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,16 +17,19 @@ import ru.glaizier.todo.config.servlet.ServletConfig;
 import ru.glaizier.todo.model.domain.Role;
 import ru.glaizier.todo.model.domain.Task;
 import ru.glaizier.todo.model.domain.User;
-import ru.glaizier.todo.persistence.RoleDao;
-import ru.glaizier.todo.persistence.TaskDao;
-import ru.glaizier.todo.persistence.UserDao;
+import ru.glaizier.todo.persistence.dao.RoleDao;
+import ru.glaizier.todo.persistence.dao.TaskDao;
+import ru.glaizier.todo.persistence.dao.UserDao;
 
+import javax.transaction.Transactional;
 import java.lang.invoke.MethodHandles;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import javax.transaction.Transactional;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.*;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)

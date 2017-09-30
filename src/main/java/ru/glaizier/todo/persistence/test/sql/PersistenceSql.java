@@ -1,4 +1,4 @@
-package ru.glaizier.todo.persistence.sql;
+package ru.glaizier.todo.persistence.test.sql;
 
 import ru.glaizier.todo.model.dto.Authorization;
 

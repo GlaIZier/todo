@@ -1,4 +1,4 @@
-package ru.glaizier.todo.persistence.sql;
+package ru.glaizier.todo.persistence.test.sql;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -6,14 +6,13 @@ import org.springframework.stereotype.Service;
 import ru.glaizier.todo.model.dto.Authorization;
 import ru.glaizier.todo.persistence.exception.PersistenceException;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.sql.DataSource;
 
 
 @Service

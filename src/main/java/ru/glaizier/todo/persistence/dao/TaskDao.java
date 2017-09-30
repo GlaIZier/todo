@@ -1,21 +1,16 @@
-package ru.glaizier.todo.persistence.memory.task;
+package ru.glaizier.todo.persistence.dao;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.glaizier.todo.model.domain.Task;
 import ru.glaizier.todo.model.domain.User;
 
 import java.util.List;
 
-public interface OverrideTaskDao {
+public interface TaskDao extends JpaRepository<Task, Integer>/*, OverrideTaskDao*/ {
 
 //    List<Task> findTasksByLogin(String login);
-//
+
 //    Task findTaskByIdAndLogin(Integer id, String login);
-//
-//    Task findTaskById(Integer id);
-//
-//    <S extends Task> S save(S s);
-//
-//    void delete(Integer integer);
 
     List<Task> findAll();
 

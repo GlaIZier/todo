@@ -1,7 +1,5 @@
 package ru.glaizier.todo.config.root;
 
-import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.HSQL;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -19,11 +17,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.HSQL;
+
 @Configuration
 @EnableJpaRepositories(basePackages = "ru.glaizier.todo.persistence")
 @EnableTransactionManagement
 @Profile({"default", "prod"})
-// Todo create postgres docker prod datasource
 public class DbConfig {
 
     @Bean
@@ -75,6 +74,7 @@ public class DbConfig {
     @Bean
     @Profile("prod")
 //    @Profile("default")
+    // Todo check here if we can configure connection pool
     public DataSource prodDataSource() {
         DriverManagerDataSource dataSourceConfig = new DriverManagerDataSource();
         dataSourceConfig.setDriverClassName("org.postgresql.Driver");

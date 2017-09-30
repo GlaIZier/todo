@@ -1,7 +1,5 @@
 package ru.glaizier.todo.persistence.memory;
 
-import static java.lang.String.format;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
@@ -14,21 +12,24 @@ import ru.glaizier.todo.model.dto.UserDto;
 import ru.glaizier.todo.persistence.Persistence;
 import ru.glaizier.todo.persistence.exception.AccessDeniedException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import javax.persistence.EntityNotFoundException;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import javax.persistence.EntityNotFoundException;
+import static java.lang.String.format;
 
+/**
+ * Java memory implementation of Persistence service which doesn't require any data source, jpa provider or entity manager.
+ * <p>
+ * If u want to create dao memory implementations u need:
+ * create all these data source, jpa provider and entity manager beans in DbConfig;
+ * create override interface for each dao and override required dao methods there;
+ * create for memory profile dao implementation which overrides OverrideDaoInterface and implement overrided methods with
+ * memory implementations
+ */
 @Service
 @Profile("memory")
 public class MemoryPersistenceService implements Persistence {

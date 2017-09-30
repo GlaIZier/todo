@@ -1,7 +1,5 @@
 package ru.glaizier.todo.persistence;
 
-import static java.lang.String.format;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,17 +10,15 @@ import ru.glaizier.todo.model.domain.User;
 import ru.glaizier.todo.model.dto.RoleDto;
 import ru.glaizier.todo.model.dto.TaskDto;
 import ru.glaizier.todo.model.dto.UserDto;
+import ru.glaizier.todo.persistence.dao.RoleDao;
+import ru.glaizier.todo.persistence.dao.TaskDao;
+import ru.glaizier.todo.persistence.dao.UserDao;
 import ru.glaizier.todo.persistence.exception.AccessDeniedException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-
 import javax.transaction.Transactional;
+import java.util.*;
+
+import static java.lang.String.format;
 
 @Service
 @Transactional
