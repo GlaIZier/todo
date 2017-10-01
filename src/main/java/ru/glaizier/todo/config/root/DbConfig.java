@@ -74,6 +74,7 @@ public class DbConfig {
     @Bean
     @Profile("prod")
     public DataSource prodDataSource() {
+        // We use here Hikari cp but also we could use Postgres cp, container (Tomcat) cp or some other external cp like c3p0
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl("jdbc:postgresql://localhost:5432/tododb");
         config.setUsername("todoer");
