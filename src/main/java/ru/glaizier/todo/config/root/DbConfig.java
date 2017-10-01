@@ -1,10 +1,11 @@
 package ru.glaizier.todo.config.root;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -23,11 +24,12 @@ import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.
 @EnableJpaRepositories(basePackages = "ru.glaizier.todo.persistence")
 @EnableTransactionManagement
 @Profile({"default", "prod"})
+// Todo move string constants to properties file
 public class DbConfig {
 
     @Bean
     @Profile("default")
-//    @Profile("prod")
+    // Todo check here if we can configure connection pool
     public DataSource localDataSource() {
         return new EmbeddedDatabaseBuilder()
                 .generateUniqueName(false)
@@ -42,7 +44,6 @@ public class DbConfig {
 
     @Bean
     @Profile("default")
-//    @Profile("prod")
     public JpaVendorAdapter localJpaVendorAdapter() {
         HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
         adapter.setDatabase(Database.HSQL);
@@ -54,7 +55,6 @@ public class DbConfig {
 
     @Bean("entityManagerFactory")
     @Profile("default")
-//    @Profile("prod")
     public LocalContainerEntityManagerFactoryBean localEntityManagerFactory() {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setDataSource(localDataSource());
@@ -73,20 +73,27 @@ public class DbConfig {
 
     @Bean
     @Profile("prod")
-//    @Profile("default")
-    // Todo check here if we can configure connection pool
     public DataSource prodDataSource() {
-        DriverManagerDataSource dataSourceConfig = new DriverManagerDataSource();
-        dataSourceConfig.setDriverClassName("org.postgresql.Driver");
-        dataSourceConfig.setUrl("jdbc:postgresql://localhost:5432/tododb");
-        dataSourceConfig.setUsername("todoer");
-        dataSourceConfig.setPassword("password");
-        return dataSourceConfig;
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl("jdbc:postgresql://localhost:5432/tododb");
+        config.setUsername("todoer");
+        config.setPassword("password");
+        config.addDataSourceProperty("cachePrepStmts", "true");
+        config.addDataSourceProperty("prepStmtCacheSize", "250");
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        config.addDataSourceProperty("maximumPoolSize", "10");
+        return new HikariDataSource(config);
+
+//        DriverManagerDataSource dataSourceConfig = new DriverManagerDataSource();
+//        dataSourceConfig.setDriverClassName("org.postgresql.Driver");
+//        dataSourceConfig.setUrl("jdbc:postgresql://localhost:5432/tododb");
+//        dataSourceConfig.setUsername("todoer");
+//        dataSourceConfig.setPassword("password");
+//        return dataSourceConfig;
     }
 
     @Bean
     @Profile("prod")
-//    @Profile("default")
     public JpaVendorAdapter prodJpaVendorAdapter() {
         HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
         adapter.setDatabase(Database.POSTGRESQL);
@@ -98,7 +105,6 @@ public class DbConfig {
 
     @Bean("entityManagerFactory")
     @Profile("prod")
-//    @Profile("default")
     public LocalContainerEntityManagerFactoryBean prodEntityManagerFactory() {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setDataSource(prodDataSource());
