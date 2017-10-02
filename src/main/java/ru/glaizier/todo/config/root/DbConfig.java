@@ -1,5 +1,7 @@
 package ru.glaizier.todo.config.root;
 
+import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.HSQL;
+
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
@@ -18,13 +20,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.HSQL;
-
 @Configuration
 @EnableJpaRepositories(basePackages = "ru.glaizier.todo.persistence")
 @EnableTransactionManagement
 @Profile({"default", "prod"})
 // Todo move string constants to properties file
+// Todo manage with tomcat and spring profiles
 public class DbConfig {
 
     @Bean
