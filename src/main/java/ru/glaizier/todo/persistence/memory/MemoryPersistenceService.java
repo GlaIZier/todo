@@ -1,5 +1,9 @@
 package ru.glaizier.todo.persistence.memory;
 
+import static java.lang.String.format;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
@@ -12,14 +16,21 @@ import ru.glaizier.todo.model.dto.UserDto;
 import ru.glaizier.todo.persistence.Persistence;
 import ru.glaizier.todo.persistence.exception.AccessDeniedException;
 
-import javax.persistence.EntityNotFoundException;
-import java.util.*;
+import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import static java.lang.String.format;
+import javax.persistence.EntityNotFoundException;
 
 /**
  * Java memory implementation of Persistence service which doesn't require any data source, jpa provider or entity manager.
@@ -33,6 +44,8 @@ import static java.lang.String.format;
 @Service
 @Profile("memory")
 public class MemoryPersistenceService implements Persistence {
+
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final ConcurrentMap<String, ConcurrentMap<Integer, TaskDto>> loginToIdToTask = new ConcurrentHashMap<>();
 
@@ -48,6 +61,7 @@ public class MemoryPersistenceService implements Persistence {
 
     @Autowired
     public MemoryPersistenceService(InMemoryUserDetailsManager userDetailsManager) {
+        log.info("Using memory persistence implementation...");
         this.userDetailsManager = userDetailsManager;
     }
 

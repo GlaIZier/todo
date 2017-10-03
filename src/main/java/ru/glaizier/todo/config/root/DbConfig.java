@@ -4,6 +4,8 @@ import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -17,6 +19,8 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.lang.invoke.MethodHandles;
+
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
@@ -28,10 +32,12 @@ import javax.sql.DataSource;
 // Todo manage with tomcat and spring profiles
 public class DbConfig {
 
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
     @Bean
     @Profile("default")
-    // Todo check here if we can configure connection pool
     public DataSource localDataSource() {
+        log.info("Using default, hsql, local persistence implementation...");
         return new EmbeddedDatabaseBuilder()
                 .generateUniqueName(false)
                 .setName("MemoryTaskDb")
@@ -75,6 +81,7 @@ public class DbConfig {
     @Bean
     @Profile("prod")
     public DataSource prodDataSource() {
+        log.info("Using prod, external, postgres persistence implementation...");
         // We use here Hikari cp but also we could use Postgres cp, container (Tomcat) cp or some other external cp like c3p0
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl("jdbc:postgresql://localhost:5432/tododb");
