@@ -23,10 +23,9 @@ import javax.annotation.PostConstruct;
 //@Profile({"default", "memory"})
 // Todo change memory tests to support this init data
 public class PersistenceInit {
-
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
-    private static final String PROD_PROFILE = "prod";
+    private static final String prodProfile = "prod";
+    private static final String defaultProfile = "default";
 
     private Persistence persistence;
 
@@ -43,12 +42,16 @@ public class PersistenceInit {
     public void createMockData() {
         List<RoleDto> roles = createRoles();
 
-        String profile = environment.getActiveProfiles()[0];
-        log.info("Found {} profile", profile);
-        if (!profile.equalsIgnoreCase(PROD_PROFILE)) {
-            createUsersAndTasks(roles);
-        }
+        String[] activeProfiles = environment.getActiveProfiles();
+        String profile;
+        if (activeProfiles.length == 0)
+            profile = defaultProfile;
+        else
+            profile = activeProfiles[0];
 
+        log.info("Found {} profile", profile);
+        if (!profile.equalsIgnoreCase(prodProfile))
+            createUsersAndTasks(roles);
     }
 
     private List<RoleDto> createRoles() {
