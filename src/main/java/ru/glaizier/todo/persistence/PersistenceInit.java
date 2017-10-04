@@ -20,8 +20,6 @@ import javax.annotation.PostConstruct;
  * Class to init db with test data for hsql implementation. Tests use this information.
  */
 @Component
-//@Profile({"default", "memory"})
-// Todo change memory tests to support this init data
 public class PersistenceInit {
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static final String prodProfile = "prod";

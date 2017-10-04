@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Run these tests with memory stub db when needed
+ * Run these tests with memory stub db when needed. Here we already have roles, users and tasks from PersistenceInit
  */
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)

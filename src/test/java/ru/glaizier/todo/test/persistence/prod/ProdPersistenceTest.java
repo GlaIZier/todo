@@ -36,7 +36,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 /**
- * Run these tests with prod db when needed
+ * Run these tests with prod db when needed. Here we already have 2 roles from PersistenceInit
  */
 // We use @Transactional so before each method we rollback changes, so we don't need to use DirtiesContext
 //@DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
@@ -255,7 +255,7 @@ public class ProdPersistenceTest {
         assertThat(p.findUsers().size(), is(2));
 
         assertTrue(p.findTasks(dummyUser2.getLogin()).isEmpty());
-        assertThat(p.findRoles().size(), is(1));
+        assertThat(p.findRoles().size(), is(3));
     }
 
     @Test
@@ -267,7 +267,7 @@ public class ProdPersistenceTest {
         assertThat(p.findUser(dummyUser2.getLogin(), dummyUser2.getPassword()), is(dummyUser2));
 
         assertTrue(p.findTasks(dummyUser2.getLogin()).isEmpty());
-        assertThat(p.findRoles().size(), is(1));
+        assertThat(p.findRoles().size(), is(3));
     }
 
     @Test(expected = JpaObjectRetrievalFailureException.class)
@@ -296,7 +296,7 @@ public class ProdPersistenceTest {
         assertTrue(p.findTasks(dummyUser2.getLogin()).isEmpty());
 
         assertThat(p.findRole(dummyRole2.getRole()), is(dummyRole2));
-        assertThat(p.findRoles().size(), is(2));
+        assertThat(p.findRoles().size(), is(4));
     }
 
 
@@ -313,7 +313,7 @@ public class ProdPersistenceTest {
         assertThat(p.findUser(dummyUser.getLogin(), dummyUser2.getPassword()),
                 is(dummyUser.toBuilder().password(dummyUser2.getPassword()).roles(dummyUser2.getRoles()).build()));
         assertThat(p.findUser(dummyUser.getLogin(), dummyUser2.getPassword()).getRoles().orElse(null).size(), is(1));
-        assertThat(p.findRoles().size(), is(2));
+        assertThat(p.findRoles().size(), is(4));
     }
 
 
@@ -335,7 +335,7 @@ public class ProdPersistenceTest {
         RoleDto dummyRole2 = new RoleDto("dummyRole2");
         assertNull(p.findRole(dummyRole2.getRole()));
         assertThat(p.saveRole(dummyRole2.getRole()), is(dummyRole2));
-        assertThat(p.findRoles().size(), is(2));
+        assertThat(p.findRoles().size(), is(4));
     }
 
     @Test
@@ -355,7 +355,7 @@ public class ProdPersistenceTest {
         assertThat(p.saveRole(dummyRole2.getRole()), is(dummyRole2));
         assertThat(p.findRole(dummyRole2.getRole()), is(dummyRole2));
 
-        assertThat(p.findRoles().size(), is(2));
+        assertThat(p.findRoles().size(), is(4));
         assertThat(p.findUsers().size(), is(1));
     }
 
@@ -369,7 +369,7 @@ public class ProdPersistenceTest {
         p.deleteRole(dummyRole.getRole());
 
         assertNull(p.findRole(dummyRole.getRole()));
-        assertThat(p.findRoles().size(), is(0));
+        assertThat(p.findRoles().size(), is(2));
         // Here we still have dummy role inside dummyUser. Probably it is cached in hibernate.
 //        assertThat(p.findUser(dummyUser.getLogin()), is(dummyUser.toBuilder().roles(Optional.of(new HashSet<>())).build()));
         assertThat(p.findUsers().size(), is(1));
