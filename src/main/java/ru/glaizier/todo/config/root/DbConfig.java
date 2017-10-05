@@ -6,6 +6,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -18,6 +19,7 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import ru.glaizier.todo.properties.PropertiesService;
 
 import java.lang.invoke.MethodHandles;
 
@@ -28,11 +30,18 @@ import javax.sql.DataSource;
 @EnableJpaRepositories(basePackages = "ru.glaizier.todo.persistence")
 @EnableTransactionManagement
 @Profile({"default", "prod"})
-// Todo move string constants to properties file
+// Todo rename local to default and update readme for starting apps
 // Todo manage with tomcat and spring profiles
 public class DbConfig {
 
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
+    private PropertiesService propertiesService;
+
+    @Autowired
+    public DbConfig(PropertiesService propertiesService) {
+        this.propertiesService = propertiesService;
+    }
 
     @Bean
     @Profile("default")
@@ -84,13 +93,13 @@ public class DbConfig {
         log.info("Using prod, external, postgres persistence implementation...");
         // We use here Hikari cp but also we could use Postgres cp, container (Tomcat) cp or some other external cp like c3p0
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:postgresql://localhost:5432/tododb");
-        config.setUsername("todoer");
-        config.setPassword("password");
+        config.setJdbcUrl(propertiesService.getDbUrl());
+        config.setUsername(propertiesService.getDbLogin());
+        config.setPassword(propertiesService.getDbPassword());
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-        config.addDataSourceProperty("maximumPoolSize", "10");
+        config.addDataSourceProperty("maximumPoolSize", String.valueOf(propertiesService.getDbMaxPoolSize()));
         return new HikariDataSource(config);
 
 //        DriverManagerDataSource dataSourceConfig = new DriverManagerDataSource();

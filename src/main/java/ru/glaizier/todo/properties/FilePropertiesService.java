@@ -1,6 +1,10 @@
 package ru.glaizier.todo.properties;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,23 +15,24 @@ import org.springframework.stereotype.Service;
 @Getter
 @Builder(toBuilder = true)
 public class FilePropertiesService implements PropertiesService {
-
     @NonNull
     private final String apiTokenCookieName;
-
     @NonNull
     private final String apiTokenHeaderName;
-
     private final int apiTokenExpireDurationInSeconds;
-
     @NonNull
     private final String apiTokenSigningKey;
-
     @NonNull
     private final String apiTokenSessionAttributeName;
 
     @NonNull
     private final String passwordEncoderSecret;
+
+    private final String dbUrl;
+    private final String dbDriver;
+    private final String dbLogin;
+    private final String dbPassword;
+    private final Integer dbMaxPoolSize;
 
     // Say this spring to inject values through this constructor, because spring injects through defaults constructor
     // by default
@@ -40,13 +45,25 @@ public class FilePropertiesService implements PropertiesService {
             @Value("${api.token.expire.seconds}") int apiTokenExpireDurationInSeconds,
             @Value("${api.token.signing.key}") String apiTokenSigningKey,
             @Value("${api.token.session.attribute.name}") String apiTokenSessionAttributeName,
-            @Value("${password.encoder.secret}") String passwordEncoderSecret
+            @Value("${password.encoder.secret}") String passwordEncoderSecret,
+            @Value("${db.url}") String dbUrl,
+            @Value("${db.driver}") String dbDriver,
+            @Value("${db.login}") String dbLogin,
+            @Value("${db.password}") String dbPassword,
+            @Value("${db.maxpoolsize}") Integer dbMaxPoolSize
     ) {
         this.apiTokenCookieName = apiTokenCookieName;
         this.apiTokenHeaderName = apiTokenHeaderName;
         this.apiTokenExpireDurationInSeconds = apiTokenExpireDurationInSeconds;
         this.apiTokenSigningKey = apiTokenSigningKey;
         this.apiTokenSessionAttributeName = apiTokenSessionAttributeName;
+
         this.passwordEncoderSecret = passwordEncoderSecret;
+
+        this.dbUrl = dbUrl;
+        this.dbDriver = dbDriver;
+        this.dbLogin = dbLogin;
+        this.dbPassword = dbPassword;
+        this.dbMaxPoolSize = dbMaxPoolSize;
     }
 }
