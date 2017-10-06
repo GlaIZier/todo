@@ -28,12 +28,12 @@
             </properties>
         </profile>
         <profile>
-            <id>local</id>
+            <id>default</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <profile.name>local</profile.name>
+                <profile.name>default</profile.name>
                 <glaizier.server>127.0.0.1</glaizier.server>
 
                 <glaizier.tomcat.path>${project.name}</glaizier.tomcat.path>

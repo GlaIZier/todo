@@ -4,19 +4,17 @@
 Spring mvc todo list app
 
 ### Tests
-#### Embedded (HSQL) db implementation
+#### Embedded (HSQL) and memory db implementation
 ```
 mvn clean verify
 ```
-#### Memory db implementation
-Doesn't work for now
-```
-mvn clean verify -DargLine="-Dspring.profiles.active=memory"
-```
+#### Production Postgres db tests
+Remove @Ignore from ProdPersistenceTest and run tests again. Make sure that Postgres db is started and contains 
+Role user and admin and doesn't contain any task or user
 
 ### Deploy
 ```
-mvn clean tomcat7:redeploy -P local/docker
+mvn clean tomcat7:redeploy -P memory/default/prod
 ```
 
 ### Run embedded tomcat
@@ -26,7 +24,12 @@ mvn tomcat7:run
 ```
 #### Memory db implementation
 ```
-mvn clean tomcat7:run -Dspring.profiles.active=memory
+mvn clean tomcat7:run -P memory -Dspring.profiles.active=memory
+```
+
+#### Postgres production db implementation
+```
+mvn clean tomcat7:run -P prod -Dspring.profiles.active=prod
 ```
 and go to 
 ```
