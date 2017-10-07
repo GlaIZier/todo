@@ -1,7 +1,5 @@
 package ru.glaizier.todo.config.root;
 
-import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.HSQL;
-
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
@@ -21,17 +19,16 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import ru.glaizier.todo.properties.PropertiesService;
 
-import java.lang.invoke.MethodHandles;
-
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.lang.invoke.MethodHandles;
+
+import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.HSQL;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "ru.glaizier.todo.persistence")
 @EnableTransactionManagement
 @Profile({"default", "prod"})
-// Todo rename local to default and update readme for starting apps
-// Todo manage with tomcat and spring profiles
 public class DbConfig {
 
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
