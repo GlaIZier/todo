@@ -23,7 +23,11 @@
             </div>
         </header>
         <div class="todos">
-            <div class="todo well well-sm">
+            <div class="todo well well-sm" th:each="task : ${tasks}">
+                <span th:text="${task.getTodo()}" class="todo-text">Just do something else</span>
+                <span class="todo-remove clickable glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </div>
+            <!--<div class="todo well well-sm">
                 <span class="todo-text">Just do something</span>
                 <span class="todo-remove clickable glyphicon glyphicon-remove" aria-hidden="true"></span>
             </div>
@@ -34,7 +38,8 @@
             <div class="todo well well-sm">
                 <span class="todo-text">Just do something different and long long long long long long long ...</span>
                 <span class="todo-remove clickable glyphicon glyphicon-remove" aria-hidden="true"></span>
-            </div>
+            </div>-->
+
         </div>
     </div>
 </div>
