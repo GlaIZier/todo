@@ -23,7 +23,7 @@
             </div>
         </header>
         <div class="todos">
-            <div class="todo well well-sm" th:each="task : ${tasks}">
+            <div th:id="${task.getId()}" class="todo well well-sm" th:each="task : ${tasks}">
                 <span th:text="${task.getTodo()}" class="todo-text">Just do something else</span>
                 <span class="todo-remove clickable glyphicon glyphicon-remove" aria-hidden="true"></span>
             </div>
