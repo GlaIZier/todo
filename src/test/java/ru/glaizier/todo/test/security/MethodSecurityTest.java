@@ -24,7 +24,7 @@ public class MethodSecurityTest {
 
     @Test(expected = AuthenticationCredentialsNotFoundException.class)
     public void forbidTaskControllerCallWithoutAuthentication() {
-        taskController.tasks();
+        taskController.tasks(null, null);
     }
 
 }
