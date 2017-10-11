@@ -23,8 +23,18 @@ public class MethodSecurityTest {
     private TaskController taskController;
 
     @Test(expected = AuthenticationCredentialsNotFoundException.class)
-    public void forbidTaskControllerCallWithoutAuthentication() {
-        taskController.tasks(null, null);
+    public void forbidGetTasksCallWithoutAuthentication() {
+        taskController.getTasks(null, null);
+    }
+
+    @Test(expected = AuthenticationCredentialsNotFoundException.class)
+    public void forbidPostTaskCallWithoutAuthentication() {
+        taskController.postTask(null, null, null);
+    }
+
+    @Test(expected = AuthenticationCredentialsNotFoundException.class)
+    public void forbidDeleteTaskCallWithoutAuthentication() {
+        taskController.deleteTask(null, null, null);
     }
 
 }

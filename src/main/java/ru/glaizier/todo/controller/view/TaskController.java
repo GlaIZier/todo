@@ -1,6 +1,11 @@
 package ru.glaizier.todo.controller.view;
 
 
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,9 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ru.glaizier.todo.model.dto.TaskDto;
 import ru.glaizier.todo.persistence.Persistence;
 
-import java.util.List;
-
 @Controller
+@RequestMapping("/tasks")
 public class TaskController {
 
     private Persistence persistence;
@@ -23,11 +27,28 @@ public class TaskController {
         this.persistence = persistence;
     }
 
-    @RequestMapping("/tasks")
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     // Todo check why couldn't find session on mac when not incognito window
-    public String tasks(@AuthenticationPrincipal User activeUser, Model model) {
-        List<TaskDto> tasks = persistence.findTasks(activeUser.getUsername());
+    public String getTasks(@AuthenticationPrincipal User activeUser, Model model) {
+        return getTasks(activeUser.getUsername(), model);
+    }
+
+    @RequestMapping(method = POST)
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    public String postTask(@AuthenticationPrincipal User activeUser, Model model, String todo) {
+        persistence.saveTask(activeUser.getUsername(), todo);
+        return getTasks(activeUser.getUsername(), model);
+    }
+
+    @RequestMapping(method = DELETE)
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    public String deleteTask(@AuthenticationPrincipal User activeUser, Model model, Integer id) {
+        persistence.deleteTask(id, activeUser.getUsername());
+        return getTasks(activeUser.getUsername(), model);
+    }
+
+    private String getTasks(String login, Model model) {
+        List<TaskDto> tasks = persistence.findTasks(login);
         model.addAttribute("tasks", tasks);
         return "tasks";
     }
