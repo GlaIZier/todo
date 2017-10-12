@@ -2,6 +2,7 @@ package ru.glaizier.todo.controller.view;
 
 
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class TaskController {
         this.persistence = persistence;
     }
 
+    @RequestMapping(method = GET)
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     // Todo check why couldn't find session on mac when not incognito window
     public String getTasks(@AuthenticationPrincipal User activeUser, Model model) {
