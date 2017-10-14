@@ -4,6 +4,8 @@ var Task = Task || (function () {
     return {
       saveTask: function () {
         var newTodo = $('#new-task-input').val();
+        if (newTodo === '')
+          return;
         var apiToken = $.cookie(config.apiTokenCookieName);
 
         var headers = {};
@@ -13,10 +15,12 @@ var Task = Task || (function () {
           type: 'POST',
           url: config.apiBaseUrl + config.meTasksEndpoint,
           headers: headers,
-          data: newTodo
+          data: 'todo=' + newTodo
         })
           .done(function (response, status, jq) {
-            console.log(response);
+            var newTask = {};
+            newTask = response.data;
+            console.log(newTask);
           })
           .fail(function (xhr, status, error) {
             console.error(error);
