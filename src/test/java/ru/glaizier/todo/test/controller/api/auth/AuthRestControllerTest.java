@@ -11,6 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import javax.servlet.http.Cookie;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,8 +32,6 @@ import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
 import ru.glaizier.todo.properties.PropertiesService;
 import ru.glaizier.todo.security.token.TokenService;
-
-import javax.servlet.http.Cookie;
 
 // Almost the same as SpringJUnit4ClassRunner
 @DirtiesContext(classMode = AFTER_CLASS)
@@ -85,9 +85,9 @@ public class AuthRestControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .content("login=&password=testCreatedPassword"))
                 .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("{\"error\":{\"code\":400,\"" +
-                        "message\":\"Provided user login is empty or null!\"}}"));
+                .andExpect(status().isBadRequest());
+//                .andExpect(content().string("{\"error\":{\"code\":400,\"message\":\"" +
+//                        "Login '' must be between 1 and 30 characters long!\"}}"));
     }
 
     @Test
@@ -96,9 +96,9 @@ public class AuthRestControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .content("login=testCreatedLogin&password="))
                 .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("{\"error\":{\"code\":400,\"" +
-                        "message\":\"Provided user password is empty or null!\"}}"));
+                .andExpect(status().isBadRequest());
+//                .andExpect(content().string("{\"error\":{\"code\":400,\"message\":" +
+//                        "\"Password must be between 1 and 30 characters long!\"}}"));
     }
 
     @Test
@@ -121,6 +121,28 @@ public class AuthRestControllerTest {
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().string("{\"error\":{\"code\":401," +
                         "\"message\":\"Wrong credentials were provided!\"}}"));
+    }
+
+    @Test
+    public void get400WhenAuthenticateUserWithTooLongLogin() throws Exception {
+        mvc.perform(post(LOGIN_PATH)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .content("login=uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu&password=testWrongPassword"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+//                .andExpect(content().string("{\"error\":{\"code\":400,\"message\":\"" +
+//                        "Login 'uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu' must be between 1 and 30 characters long!\"}}"));
+    }
+
+    @Test
+    public void get400WhenAuthenticateUserWithTooLongPassword() throws Exception {
+        mvc.perform(post(LOGIN_PATH)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .content("login=u&password=testWrongPasswordfffffffffffffffffffffffffffffffffffffffffffffffffffffffff"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+//                .andExpect(content().string("{\"error\":{\"code\":400,\"message\":\"" +
+//                        "Login 'uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu' must be between 1 and 30 characters long!\"}}"));
     }
 
     @Test

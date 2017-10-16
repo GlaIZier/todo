@@ -1,5 +1,17 @@
 package ru.glaizier.todo.controller.api.task;
 
+import static java.lang.String.format;
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -22,14 +34,6 @@ import ru.glaizier.todo.model.dto.api.output.OutputData;
 import ru.glaizier.todo.model.dto.api.output.OutputTask;
 import ru.glaizier.todo.persistence.Persistence;
 import ru.glaizier.todo.properties.PropertiesService;
-
-import javax.servlet.http.HttpServletRequest;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
-import static java.lang.String.format;
-import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
 @RequestMapping(value = {"/api/v1/me/tasks", "/api/me/tasks"})
@@ -73,7 +77,7 @@ public class TaskRestController extends ExceptionHandlingController {
 
     @RequestMapping(method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<OutputData<OutputTask>> createTask(HttpServletRequest req,
-                                                             @RequestParam("todo") String todo) {
+                                                             @RequestParam(value = "todo", required = false) String todo) {
         checkTodoIsNotEmpty(todo);
         String login = getLogin(req);
 

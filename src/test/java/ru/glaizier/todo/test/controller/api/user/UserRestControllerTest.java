@@ -48,7 +48,7 @@ public class UserRestControllerTest {
      * Create
      */
     @Test
-    public void get201WhenCreateTask() throws Exception {
+    public void get201WhenCreateUser() throws Exception {
         mvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .content("login=testCreatedLogin&password=testCreatedPassword"))
@@ -58,7 +58,7 @@ public class UserRestControllerTest {
     }
 
     @Test
-    public void get400WhenCreateTaskWithEmptyLogin() throws Exception {
+    public void get400WhenCreateUserWithEmptyLogin() throws Exception {
         mvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .content("login=&password=testCreatedPassword"))
@@ -67,10 +67,28 @@ public class UserRestControllerTest {
     }
 
     @Test
-    public void get400WhenCreateTaskWithEmptyPassword() throws Exception {
+    public void get400WhenCreateUserWithEmptyPassword() throws Exception {
         mvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .content("login=testCreatedLogin&password="))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void get400WhenCreateUserWithLongLogin() throws Exception {
+        mvc.perform(post("/api/users")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .content("login=testCreatedLoginnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn&password=aa"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void get400WhenCreateUserWithLongPassword() throws Exception {
+        mvc.perform(post("/api/users")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .content("login=testCreatedLogin&password=ffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
