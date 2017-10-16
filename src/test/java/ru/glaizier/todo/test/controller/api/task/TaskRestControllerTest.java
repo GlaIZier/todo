@@ -1,5 +1,18 @@
 package ru.glaizier.todo.test.controller.api.task;
 
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import javax.servlet.http.Cookie;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,14 +29,6 @@ import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
 import ru.glaizier.todo.properties.PropertiesService;
 import ru.glaizier.todo.security.token.TokenService;
-
-import javax.servlet.http.Cookie;
-
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -143,7 +148,8 @@ public class TaskRestControllerTest {
 
 
         mvc.perform(post("/api/me/tasks")
-                .content("todoCreatedWithinTaskTest3")
+                .param("todo", "todoCreatedWithinTaskTest3")
+//                .content("todo=todoCreatedWithinTaskTest3")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
 
                 .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
@@ -161,7 +167,7 @@ public class TaskRestControllerTest {
 
 
         mvc.perform(post("/api/me/tasks")
-                .content("todoCreatedWithinTaskTest3")
+                .param("todo", "todoCreatedWithinTaskTest3")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
                 .andDo(print())
@@ -176,7 +182,7 @@ public class TaskRestControllerTest {
 
 
         mvc.perform(post("/api/me/tasks")
-                .content("todoCreatedWithinTaskTest3")
+                .param("todo", "todoCreatedWithinTaskTest3")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
                 .header(propertiesService.getApiTokenHeaderName(), "wrongToken"))
@@ -191,7 +197,7 @@ public class TaskRestControllerTest {
         String token = tokenService.createToken("dummyLogin");
 
         mvc.perform(post("/api/me/tasks")
-                .content("todo1")
+                .param("todo", "todo1")
 //                .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
                 .header(propertiesService.getApiTokenHeaderName(), token))
@@ -209,7 +215,8 @@ public class TaskRestControllerTest {
         String token = tokenService.createToken("u");
 
         mvc.perform(put("/api/me/tasks/1")
-                .content("todoUpdatedWithinTaskTest1")
+                .param("todo", "todoUpdatedWithinTaskTest1")
+//                .content("todoUpdatedWithinTaskTest1")
 //                .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
                 .header(propertiesService.getApiTokenHeaderName(), token))
@@ -224,7 +231,7 @@ public class TaskRestControllerTest {
         String token = tokenService.createToken("u");
 
         mvc.perform(put("/api/me/tasks/1")
-                .content("todoUpdatedWithinTaskTest1")
+                .param("todo", "todoUpdatedWithinTaskTest1")
 //                .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
                 .andDo(print())
@@ -238,7 +245,7 @@ public class TaskRestControllerTest {
         String token = tokenService.createToken("u");
 
         mvc.perform(put("/api/me/tasks/100")
-                .content("todoUpdatedWithinTaskTest100")
+                .param("todo", "todoUpdatedWithinTaskTest100")
 //                .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
                 .header(propertiesService.getApiTokenHeaderName(), token))
@@ -253,7 +260,7 @@ public class TaskRestControllerTest {
         String token = tokenService.createToken("dummyLogin");
 
         mvc.perform(put("/api/me/tasks/1")
-                .content("todoUpdatedWithinTaskTest1")
+                .param("todo", "todoUpdatedWithinTaskTest1")
 //                .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
                 .header(propertiesService.getApiTokenHeaderName(), token))
@@ -295,7 +302,7 @@ public class TaskRestControllerTest {
         String token = tokenService.createToken("u");
 
         mvc.perform(delete("/api/me/tasks/100")
-                .content("todoUpdatedWithinTaskTest100")
+                .param("todo", "todoUpdatedWithinTaskTest100")
                 .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
                 .header(propertiesService.getApiTokenHeaderName(), token))
                 .andDo(print())
@@ -309,7 +316,7 @@ public class TaskRestControllerTest {
         String token = tokenService.createToken("dummyLogin");
 
         mvc.perform(delete("/api/me/tasks/1")
-                .content("todoUpdatedWithinTaskTest1")
+                .param("todo", "todoUpdatedWithinTaskTest1")
                 .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
                 .header(propertiesService.getApiTokenHeaderName(), token))
                 .andDo(print())
