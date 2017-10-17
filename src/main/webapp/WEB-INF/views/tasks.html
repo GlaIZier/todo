@@ -27,7 +27,8 @@
         <div class="todos" id="todos">
             <div th:id="${task.getId()}" class="todo well well-sm" th:each="task : ${tasks}">
                 <span th:text="${task.getTodo()}" class="todo-text">Just do something else</span>
-                <span class="todo-remove clickable glyphicon glyphicon-remove" aria-hidden="true"></span>
+                <span class="todo-remove clickable glyphicon glyphicon-remove" aria-hidden="true"
+                      onclick="Task.deleteTask(this)"></span>
             </div>
             <!--<div class="todo well well-sm">
                 <span class="todo-text">Just do something</span>
