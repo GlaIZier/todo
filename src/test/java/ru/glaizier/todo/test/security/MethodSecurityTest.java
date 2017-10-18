@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationCredentialsNotF
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
 import ru.glaizier.todo.controller.view.TaskController;
@@ -25,16 +26,6 @@ public class MethodSecurityTest {
     @Test(expected = AuthenticationCredentialsNotFoundException.class)
     public void forbidGetTasksCallWithoutAuthentication() {
         taskController.getTasks(null, null);
-    }
-
-    @Test(expected = AuthenticationCredentialsNotFoundException.class)
-    public void forbidPostTaskCallWithoutAuthentication() {
-        taskController.postTask(null, null, null);
-    }
-
-    @Test(expected = AuthenticationCredentialsNotFoundException.class)
-    public void forbidDeleteTaskCallWithoutAuthentication() {
-        taskController.deleteTask(null, null, null);
     }
 
 }

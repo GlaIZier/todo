@@ -36,6 +36,10 @@ var Task = Task || (function () {
           });
       },
 
+      updateTask: function (clickedElement) {
+
+      },
+
       deleteTask: function (clickedElement) {
         var parentElement = $(clickedElement).parent();
         var id = $(parentElement).attr('id');

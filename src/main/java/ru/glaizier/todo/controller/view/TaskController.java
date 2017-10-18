@@ -3,9 +3,7 @@ package ru.glaizier.todo.controller.view;
 
 import java.util.List;
 
-import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -32,26 +30,7 @@ public class TaskController {
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     // Todo check why couldn't find session on mac when not incognito window
     public String getTasks(@AuthenticationPrincipal User activeUser, Model model) {
-        return getTasks(activeUser.getUsername(), model);
-    }
-
-    // Todo remove these unnecessary methods
-    @RequestMapping(method = POST)
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    public String postTask(@AuthenticationPrincipal User activeUser, Model model, String todo) {
-        persistence.saveTask(activeUser.getUsername(), todo);
-        return getTasks(activeUser.getUsername(), model);
-    }
-
-    @RequestMapping(method = DELETE)
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    public String deleteTask(@AuthenticationPrincipal User activeUser, Model model, Integer id) {
-        persistence.deleteTask(id, activeUser.getUsername());
-        return getTasks(activeUser.getUsername(), model);
-    }
-
-    private String getTasks(String login, Model model) {
-        List<TaskDto> tasks = persistence.findTasks(login);
+        List<TaskDto> tasks = persistence.findTasks(activeUser.getUsername());
         model.addAttribute("tasks", tasks);
         return "tasks";
     }
