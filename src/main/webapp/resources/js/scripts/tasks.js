@@ -36,6 +36,19 @@ var Task = Task || (function () {
           });
       },
 
+      clickUpdateTask: function (clickedElement) {
+        var parent = $(clickedElement).parent();
+        var id = parent.attr('id');
+        var todo = $(clickedElement).text();
+        var updateInputElement =
+          $('<input id="new-task-input" type="text" class="todo-input form-control" value="' + todo + '" aria-describedby="basic-addon">');
+
+        $(clickedElement).remove();
+        parent.find('.todo-remove').hide();
+        parent.prepend(updateInputElement);
+        updateInputElement.select();
+      },
+
       updateTask: function (clickedElement) {
 
       },
