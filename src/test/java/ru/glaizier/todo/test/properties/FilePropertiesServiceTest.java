@@ -2,13 +2,13 @@ package ru.glaizier.todo.test.properties;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
 import ru.glaizier.todo.properties.PropertiesService;
@@ -31,7 +31,7 @@ public class FilePropertiesServiceTest {
 
     @Test
     public void getApiTokenExpireDurationInSeconds() throws Exception {
-        assertThat(propertiesService.getApiTokenExpireDurationInSeconds(), is(180));
+        assertThat(propertiesService.getApiTokenExpireDurationInSeconds(), is(84600));
     }
 
     @Test
