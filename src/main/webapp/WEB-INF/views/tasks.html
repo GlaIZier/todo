@@ -19,7 +19,9 @@
             <div class="todo-input-group input-group">
                 <input id="new-task-input" type="text" class="todo-input form-control"
                        placeholder="What needs to be done?"
-                       aria-describedby="basic-addon"/>
+                       aria-describedby="basic-addon"
+                       onkeyup="Task.pressSaveTask(event)"
+                />
                 <span class="todo-new clickable input-group-addon" id="basic-addon"
                       onclick="Task.saveTask()">New task</span>
             </div>
