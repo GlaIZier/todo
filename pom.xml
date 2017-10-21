@@ -85,7 +85,6 @@
                 </configuration>
             </plugin>
 
-            <!--TODO upgrade to Tomcat8?-->
             <!--Tomcat deploy and run plugin-->
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>

@@ -15,7 +15,7 @@
 <div class="container">
     <form th:object="${user}" th:action="@{/register}" class="form-horizontal" method="POST">
         <h2>Please register</h2>
-        <div>
+        <div class="div-register">
             <label for="login" class="col-sm-3 control-label">Login</label>
             <div class="col-sm-9">
                 <input th:field="*{login}" type="text" id="login" placeholder="Login" class="form-control" autofocus>
