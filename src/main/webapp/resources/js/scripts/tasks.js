@@ -16,8 +16,17 @@ var Task = Task || (function () {
       return headers;
     };
 
+    var _processUnauthenticated = function (status) {
+      if (status === 401 || status === 403) {
+        window.location.replace("./logout");
+        return true;
+      }
+      return false;
+    };
+
     return {
 
+      // Todo redirect to logout when 401
       pressSaveTask: function (event) {
         if (event.keyCode === 13)
           Task.saveTask();
@@ -49,6 +58,10 @@ var Task = Task || (function () {
             console.log("Created task: " + JSON.stringify(newTask));
           })
           .fail(function (xhr, status, error) {
+            if (_processUnauthenticated(xhr.status)) {
+              alert("You have been logged out");
+              return;
+            }
             console.error(error);
             alert("Error: " + error + ". Try to reload the page");
           });
@@ -87,6 +100,10 @@ var Task = Task || (function () {
             console.log("Updated task: " + JSON.stringify(updatedTask));
           })
           .fail(function (xhr, status, error) {
+            if (_processUnauthenticated(xhr.status)) {
+              alert("You have been logged out");
+              return;
+            }
             console.error(error);
             alert("Error: " + error + ". Try to reload the page");
             _finishUpdateTask(self, prevTodo)
@@ -111,6 +128,10 @@ var Task = Task || (function () {
             console.log("Deleted task: " + JSON.stringify(response.data));
           })
           .fail(function (xhr, status, error) {
+            if (_processUnauthenticated(xhr.status)) {
+              alert("You have been logged out");
+              return;
+            }
             console.error(error);
             alert("Error: " + error + ". Try to reload the page");
           });

@@ -1,17 +1,15 @@
 package ru.glaizier.todo.security.handler;
 
-import java.io.IOException;
+import lombok.NonNull;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import ru.glaizier.todo.security.token.TokenService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-
-import lombok.NonNull;
-import ru.glaizier.todo.security.token.TokenService;
+import java.io.IOException;
 
 // Todo read about SavedRequestAwareAuthenticationSuccessHandler and other extends
 public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
@@ -29,7 +27,7 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
     }
 
     @Override
-    // Todo replace hardcoded values with property ones like mas age
+    // Todo replace hardcoded values with property ones like max age.
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                                         Authentication auth) throws IOException, ServletException {
         String token = tokenService.createToken(auth.getName());
