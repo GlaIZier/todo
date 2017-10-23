@@ -43,7 +43,15 @@ and skip the warning because no trust certificate is used in the application
 
 ### Rest api
 ```
+http://localhost:8080/todo/api
+```
+or
+```
 http://localhost:8080/todo/swagger-ui.html
+```
+Swagger docs
+```
+http://localhost:8080/todo/v2/api-docs
 ```
 ### Postgresql docker
 Pull image
