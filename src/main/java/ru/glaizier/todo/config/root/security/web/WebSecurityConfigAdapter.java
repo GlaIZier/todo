@@ -64,10 +64,10 @@ public abstract class WebSecurityConfigAdapter extends WebSecurityConfigurerAdap
             .tokenValiditySeconds(86400)
 
             // Todo enable this force redirect to http after application will be done
-//                .and()
-//                .requiresChannel()
-//                .antMatchers("/")
-//                .requiresSecure()
+            .and()
+            .requiresChannel()
+            .antMatchers("/")
+            .requiresSecure()
 
             // csrf
             .and()
