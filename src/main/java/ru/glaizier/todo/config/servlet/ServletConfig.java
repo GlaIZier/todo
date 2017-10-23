@@ -1,12 +1,10 @@
 package ru.glaizier.todo.config.servlet;
 
-import java.util.Collections;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -20,32 +18,16 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
-import ru.glaizier.todo.properties.PropertiesService;
-import springfox.documentation.builders.ParameterBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.schema.ModelRef;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
 @Configuration
 @EnableWebMvc
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true/*, jsr250Enabled = true, proxyTargetClass = true*/)
 @EnableAspectJAutoProxy
-@EnableSwagger2
 @ComponentScan(basePackages = {
-        "ru.glaizier.todo.controller",
-        "ru.glaizier.todo.log"
+    "ru.glaizier.todo.controller",
+    "ru.glaizier.todo.log"
 })
+@Import(SwaggerConfig.class)
 public class ServletConfig extends WebMvcConfigurerAdapter {
-
-    PropertiesService propertiesService;
-
-    @Autowired
-    public ServletConfig(PropertiesService propertiesService) {
-        this.propertiesService = propertiesService;
-    }
 
     @Bean
     public ViewResolver viewResolver(TemplateEngine templateEngine) {
@@ -80,28 +62,6 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 
         registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-    }
-
-    // Swagger bean
-    // http://localhost:8080/todo/swagger-ui.html#/
-    // http://localhost:8080/todo/v2/api-docs
-    @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .globalOperationParameters(Collections.singletonList(
-                        new ParameterBuilder()
-                                .name(propertiesService.getApiTokenHeaderName())
-                                .description("Api authentication token")
-                                .modelRef(new ModelRef("String"))
-                                .parameterType("header")
-                                .required(false)
-                                .build()
-                ))
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("ru.glaizier.todo.controller.api"))
-                // get only api paths without version inside
-                .paths(PathSelectors.regex("\\/api\\/(?!v\\d*)[\\S\\s]*"))
-                .build();
     }
 
 }
