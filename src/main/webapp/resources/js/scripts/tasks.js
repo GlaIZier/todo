@@ -26,7 +26,6 @@ var Task = Task || (function () {
 
     return {
 
-      // Todo redirect to logout when 401
       pressSaveTask: function (event) {
         if (event.keyCode === 13)
           Task.saveTask();

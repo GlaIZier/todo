@@ -10,6 +10,9 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
+/**
+ * Is used for authentication in traditional web application
+ */
 @Configuration
 @Order(3)
 @Profile("memory")
@@ -17,8 +20,8 @@ public class MemoryWebSecurityConfig extends WebSecurityConfigAdapter {
 
     @Autowired
     public MemoryWebSecurityConfig(
-            AuthenticationSuccessHandler authenticationSuccessHandler,
-            LogoutHandler apiLogoutHandler) {
+        AuthenticationSuccessHandler authenticationSuccessHandler,
+        LogoutHandler apiLogoutHandler) {
         super(authenticationSuccessHandler, apiLogoutHandler);
     }
 

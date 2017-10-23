@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+
 import ru.glaizier.todo.config.root.security.api.ApiSecurityConfig;
 import ru.glaizier.todo.config.root.security.api.ApiTasksSecurityConfig;
 import ru.glaizier.todo.config.root.security.web.MemoryWebSecurityConfig;
@@ -47,7 +48,8 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return new LoginSuccessHandler(tokenService(), propertiesService.getApiTokenCookieName());
+        return new LoginSuccessHandler(tokenService(),
+            propertiesService.getApiTokenCookieName(), propertiesService.getApiTokenExpireDurationInSeconds());
     }
 
     @Bean

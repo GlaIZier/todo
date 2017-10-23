@@ -1,5 +1,7 @@
 package ru.glaizier.todo.config.root.security.web;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -9,8 +11,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import javax.sql.DataSource;
-
+/**
+ * Is used for authentication in traditional web application
+ */
 @Configuration
 @Order(3)
 @Profile({"default", "prod"})

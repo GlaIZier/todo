@@ -1,15 +1,17 @@
 package ru.glaizier.todo.security.handler;
 
-import lombok.NonNull;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-import ru.glaizier.todo.security.token.TokenService;
+import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+
+import lombok.NonNull;
+import ru.glaizier.todo.security.token.TokenService;
 
 // Todo read about SavedRequestAwareAuthenticationSuccessHandler and other extends
 public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
@@ -20,21 +22,25 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
     @NonNull
     private final String tokenCookieName;
 
+    @NonNull
+    private final int tokenCookieMaxAge;
+
     public LoginSuccessHandler(TokenService tokenService,
-                               String tokenCookieName) {
+                               String tokenCookieName,
+                               int tokenCookieMaxAge) {
         this.tokenService = tokenService;
         this.tokenCookieName = tokenCookieName;
+        this.tokenCookieMaxAge = tokenCookieMaxAge;
     }
 
     @Override
-    // Todo replace hardcoded values with property ones like max age.
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                                         Authentication auth) throws IOException, ServletException {
         String token = tokenService.createToken(auth.getName());
 
         Cookie jwtTokenCookie = new Cookie(tokenCookieName, token);
         jwtTokenCookie.setPath("/todo");
-        jwtTokenCookie.setMaxAge(84600);
+        jwtTokenCookie.setMaxAge(tokenCookieMaxAge);
         httpServletResponse.addCookie(jwtTokenCookie);
 
         super.onAuthenticationSuccess(httpServletRequest, httpServletResponse, auth);
