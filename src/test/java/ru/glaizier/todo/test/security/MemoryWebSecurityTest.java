@@ -1,8 +1,10 @@
 package ru.glaizier.todo.test.security;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.logout;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
@@ -15,7 +17,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,15 +30,13 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
 import ru.glaizier.todo.model.domain.Role;
 import ru.glaizier.todo.model.dto.RoleDto;
 import ru.glaizier.todo.persistence.Persistence;
 import ru.glaizier.todo.properties.PropertiesService;
-
-import java.util.Arrays;
-import java.util.HashSet;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -86,7 +85,7 @@ public class MemoryWebSecurityTest {
     @Test
     public void getTasksUnauthenticatedAndRedirectToLogin() throws Exception {
         mvc
-                .perform(get("/tasks"))
+            .perform(get("/tasks").secure(true))
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("http://localhost/login"))
@@ -97,7 +96,7 @@ public class MemoryWebSecurityTest {
     @Test
     public void getTasksSlashUnauthenticatedAndRedirectToLogin() throws Exception {
         mvc
-                .perform(get("/tasks/"))
+            .perform(get("/tasks/").secure(true))
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("http://localhost/login"))
@@ -109,7 +108,7 @@ public class MemoryWebSecurityTest {
     @WithMockUser(value = "fake")
     public void getTasksAuthenticatedWhenFakeUserIsPresent() throws Exception {
         mvc
-                .perform(get("/tasks"))
+            .perform(get("/tasks").secure(true))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(authenticated().withUsername("fake").withRoles("USER"));
@@ -117,37 +116,67 @@ public class MemoryWebSecurityTest {
 
     @Test
     public void getLogoutUnauthenticatedAndRedirectToRoot() throws Exception {
+//        mvc
+//                .perform(logout())
+//                .andDo(print())
+//                .andExpect(status().isFound())
+//                .andExpect(redirectedUrl("/"))
+//                .andExpect(header().string("Location", equalTo("/")))
+//                .andExpect(unauthenticated())
+//                .andExpect(cookie().maxAge(propertiesService.getApiTokenCookieName(), 0))
+//                .andExpect(cookie().maxAge("todo-remember-me-cookie", 0));
+
+        // logout() can't send request to https
         mvc
-                .perform(logout())
-                .andDo(print())
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/"))
-                .andExpect(header().string("Location", equalTo("/")))
-                .andExpect(unauthenticated())
-                .andExpect(cookie().maxAge(propertiesService.getApiTokenCookieName(), 0))
-                .andExpect(cookie().maxAge("todo-remember-me-cookie", 0));
+            .perform(post("/logout").with(csrf()).secure(true))
+            .andDo(print())
+            .andExpect(status().isFound())
+            .andExpect(redirectedUrl("/"))
+            .andExpect(header().string("Location", equalTo("/")))
+            .andExpect(unauthenticated())
+            .andExpect(cookie().maxAge(propertiesService.getApiTokenCookieName(), 0))
+            .andExpect(cookie().maxAge("todo-remember-me-cookie", 0));
     }
 
     @Test
     public void postLoginAuthenticatedAndRedirectToRoot() throws Exception {
+//        mvc
+//                .perform(formLogin().userParameter("user").user("u").password("p"))
+//                .andDo(print())
+//                .andExpect(status().isFound())
+//                .andExpect(redirectedUrl("/"))
+//                .andExpect(header().string("Location", equalTo("/")))
+//                .andExpect(authenticated().withUsername("u").withRoles("USER"));
+
         mvc
-                .perform(formLogin().userParameter("user").user("u").password("p"))
-                .andDo(print())
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/"))
-                .andExpect(header().string("Location", equalTo("/")))
-                .andExpect(authenticated().withUsername("u").withRoles("USER"));
+            .perform(post("/login").param("user", "u").param("password", "p")
+                .with(csrf()).secure(true))
+            .andDo(print())
+            .andExpect(status().isFound())
+            .andExpect(redirectedUrl("/"))
+            .andExpect(header().string("Location", equalTo("/")))
+            .andExpect(authenticated().withUsername("u").withRoles("USER"));
     }
 
     @Test
     public void postLoginAdminAuthenticatedAndRedirectToRoot() throws Exception {
+//        mvc
+//                .perform(formLogin().userParameter("user").user("a").password("p"))
+//                .andDo(print())
+//                .andExpect(status().isFound())
+//                .andExpect(redirectedUrl("/"))
+//                .andExpect(header().string("Location", equalTo("/")))
+//                .andExpect(authenticated().withUsername("a").withRoles("USER", "ADMIN"));
+
+        // formLogin() can't send https request
         mvc
-                .perform(formLogin().userParameter("user").user("a").password("p"))
-                .andDo(print())
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/"))
-                .andExpect(header().string("Location", equalTo("/")))
-                .andExpect(authenticated().withUsername("a").withRoles("USER", "ADMIN"));
+            .perform(post("/login").param("user", "a").param("password", "p")
+                .with(csrf()).secure(true))
+            .andDo(print())
+            .andExpect(status().isFound())
+            .andExpect(redirectedUrl("/"))
+            .andExpect(header().string("Location", equalTo("/")))
+            .andExpect(authenticated().withUsername("a").withRoles("USER", "ADMIN"));
     }
 
     @Test
@@ -171,7 +200,7 @@ public class MemoryWebSecurityTest {
         // use post() instead of formlogin() because formlogin() doesn't provide method to attach remember-me param
         mvc
                 .perform(post("/login").param("user", "u").param("password", "p")
-                        .param("remember-me", "on").with(csrf()))
+                    .param("remember-me", "on").with(csrf()).secure(true))
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/"))
