@@ -22,7 +22,6 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
     @NonNull
     private final String tokenCookieName;
 
-    @NonNull
     private final int tokenCookieMaxAge;
 
     public LoginSuccessHandler(TokenService tokenService,
