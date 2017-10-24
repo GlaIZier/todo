@@ -66,7 +66,7 @@ public abstract class WebSecurityConfigAdapter extends WebSecurityConfigurerAdap
             // Todo enable this force redirect to http after application will be done
             .and()
             .requiresChannel()
-            .antMatchers("/")
+            .antMatchers("/**")
             .requiresSecure()
 
             // csrf

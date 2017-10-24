@@ -1,6 +1,9 @@
 var Task = Task || (function () {
 
-    var _finishUpdateTask = function (self, updatedTodo) {
+    var _host = window.location.protocol + '//' + window.location.host;
+
+    var
+      _finishUpdateTask = function (self, updatedTodo) {
       var updatedTask = $('<span class="todo-text" onclick="Task.clickUpdateTask(this)">' + updatedTodo + '</span>');
       var parent = $(self).parent();
       $(self).remove();
@@ -41,7 +44,7 @@ var Task = Task || (function () {
         var headers = _getApiTokenHeader();
         $.ajax({
           type: 'POST',
-          url: config.apiBaseUrl + config.meTasksEndpoint,
+          url: _host + config.apiBaseUrl + config.meTasksEndpoint,
           headers: headers,
           data: 'todo=' + newTodo
         })
@@ -90,7 +93,7 @@ var Task = Task || (function () {
         var updatedTodo = $(self).val();
         $.ajax({
           type: 'PUT',
-          url: config.apiBaseUrl + config.meTasksEndpoint + "/" + id + "?todo=" + updatedTodo,
+          url: _host + config.apiBaseUrl + config.meTasksEndpoint + "/" + id + "?todo=" + updatedTodo,
           headers: headers
         })
           .done(function (response, status, jq) {
@@ -117,7 +120,7 @@ var Task = Task || (function () {
         var headers = _getApiTokenHeader();
         $.ajax({
           type: 'DELETE',
-          url: config.apiBaseUrl + config.meTasksEndpoint + "/" + id,
+          url: _host + config.apiBaseUrl + config.meTasksEndpoint + "/" + id,
           headers: headers
         })
           .done(function (response, status, jq) {
