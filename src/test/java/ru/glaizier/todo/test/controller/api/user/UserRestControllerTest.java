@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +18,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
 
@@ -54,7 +54,7 @@ public class UserRestControllerTest {
                 .content("login=testCreatedLogin&password=testCreatedPassword"))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(content().string("{\"data\":\"testCreatedLogin\"}"));
+            .andExpect(content().string("{\"data\":{\"login\":\"testCreatedLogin\"}}"));
     }
 
     @Test

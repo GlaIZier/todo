@@ -1,13 +1,11 @@
 package ru.glaizier.todo.controller.api.user;
 
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-
 import java.util.Collections;
 import java.util.HashSet;
 
 import javax.validation.Valid;
 
-import lombok.RequiredArgsConstructor;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,12 +14,15 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import lombok.RequiredArgsConstructor;
 import ru.glaizier.todo.controller.api.exception.ApiBadRequestException;
 import ru.glaizier.todo.controller.api.exception.ExceptionHandlingController;
 import ru.glaizier.todo.model.domain.Role;
 import ru.glaizier.todo.model.dto.RoleDto;
 import ru.glaizier.todo.model.dto.UserDto;
 import ru.glaizier.todo.model.dto.api.output.OutputData;
+import ru.glaizier.todo.model.dto.api.output.OutputUser;
 import ru.glaizier.todo.model.dto.input.InputUser;
 import ru.glaizier.todo.persistence.Persistence;
 
@@ -37,7 +38,8 @@ public class UserRestController extends ExceptionHandlingController {
 
     @RequestMapping(method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public ResponseEntity<OutputData<String>> registerUser(@Valid InputUser inputUser, BindingResult bindingResult) {
+    public ResponseEntity<OutputData<OutputUser>> registerUser(@Valid InputUser inputUser,
+                                                               BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             throw new ApiBadRequestException(bindingResult.getAllErrors().get(0).getDefaultMessage());
 
@@ -45,7 +47,7 @@ public class UserRestController extends ExceptionHandlingController {
                 new HashSet<>(Collections.singletonList(new RoleDto(Role.USER.getRole()))));
 
 
-        OutputData<String> outputData = new OutputData<>(userDto.getLogin());
+        OutputData<OutputUser> outputData = new OutputData<>(new OutputUser(userDto.getLogin()));
         return new ResponseEntity<>(outputData, HttpStatus.CREATED);
     }
 

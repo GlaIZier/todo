@@ -63,7 +63,6 @@ public abstract class WebSecurityConfigAdapter extends WebSecurityConfigurerAdap
             .rememberMeCookieName("todo-remember-me-cookie")
             .tokenValiditySeconds(86400)
 
-            // Todo enable this force redirect to http after application will be done
             .and()
             .requiresChannel()
             .antMatchers("/**")

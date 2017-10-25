@@ -6,7 +6,7 @@
 
     <groupId>ru.glaizier</groupId>
     <artifactId>todo</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
     <description>Todo list application</description>
     <packaging>war</packaging>
 
@@ -16,7 +16,6 @@
         <spring-security.version>4.2.1.RELEASE</spring-security.version>
     </properties>
     <profiles>
-        <!--Todo move location to properties file-->
         <profile>
             <id>memory</id>
             <properties>
