@@ -12,9 +12,13 @@ mvn clean verify
 Remove @Ignore from ProdPersistenceTest and run tests again. Make sure that Postgres db is started and contains 
 Role user and admin and doesn't contain any task or user
 
-### Deploy
+### Deploy to standalone tomcat
+Tomcat is needed to be running on localhost:8080 and accept https on 8443. 
+Also, maven settings in <home>/.m2/settings.xml must be consistent with <tomcat-home>/conf/tomcat-users.xml. 
+Role "manager-gui" and user with that role must be set up in these files.
+
 ```
-mvn clean tomcat7:redeploy -P memory/default/prod
+mvn clean tomcat7:redeploy -P <memory/default/prod> -Dspring.profiles.active=<memory/default/prod>
 ```
 
 ### Run embedded tomcat
