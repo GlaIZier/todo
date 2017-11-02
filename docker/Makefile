@@ -9,7 +9,7 @@ build:
 	@cd ../; \
 	  ./mvnw clean package -P default -Dspring.profiles.active=default; \
 	  mkdir -p docker/app; \
-	  cp target/powerliftersdb.war docker/app;
+	  cp target/todo.war docker/app;
 	@docker build -t ${IMAGE} .
 
 run: build
