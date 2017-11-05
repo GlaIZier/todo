@@ -8,11 +8,14 @@ all: build
 build:
 	@cd ../; \
 	  ./mvnw clean package -P default -Dspring.profiles.active=default; \
-	  mkdir -p docker/app; \
-	  cp target/todo.war docker/app;
-	@docker build -t ${IMAGE} .
+	  mkdir -p docker/tomcat/7-jre8/app; \
+	  cp target/todo.war docker/tomcat/7-jre8/app;
+	@docker build -t ${IMAGE} ./tomcat/7-jre8/
 
-run: build
+#run: build
+#    @docker run --rm -p 8080:8080 -p 8443:8443 --name todo ${IMAGE}
+
+run-prod: build
 	@docker-compose up
 
 release: build
