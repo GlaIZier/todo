@@ -12,11 +12,8 @@ build:
 	  cp target/todo.war docker/tomcat/7-jre8/app;
 	@docker build -t ${IMAGE} ./tomcat/7-jre8/
 
-#run: build
-#    @docker run --rm -p 8080:8080 -p 8443:8443 --name todo ${IMAGE}
-
-run-prod: build
-	@docker-compose up
+run: build
+	@docker run --rm -p 8080:8080 -p 8443:8443 --name todo ${IMAGE}
 
 release: build
 	@docker build -t ${IMAGE}:${VERSION} .
