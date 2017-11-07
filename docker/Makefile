@@ -6,14 +6,29 @@ VERSION=$(shell cat VERSION)
 all: build
 
 build:
+# ((profile == memory || profile == default || profile == prod) && (profile is present))
+ifneq (, $(filter $(profile), memory default prod))
 	@cd ../; \
-	  ./mvnw clean package -P default -Dspring.profiles.active=default; \
+	  ./mvnw clean package -P $(profile) -Dspring.profiles.active=$(profile); \
 	  mkdir -p docker/tomcat/7-jre8/app; \
 	  cp target/todo.war docker/tomcat/7-jre8/app;
 	@docker build -t ${IMAGE} ./tomcat/7-jre8/
+else
+	$(error Profile parameter should specified as memory, default or prod! Hint: profile=<memory/default/prod>)
+endif
 
 run: build
+ifeq ($(profile), prod)
+	$(info docker for prod)
+else
 	@docker run --rm -p 8080:8080 -p 8443:8443 --name todo ${IMAGE}
+endif
 
-release: build
-	@docker build -t ${IMAGE}:${VERSION} .
+
+# Todo remove it after Makefile is done
+test:
+ifneq (, $(filter $(profile), default memory prod))
+	$(info !!!)
+else
+	$(info profile should be either memory, default or prod)
+endif
