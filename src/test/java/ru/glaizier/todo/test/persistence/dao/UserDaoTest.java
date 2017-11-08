@@ -1,5 +1,17 @@
 package ru.glaizier.todo.test.persistence.dao;
 
+import java.lang.invoke.MethodHandles;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+
+import javax.transaction.Transactional;
+
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,25 +20,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.IfProfileValue;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
 import ru.glaizier.todo.model.domain.Role;
 import ru.glaizier.todo.model.domain.User;
 import ru.glaizier.todo.persistence.dao.RoleDao;
 import ru.glaizier.todo.persistence.dao.UserDao;
-
-import javax.transaction.Transactional;
-import java.lang.invoke.MethodHandles;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -36,6 +40,10 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER
 })
 @WebAppConfiguration
 @Transactional
+// Make these tests work only with default profile because there are no dao for memory implementation
+// And the prod db doesn't contain any test data (like "u" and "a" users to rely on)
+// Comment @IfProfileValue to run this test from IDE or edit the IDE's run config to run with this provided key by default
+@IfProfileValue(name = "spring.profiles.active", values = {"default"})
 public class UserDaoTest {
 
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());

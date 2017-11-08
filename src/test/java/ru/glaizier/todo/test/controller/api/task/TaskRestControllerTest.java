@@ -1,5 +1,8 @@
 package ru.glaizier.todo.test.controller.api.task;
 
+import javax.servlet.http.Cookie;
+import javax.transaction.Transactional;
+
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -10,9 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import javax.servlet.http.Cookie;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +25,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
 import ru.glaizier.todo.properties.PropertiesService;
@@ -37,6 +38,9 @@ import ru.glaizier.todo.security.token.TokenService;
         RootConfig.class
 })
 @WebAppConfiguration
+// Make this transactional because we need to rollback the db transaction on save methods not to save anything to db
+@Transactional
+// Todo make tests not reliable on previously saved test
 public class TaskRestControllerTest {
 
     @Autowired

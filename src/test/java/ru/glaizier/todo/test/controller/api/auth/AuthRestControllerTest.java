@@ -1,5 +1,8 @@
 package ru.glaizier.todo.test.controller.api.auth;
 
+import javax.servlet.http.Cookie;
+import javax.transaction.Transactional;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
@@ -10,9 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import javax.servlet.http.Cookie;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
 import ru.glaizier.todo.properties.PropertiesService;
@@ -41,6 +42,8 @@ import ru.glaizier.todo.security.token.TokenService;
         RootConfig.class
 })
 @WebAppConfiguration
+// Make this transactional because we need to rollback the db transaction on save methods not to save anything to db
+@Transactional
 public class AuthRestControllerTest {
 
     private static final String LOGIN_PATH = "/api/auth/login";

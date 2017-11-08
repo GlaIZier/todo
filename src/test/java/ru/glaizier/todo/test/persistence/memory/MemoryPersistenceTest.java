@@ -1,12 +1,17 @@
 package ru.glaizier.todo.test.persistence.memory;
 
+import java.lang.invoke.MethodHandles;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,10 +20,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.IfProfileValue;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
 import ru.glaizier.todo.model.dto.RoleDto;
@@ -26,12 +33,6 @@ import ru.glaizier.todo.model.dto.TaskDto;
 import ru.glaizier.todo.model.dto.UserDto;
 import ru.glaizier.todo.persistence.Persistence;
 import ru.glaizier.todo.persistence.exception.AccessDeniedException;
-
-import java.lang.invoke.MethodHandles;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Run these tests with memory stub db when needed. Here we already have roles, users and tasks from PersistenceInit
@@ -44,6 +45,8 @@ import java.util.Optional;
 })
 @WebAppConfiguration
 @ActiveProfiles("memory")
+// Comment @IfProfileValue to run this test from IDE or edit the IDE's run config to run with this provided key by default
+@IfProfileValue(name = "spring.profiles.active", values = {"memory"})
 public class MemoryPersistenceTest {
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 

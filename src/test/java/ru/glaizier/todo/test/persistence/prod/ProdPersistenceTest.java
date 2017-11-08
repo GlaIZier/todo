@@ -15,13 +15,13 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
+import org.springframework.test.annotation.IfProfileValue;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -48,8 +48,8 @@ import ru.glaizier.todo.persistence.exception.AccessDeniedException;
 @WebAppConfiguration
 @ActiveProfiles("prod")
 @Transactional
-@Ignore
-// Todo check tests. When they are needed to be started
+// Comment @IfProfileValue to run this test from IDE or edit the IDE's run config to run with this provided key by default
+@IfProfileValue(name = "spring.profiles.active", values = {"prod"})
 public class ProdPersistenceTest {
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 

@@ -1,5 +1,7 @@
 package ru.glaizier.todo.test.controller.api.user;
 
+import javax.transaction.Transactional;
+
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -29,6 +31,8 @@ import ru.glaizier.todo.config.servlet.ServletConfig;
         RootConfig.class
 })
 @WebAppConfiguration
+// Make this transactional because we need to rollback the db transaction on save methods not to save anything to db
+@Transactional
 public class UserRestControllerTest {
 
     @Autowired

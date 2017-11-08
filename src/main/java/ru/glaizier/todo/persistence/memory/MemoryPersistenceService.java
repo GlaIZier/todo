@@ -1,21 +1,6 @@
 package ru.glaizier.todo.persistence.memory;
 
 import static java.lang.String.format;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
-import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.stereotype.Service;
-import ru.glaizier.todo.model.dto.RoleDto;
-import ru.glaizier.todo.model.dto.TaskDto;
-import ru.glaizier.todo.model.dto.UserDto;
-import ru.glaizier.todo.persistence.Persistence;
-import ru.glaizier.todo.persistence.exception.AccessDeniedException;
-
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +16,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.stereotype.Service;
+
+import ru.glaizier.todo.model.dto.RoleDto;
+import ru.glaizier.todo.model.dto.TaskDto;
+import ru.glaizier.todo.model.dto.UserDto;
+import ru.glaizier.todo.persistence.Persistence;
+import ru.glaizier.todo.persistence.exception.AccessDeniedException;
 
 /**
  * Java memory implementation of Persistence service which doesn't require any data source, jpa provider or entity manager.
@@ -97,8 +97,10 @@ public class MemoryPersistenceService implements Persistence {
         TaskDto task = findTask(id);
         if (task == null)
             return null;
-        if (!task.getUser().orElseThrow(IllegalStateException::new).getLogin().equals(login))
-            throw new AccessDeniedException(format("Can't get task with this %s id for %s", String.valueOf(id), login));
+        if (!task.getUser().orElseThrow(IllegalStateException::new).getLogin().equals(login)) {
+            throw new AccessDeniedException(
+                format("User with login %s doesn't have rights to access task with %d id!", login, id));
+        }
         return task;
     }
 
