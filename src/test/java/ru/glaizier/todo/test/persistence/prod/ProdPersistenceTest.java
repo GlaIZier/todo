@@ -15,6 +15,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -50,6 +51,8 @@ import ru.glaizier.todo.persistence.exception.AccessDeniedException;
 @Transactional
 // Comment @IfProfileValue to run this test from IDE or edit the IDE's run config to run with this provided key by default
 @IfProfileValue(name = "spring.profiles.active", values = {"prod"})
+// Comment it to run this test using the prod db
+@Ignore
 public class ProdPersistenceTest {
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 

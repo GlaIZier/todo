@@ -1,7 +1,5 @@
 package ru.glaizier.todo.test.controller.api.user;
 
-import javax.transaction.Transactional;
-
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -14,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.IfProfileValue;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -23,6 +22,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
+import ru.glaizier.todo.persistence.Persistence;
 
 @DirtiesContext(classMode = AFTER_CLASS)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -31,12 +31,18 @@ import ru.glaizier.todo.config.servlet.ServletConfig;
         RootConfig.class
 })
 @WebAppConfiguration
-// Make this transactional because we need to rollback the db transaction on save methods not to save anything to db
-@Transactional
+// Don't check here prod profile because this requires to create users and tasks in prod db and rollback it clearly
+// If necessary we can create another test for prod profile personally
+@IfProfileValue(name = "spring.profiles.active", values = {"memory", "default"})
+// Uncomment to start from IDE with memory profile
+//@ActiveProfiles("memory")
 public class UserRestControllerTest {
 
     @Autowired
     private WebApplicationContext context;
+
+    @Autowired
+    private Persistence persistence;
 
     private MockMvc mvc;
 
@@ -59,6 +65,8 @@ public class UserRestControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
             .andExpect(content().string("{\"data\":{\"login\":\"testCreatedLogin\"}}"));
+
+        persistence.deleteUser("testCreatedLogin");
     }
 
     @Test

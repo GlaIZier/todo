@@ -1,7 +1,6 @@
 package ru.glaizier.todo.test.controller.api.auth;
 
 import javax.servlet.http.Cookie;
-import javax.transaction.Transactional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -13,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.IfProfileValue;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -31,6 +32,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
+import ru.glaizier.todo.persistence.Persistence;
 import ru.glaizier.todo.properties.PropertiesService;
 import ru.glaizier.todo.security.token.TokenService;
 
@@ -42,8 +44,10 @@ import ru.glaizier.todo.security.token.TokenService;
         RootConfig.class
 })
 @WebAppConfiguration
-// Make this transactional because we need to rollback the db transaction on save methods not to save anything to db
-@Transactional
+// Don't check here prod profile because this requires to create users in prod db
+@IfProfileValue(name = "spring.profiles.active", values = {"memory", "default"})
+// Uncomment to start from IDE with memory profile
+//@ActiveProfiles("memory")
 public class AuthRestControllerTest {
 
     private static final String LOGIN_PATH = "/api/auth/login";
@@ -59,6 +63,9 @@ public class AuthRestControllerTest {
     @Autowired
     private PropertiesService propertiesService;
 
+    @Autowired
+    private Persistence persistence;
+
     private MockMvc mvc;
 
     @Before
@@ -67,26 +74,32 @@ public class AuthRestControllerTest {
                 .webAppContextSetup(context)
                 .apply(springSecurity())
                 .build();
+        persistence.saveUser("test", "testPassword".toCharArray());
+    }
+
+    @After
+    public void cleanUp() {
+        persistence.deleteUser("test");
     }
 
     @Test
     public void get200WhenAuthenticateUser() throws Exception {
         MvcResult mvcResult = mvc.perform(post(LOGIN_PATH)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .content("login=u&password=p"))
+            .content("login=test&password=testPassword"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
 
         String content = mvcResult.getResponse().getContentAsString();
-        assertThat(content.matches("\\{\"data\":\\{\"login\":\"u\",\"token\":\".+\\..+\\..+\"\\}\\}"), is(true));
+        assertThat(content.matches("\\{\"data\":\\{\"login\":\"test\",\"token\":\".+\\..+\\..+\"\\}\\}"), is(true));
     }
 
     @Test
     public void get400WhenAuthenticateUserWithEmptyLogin() throws Exception {
         mvc.perform(post(LOGIN_PATH)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .content("login=&password=testCreatedPassword"))
+            .content("login=&password=testPassword"))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
 //                .andExpect(content().string("{\"error\":{\"code\":400,\"message\":\"" +
@@ -97,7 +110,7 @@ public class AuthRestControllerTest {
     public void get400WhenAuthenticateUserWithEmptyPassword() throws Exception {
         mvc.perform(post(LOGIN_PATH)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .content("login=testCreatedLogin&password="))
+            .content("login=test&password="))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
 //                .andExpect(content().string("{\"error\":{\"code\":400,\"message\":" +
@@ -119,7 +132,7 @@ public class AuthRestControllerTest {
     public void get401WhenAuthenticateUserWithWrongCredentials() throws Exception {
         mvc.perform(post(LOGIN_PATH)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .content("login=u&password=testWrongPassword"))
+            .content("login=test&password=testWrongPassword"))
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().string("{\"error\":{\"code\":401," +
@@ -141,7 +154,7 @@ public class AuthRestControllerTest {
     public void get400WhenAuthenticateUserWithTooLongPassword() throws Exception {
         mvc.perform(post(LOGIN_PATH)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .content("login=u&password=testWrongPasswordfffffffffffffffffffffffffffffffffffffffffffffffffffffffff"))
+            .content("login=test&password=testWrongPasswordfffffffffffffffffffffffffffffffffffffffffffffffffffffffff"))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
 //                .andExpect(content().string("{\"error\":{\"code\":400,\"message\":\"" +
