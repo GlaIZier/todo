@@ -18,6 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.IfProfileValue;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -112,6 +113,7 @@ public class WebSecurityTest {
     @Test
     // Spring security automatically inject UserDetailsService from SecurityConfig because
     // WithUserDetailsSecurityContextFactory is annotated with @Autowired
+    @IfProfileValue(name = "spring.profiles.active", values = {"memory", "default"})
     public void postLoginAuthenticatedAndRedirectToRoot() throws Exception {
 //        mvc
 //                .perform(formLogin().userParameter("user").user("u").password("p"))
@@ -132,6 +134,7 @@ public class WebSecurityTest {
     }
 
     @Test
+    @IfProfileValue(name = "spring.profiles.active", values = {"memory", "default"})
     public void postLoginAdminAuthenticatedAndRedirectToRoot() throws Exception {
 //        mvc
 //                .perform(formLogin().userParameter("user").user("a").password("p"))
@@ -168,6 +171,7 @@ public class WebSecurityTest {
 
     @Test
     // we can check if cookie is present even without providing user and password
+    @IfProfileValue(name = "spring.profiles.active", values = {"memory", "default"})
     public void postLoginAuthenticatedWithRememberMeCookieAndRedirectToRoot() throws Exception {
         // use post() instead of formlogin() because formlogin() doesn't provide method to attach remember-me param
         mvc
