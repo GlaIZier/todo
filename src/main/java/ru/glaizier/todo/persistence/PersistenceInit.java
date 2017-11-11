@@ -9,12 +9,11 @@ import ru.glaizier.todo.model.domain.Role;
 import ru.glaizier.todo.model.dto.RoleDto;
 import ru.glaizier.todo.model.dto.UserDto;
 
+import javax.annotation.PostConstruct;
 import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-
-import javax.annotation.PostConstruct;
 
 /**
  * Class to init db with test data for hsql implementation. Tests use this information.
@@ -22,6 +21,7 @@ import javax.annotation.PostConstruct;
 @Component
 public class PersistenceInit {
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    // Todo move it to properties file and change logic of create mock data
     private static final String prodProfile = "prod";
     private static final String defaultProfile = "default";
 
@@ -47,7 +47,7 @@ public class PersistenceInit {
         else
             profile = activeProfiles[0];
 
-        log.info("Found {} profile", profile);
+        log.info("Creating mock data for {} profile", profile);
         if (!profile.equalsIgnoreCase(prodProfile))
             createUsersAndTasks(roles);
     }

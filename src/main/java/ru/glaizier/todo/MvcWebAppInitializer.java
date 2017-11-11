@@ -30,4 +30,16 @@ public class MvcWebAppInitializer extends AbstractAnnotationConfigDispatcherServ
     protected String[] getServletMappings() {
         return new String[]{"/"};
     }
+
+//    @Override
+//    public void onStartup(ServletContext context) throws ServletException {
+//        super.onStartup(context);
+//
+//        String activeProfile = System.getProperty("your.profile.property");
+//        if (activeProfile == null) {
+//            activeProfile = "memory"; // or whatever you want the default to be
+//        }
+//
+//        context.setInitParameter("spring.profiles.active", activeProfile);
+//    }
 }
