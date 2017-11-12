@@ -47,7 +47,7 @@ public class PersistenceInit {
         else
             profile = activeProfiles[0];
 
-        log.info("Creating mock data for {} profile", profile);
+        log.info("Creating mock data for '{}' profile", profile);
         if (!profile.equalsIgnoreCase(prodProfile))
             createUsersAndTasks(roles);
     }
