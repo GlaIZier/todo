@@ -1,7 +1,11 @@
 package ru.glaizier.todo.config.root;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import java.lang.invoke.MethodHandles;
+
+import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
+
+import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.HSQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +21,11 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
 import ru.glaizier.todo.properties.PropertiesService;
-
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
-import java.lang.invoke.MethodHandles;
-
-import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.HSQL;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "ru.glaizier.todo.persistence")
@@ -93,6 +95,7 @@ public class DbConfig {
         config.setJdbcUrl(propertiesService.getDbUrl());
         config.setUsername(propertiesService.getDbLogin());
         config.setPassword(propertiesService.getDbPassword());
+        config.setDriverClassName(propertiesService.getDbDriver());
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
