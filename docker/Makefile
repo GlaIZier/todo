@@ -1,5 +1,6 @@
 .PHONY: all build release
 
+# Todo check prod tests when uploading with prod profile
 IMAGE=glaizier/todo
 VERSION=$(shell cat VERSION)
 

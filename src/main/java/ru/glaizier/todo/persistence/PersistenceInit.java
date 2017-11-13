@@ -1,19 +1,22 @@
 package ru.glaizier.todo.persistence;
 
+import java.lang.invoke.MethodHandles;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+
 import ru.glaizier.todo.model.domain.Role;
 import ru.glaizier.todo.model.dto.RoleDto;
 import ru.glaizier.todo.model.dto.UserDto;
-
-import javax.annotation.PostConstruct;
-import java.lang.invoke.MethodHandles;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import ru.glaizier.todo.properties.PropertiesService;
 
 /**
  * Class to init db with test data for hsql implementation. Tests use this information.
@@ -21,35 +24,41 @@ import java.util.List;
 @Component
 public class PersistenceInit {
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    // Todo move it to properties file and change logic of create mock data
-    private static final String prodProfile = "prod";
-    private static final String defaultProfile = "default";
 
-    private Persistence persistence;
+    private final Persistence persistence;
 
-    private Environment environment;
+    private final Environment environment;
+
+    private final PropertiesService propertiesService;
 
     @Autowired
     public PersistenceInit(Persistence persistence,
-                           Environment environment) {
+                           Environment environment,
+                           PropertiesService propertiesService) {
         this.persistence = persistence;
         this.environment = environment;
+        this.propertiesService = propertiesService;
     }
 
     @PostConstruct
     public void createMockData() {
         List<RoleDto> roles = createRoles();
+        log.info("Basic roles: 'USER' and 'ADMIN' have been created");
 
         String[] activeProfiles = environment.getActiveProfiles();
         String profile;
-        if (activeProfiles.length == 0)
-            profile = defaultProfile;
-        else
+        if (activeProfiles.length == 0) {
+            profile = propertiesService.getSpringProfilesDefaultName();
+            log.info("Couldn't find active profile in the environment. Setting default profile...");
+        } else {
             profile = activeProfiles[0];
+            log.info("Active profile {} has been found in the environment", profile);
+        }
 
-        log.info("Creating mock data for '{}' profile", profile);
-        if (!profile.equalsIgnoreCase(prodProfile))
+        if (!profile.equalsIgnoreCase(propertiesService.getSpringProfilesProdName())) {
+            log.info("Creating mock data ('a', 'u' users and tasks for them) for '{}' profile...", profile);
             createUsersAndTasks(roles);
+        }
     }
 
     private List<RoleDto> createRoles() {

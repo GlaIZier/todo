@@ -1,14 +1,16 @@
 package ru.glaizier.todo;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
-import ru.glaizier.todo.config.root.RootConfig;
-import ru.glaizier.todo.config.servlet.ServletConfig;
+import java.io.InputStream;
+import java.util.Properties;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import java.io.InputStream;
-import java.util.Properties;
+
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import lombok.extern.slf4j.Slf4j;
+import ru.glaizier.todo.config.root.RootConfig;
+import ru.glaizier.todo.config.servlet.ServletConfig;
 
 // Todo move the whole application to docker to run it with one command
 @Slf4j
@@ -50,12 +52,12 @@ public class MvcWebAppInitializer extends AbstractAnnotationConfigDispatcherServ
         if (activeProfile == null) {
             log.info("Spring profile hasn't been found in system properties");
             activeProfile = readActiveProfileFromPropertyFile();
-            if (activeProfile != null)
-                log.info("Found '{}' Spring profile in properties file", activeProfile);
-            else
+            if (activeProfile != null) {
+                log.info("Spring profile {} has been found in properties file", activeProfile);
+            } else
                 log.warn("Spring profile hasn't been found in properties file");
         } else {
-            log.info("Found '{}' Spring profile in system properties", activeProfile);
+            log.info("Spring profile {} has been found in system properties", activeProfile);
         }
 
         if (activeProfile != null) {

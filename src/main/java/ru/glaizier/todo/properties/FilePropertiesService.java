@@ -1,13 +1,14 @@
 package ru.glaizier.todo.properties;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 @Service
 @EqualsAndHashCode
@@ -15,6 +16,16 @@ import org.springframework.stereotype.Service;
 @Getter
 @Builder(toBuilder = true)
 public class FilePropertiesService implements PropertiesService {
+
+    @NonNull
+    private final String springProfilesActive;
+    @NonNull
+    private final String springProfilesMemoryName;
+    @NonNull
+    private final String springProfilesDefaultName;
+    @NonNull
+    private final String springProfilesProdName;
+
     @NonNull
     private final String apiTokenCookieName;
     @NonNull
@@ -40,18 +51,27 @@ public class FilePropertiesService implements PropertiesService {
     // on the fields
     @Autowired
     private FilePropertiesService(
-            @Value("${api.token.cookie.name}") String apiTokenCookieName,
-            @Value("${api.token.header.name}") String apiTokenHeaderName,
-            @Value("${api.token.expire.seconds}") int apiTokenExpireDurationInSeconds,
-            @Value("${api.token.signing.key}") String apiTokenSigningKey,
-            @Value("${api.token.session.attribute.name}") String apiTokenSessionAttributeName,
-            @Value("${password.encoder.secret}") String passwordEncoderSecret,
-            @Value("${db.url}") String dbUrl,
-            @Value("${db.driver}") String dbDriver,
-            @Value("${db.login}") String dbLogin,
-            @Value("${db.password}") String dbPassword,
-            @Value("${db.maxpoolsize}") Integer dbMaxPoolSize
+        @Value("${spring.profiles.active}") String springProfilesActive,
+        @Value("${spring.profiles.memory.name}") String springProfilesMemoryName,
+        @Value("${spring.profiles.default.name}") String springProfilesDefaultName,
+        @Value("${spring.profiles.prod.name}") String springProfilesProdName,
+        @Value("${api.token.cookie.name}") String apiTokenCookieName,
+        @Value("${api.token.header.name}") String apiTokenHeaderName,
+        @Value("${api.token.expire.seconds}") int apiTokenExpireDurationInSeconds,
+        @Value("${api.token.signing.key}") String apiTokenSigningKey,
+        @Value("${api.token.session.attribute.name}") String apiTokenSessionAttributeName,
+        @Value("${password.encoder.secret}") String passwordEncoderSecret,
+        @Value("${db.url}") String dbUrl,
+        @Value("${db.driver}") String dbDriver,
+        @Value("${db.login}") String dbLogin,
+        @Value("${db.password}") String dbPassword,
+        @Value("${db.maxpoolsize}") Integer dbMaxPoolSize
     ) {
+        this.springProfilesActive = springProfilesActive;
+        this.springProfilesMemoryName = springProfilesMemoryName;
+        this.springProfilesDefaultName = springProfilesDefaultName;
+        this.springProfilesProdName = springProfilesProdName;
+
         this.apiTokenCookieName = apiTokenCookieName;
         this.apiTokenHeaderName = apiTokenHeaderName;
         this.apiTokenExpireDurationInSeconds = apiTokenExpireDurationInSeconds;

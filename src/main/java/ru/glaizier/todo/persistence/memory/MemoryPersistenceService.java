@@ -61,7 +61,7 @@ public class MemoryPersistenceService implements Persistence {
 
     @Autowired
     public MemoryPersistenceService(InMemoryUserDetailsManager userDetailsManager) {
-        log.info("Using memory persistence implementation...");
+        log.info("Using in-memory, java map-based persistence implementation...");
         this.userDetailsManager = userDetailsManager;
     }
 
