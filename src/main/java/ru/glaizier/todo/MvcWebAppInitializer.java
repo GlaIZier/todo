@@ -53,9 +53,12 @@ public class MvcWebAppInitializer extends AbstractAnnotationConfigDispatcherServ
             log.info("Spring profile hasn't been found in system properties");
             activeProfile = readActiveProfileFromPropertyFile();
             if (activeProfile != null) {
-                log.info("Spring profile '{}' has been found in properties file", activeProfile);
-            } else
-                log.warn("Spring profile hasn't been found in properties file");
+                log.info("Spring profile '{}' has been found in properties file {} in classpath", activeProfile,
+                    PROPERTIES_CLASSPATH_LOCATION);
+            } else {
+                log.warn("Spring profile hasn't been found in properties file {} in classpath",
+                    PROPERTIES_CLASSPATH_LOCATION);
+            }
         } else {
             log.info("Spring profile '{}' has been found in system properties", activeProfile);
         }

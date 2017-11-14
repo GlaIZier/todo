@@ -8,9 +8,16 @@ all: build
 
 build:
 # ((profile == memory || profile == default || profile == prod) && (profile is present))
-ifneq (, $(filter $(profile), memory default prod))
+ifeq ($(profile), $(filter $(profile), memory default))
 	@cd ../; \
-	  ./mvnw clean package -P $(profile) -Dspring.profiles.active=$(profile); \
+	  ./mvnw clean package -P $(profile); \
+	  mkdir -p docker/tomcat/7-jre8/app; \
+	  cp target/todo.war docker/tomcat/7-jre8/app;
+	@docker build -t ${IMAGE} ./tomcat/7-jre8/
+# for prod we skip tests because they require the db
+else ifeq ($(profile), prod)
+	@cd ../; \
+	  ./mvnw clean package -P $(profile) -Dmaven.test.skip=true; \
 	  mkdir -p docker/tomcat/7-jre8/app; \
 	  cp target/todo.war docker/tomcat/7-jre8/app;
 	@docker build -t ${IMAGE} ./tomcat/7-jre8/

@@ -27,7 +27,7 @@
         </rollingPolicy>
     </appender>
 
-    <logger name="ru.glaizier.todo" level="DEBUG"/>
+    <!--<logger name="ru.glaizier.todo" level="DEBUG"/>-->
     <!-- Uncomment if u need to understand what't happening in spring, hibernate -->
     <!--<logger name="org.springframework" level="DEBUG"/>-->
     <!--<logger name="org.hibernate" level="TRACE"/>-->
