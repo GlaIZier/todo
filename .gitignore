@@ -18,3 +18,7 @@ repository/
 target/
 logs/
 .DS_Store
+
+#docker
+docker/tomcat/7-jre8/app
+docker/postgresql/

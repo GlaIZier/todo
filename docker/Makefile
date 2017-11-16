@@ -27,7 +27,9 @@ endif
 
 run: build
 ifeq ($(profile), prod)
-	$(info docker for prod)
+	@mkdir -p postgresql/init; \
+	  cp ../src/main/resources/sql/postgresql/init.sql postgresql/init;
+	@docker-compose up
 else
 	@docker run --rm -p 8080:8080 -p 8443:8443 --name todo ${IMAGE}
 endif
