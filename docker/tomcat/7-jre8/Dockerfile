@@ -5,4 +5,6 @@ COPY keys/.keystore /usr/local/tomcat/keys/
 COPY conf/* /usr/local/tomcat/conf/
 RUN mkdir /usr/local/scripts/
 COPY scripts/* /usr/local/scripts/
+RUN find /usr/local/scripts -type f -exec chmod +x {} \;
+
 EXPOSE 8443

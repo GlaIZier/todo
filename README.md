@@ -49,6 +49,10 @@ Run docker with relative volume mount, bridge ports, name postgres and remove co
 ```$bash
 docker run --rm -p 5432:5432 -v $PWD/src/main/resources/sql/postgresql:/docker-entrypoint-initdb.d --name postgres postgres:9.6.1
 ```
+Enter the container
+```
+docker exec -it <postgres-container-id> bash
+```
 Connect to the db to make sure that it works 
 ```bash
 psql -U todoer -d tododb -h localhost
