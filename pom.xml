@@ -4,6 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- Todo update readme-->
     <groupId>ru.glaizier</groupId>
     <artifactId>todo</artifactId>
     <version>0.2</version>
@@ -20,6 +21,7 @@
             <id>memory</id>
             <properties>
                 <profile.name>memory</profile.name>
+                <spring.profiles.active>memory</spring.profiles.active>
                 <glaizier.server>127.0.0.1</glaizier.server>
                 <glaizier.tomcat.path>${project.name}</glaizier.tomcat.path>
                 <glaizier.tomcat.port>8080</glaizier.tomcat.port>
@@ -32,6 +34,7 @@
             </activation>
             <properties>
                 <profile.name>default</profile.name>
+                <spring.profiles.active>default</spring.profiles.active>
                 <glaizier.server>127.0.0.1</glaizier.server>
                 <glaizier.tomcat.path>${project.name}</glaizier.tomcat.path>
                 <glaizier.tomcat.port>8080</glaizier.tomcat.port>
@@ -41,6 +44,17 @@
             <id>prod</id>
             <properties>
                 <profile.name>prod</profile.name>
+                <spring.profiles.active>prod</spring.profiles.active>
+                <glaizier.server>127.0.0.1</glaizier.server>
+                <glaizier.tomcat.path>${project.name}</glaizier.tomcat.path>
+                <glaizier.tomcat.port>8080</glaizier.tomcat.port>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod-docker</id>
+            <properties>
+                <profile.name>prod-docker</profile.name>
+                <spring.profiles.active>prod</spring.profiles.active>
                 <glaizier.server>127.0.0.1</glaizier.server>
                 <glaizier.tomcat.path>${project.name}</glaizier.tomcat.path>
                 <glaizier.tomcat.port>8080</glaizier.tomcat.port>
@@ -91,7 +105,7 @@
                     <!-- Enable spring profile by setting spring.profiles.active in system var while using tomcat7 plugin for tomcat7:run
                         or use mvn clean tomcat7:run -Dspring.profiles.active=<profile> instead of it-->
                     <systemProperties>
-                        <spring.profiles.active>${profile.name}</spring.profiles.active>
+                        <spring.profiles.active>${spring.profiles.active}</spring.profiles.active>
                     </systemProperties>
                     <!--http config-->
                     <server>${glaizier.server}</server>
@@ -170,7 +184,7 @@
                 <version>2.20.1</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <spring.profiles.active>${profile.name}</spring.profiles.active>
+                        <spring.profiles.active>${spring.profiles.active}</spring.profiles.active>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
