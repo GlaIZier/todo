@@ -95,7 +95,10 @@ mvn clean compile
 There are 3 profiles in the application: memory, default and prod. They defer from each other by using different 
 implementation of persistence. Memory uses Java's ConcurrentHashMaps to store users, roles and tasks; default - 
 embedded HSQL db; prod - external PostgreSql instance. So, in the first two cases data is erased after restart, 
-in the last - currently it is erased too when docker is used, but it's possible to make it constant.
+in the last - currently it is erased too when docker is used, but it's possible to make it constant. Also there is an
+additional profile 'prod-docker'. It's a prod profile which is used only in Makefile with docker-compose because
+tomcat docker container can't reach postgres on localhost. You don't need to use this profile separately without 
+docker-compose in most of the cases.
 
 These three profiles are connected with Spring profiles to allow to instantiate certain beans depending on different
 profiles. All properties for these profiles are in the profiles folder under /resource. Maven filters these files, 
