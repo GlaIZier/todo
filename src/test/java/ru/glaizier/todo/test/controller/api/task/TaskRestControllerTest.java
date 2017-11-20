@@ -94,6 +94,21 @@ public class TaskRestControllerTest {
     }
 
     @Test
+    public void get200AndEmptyList() throws Exception {
+        persistence.saveUser("emptyTasksLogin", "testPassword".toCharArray());
+        // We can get empty list but it's OK 200 for rest get collection
+        String token = tokenService.createToken("emptyTasksLogin");
+
+        mvc.perform(get("/api/me/tasks").cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(content().string("{\"data\":" +
+                "[]}"));
+
+        persistence.deleteUser("emptyTasksLogin");
+    }
+
+    @Test
     public void get404WhenGetTasksForUnknownUser() throws Exception {
         String token = tokenService.createToken("dummyLogin");
 

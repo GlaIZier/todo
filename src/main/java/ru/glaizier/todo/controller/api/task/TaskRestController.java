@@ -1,6 +1,17 @@
 package ru.glaizier.todo.controller.api.task;
 
-import lombok.RequiredArgsConstructor;
+import static java.lang.String.format;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import lombok.RequiredArgsConstructor;
 import ru.glaizier.todo.controller.api.exception.ApiBadRequestException;
 import ru.glaizier.todo.controller.api.exception.ApiNotFoundException;
 import ru.glaizier.todo.controller.api.exception.ApiTaskNotFoundException;
@@ -22,14 +35,6 @@ import ru.glaizier.todo.model.dto.api.output.OutputData;
 import ru.glaizier.todo.model.dto.api.output.OutputTask;
 import ru.glaizier.todo.persistence.Persistence;
 import ru.glaizier.todo.properties.PropertiesService;
-
-import javax.servlet.http.HttpServletRequest;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
-import static java.lang.String.format;
-import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
 @RequestMapping(value = {"/api/v1/me/tasks", "/api/me/tasks"})
@@ -54,8 +59,9 @@ public class TaskRestController extends ExceptionHandlingController {
         if (tasks == null)
             throw new ApiNotFoundException(format("Tasks list get failed! " +
                     "Login %s hasn't been found!", login));
-        if (tasks.isEmpty())
-            return new ResponseEntity<>(new OutputData<>(null), HttpStatus.OK);
+        if (tasks.isEmpty()) {
+            return new ResponseEntity<>(new OutputData<>(Collections.emptyList()), HttpStatus.OK);
+        }
 
         List<OutputTask> outputTasks = tasks.stream().collect(
                 ArrayList<OutputTask>::new,
