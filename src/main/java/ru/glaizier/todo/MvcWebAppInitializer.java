@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
 
-// Todo move the whole application to docker to run it with one command
 @Slf4j
 public class MvcWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 

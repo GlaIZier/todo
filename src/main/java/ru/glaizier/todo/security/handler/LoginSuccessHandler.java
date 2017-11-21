@@ -13,7 +13,7 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import lombok.NonNull;
 import ru.glaizier.todo.security.token.TokenService;
 
-// Todo read about SavedRequestAwareAuthenticationSuccessHandler and other extends
+// We extend standard, used by Spring Security authentication handler to add token for api to cookie
 public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
     @NonNull
