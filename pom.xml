@@ -6,7 +6,7 @@
 
     <groupId>ru.glaizier</groupId>
     <artifactId>todo</artifactId>
-    <version>0.2</version>
+    <version>1.0</version>
     <description>Todo list application</description>
     <packaging>war</packaging>
 
