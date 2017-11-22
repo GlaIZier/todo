@@ -1,6 +1,7 @@
 package ru.glaizier.todo.persistence;
 
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -43,31 +44,47 @@ public class PersistenceInit {
     @PostConstruct
     public void createMockData() {
         List<RoleDto> roles = createRoles();
-        log.info("Basic roles: 'USER' and 'ADMIN' have been created");
 
         String[] activeProfiles = environment.getActiveProfiles();
         String profile;
         if (activeProfiles.length == 0) {
             profile = propertiesService.getSpringProfilesDefaultName();
-            log.info("Couldn't find active profile in the environment. Setting default profile...");
+            log.info(
+                "Couldn't find an active profile in the environment. The default profile from properties file has been used");
         } else {
             profile = activeProfiles[0];
             log.info("Active profile {} has been found in the environment", profile);
         }
 
         if (!profile.equalsIgnoreCase(propertiesService.getSpringProfilesProdName())) {
-            log.info("Creating mock data ('a', 'u' users and tasks for them) for '{}' profile...", profile);
             createUsersAndTasks(roles);
+            log.info("Mock data ('a', 'u' users and tasks for them) for '{}' profile has been created", profile);
         }
     }
 
+    // Create roles only if they are absent because we need to save existing roles and authorizations
+    // if they are present in the db
     private List<RoleDto> createRoles() {
+        List<RoleDto> roles = new ArrayList<>();
         RoleDto userRole = new RoleDto(Role.USER.getRole());
-        RoleDto adminRole = new RoleDto(Role.ADMIN.getRole());
-        persistence.saveRole(userRole.getRole());
-        persistence.saveRole(adminRole.getRole());
+        if (persistence.findRole(userRole.getRole()) == null) {
+            persistence.saveRole(userRole.getRole());
+            log.info("Basic role 'ROLE_USER' has been created");
+        } else {
+            log.info("Basic role 'ROLE_USER' has been found. Skip creating 'ROLE_USER'");
+        }
+        roles.add(userRole);
 
-        return Arrays.asList(userRole, adminRole);
+        RoleDto adminRole = new RoleDto(Role.ADMIN.getRole());
+        if (persistence.findRole(adminRole.getRole()) == null) {
+            persistence.saveRole(adminRole.getRole());
+            log.info("Basic role 'ROLE_ADMIN' has been created");
+        } else {
+            log.info("Basic role 'ROLE_ADMIN' has been found. Skip creating 'ROLE_ADMIN'");
+        }
+        roles.add(adminRole);
+
+        return roles;
     }
 
     private void createUsersAndTasks(List<RoleDto> roles) {
