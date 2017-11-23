@@ -1,0 +1,9 @@
+#cc-loading-gif {
+    text-align: center;
+    padding-bottom: 15px;
+}
+
+#cc-loading-gif span {
+    font-style: oblique;
+    color: lightslategrey;
+}

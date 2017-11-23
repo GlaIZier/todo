@@ -1,0 +1,15 @@
+.cc-display-inline {
+    display: inline;
+}
+
+#cc-result-panel-title-sort {
+    float: right;
+}
+
+#cc-result-panel-title-sort-heading {
+    padding-right: 10px;
+}
+
+#cc-result-panel-body .panel-body {
+    padding-top: 0;
+}

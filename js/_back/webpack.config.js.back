@@ -1,0 +1,41 @@
+var webpack = require('webpack');
+var path = require('path');
+
+// import styles to components
+var autoprefixer = require('autoprefixer');
+var precss = require('precss');
+
+//var PROD_BUILD_DIR = path.resolve(__dirname, 'build');
+var JS_DIR = path.resolve(__dirname, 'src');
+//var DEV_BUILD_DIR = path.resolve(__dirname, '../../../target/classes/static/build');
+
+var config = {
+    // https://github.com/webpack/webpack/issues/1189
+    // to place bundle in two dirs: build and target
+    entry: {
+        'build': JS_DIR + '/index.js',
+        '../../../../target/classes/static/build': JS_DIR + '/index.js'
+    },
+    output: {
+        path: './',
+        filename: '[name]/bundle.js'
+    },
+    module: {
+        loaders: [
+            {
+                test: /\.jsx?/,
+                include: JS_DIR,
+                loader: 'babel'
+            },
+            {
+                test: /\.css$/,
+                loader: "style-loader!css-loader!postcss-loader"
+            }
+        ]
+    },
+    postcss: function () {
+        return [autoprefixer, precss];
+    }
+};
+
+module.exports = config;

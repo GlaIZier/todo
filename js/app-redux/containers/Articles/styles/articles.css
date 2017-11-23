@@ -1,0 +1,9 @@
+#cc-loading-gif {
+    text-align: center;
+    padding-bottom: 15px;
+}
+
+#cc-articles-search-results {
+    max-height: 620px;
+    overflow-y: auto;
+}

@@ -1,0 +1,8 @@
+{
+  "root": "/",
+  "login": "/login",
+  "articles": "/articles/",
+  "article": "/articles/<%-props.id%>",
+  "403": "/403",
+  "404": "/404"
+}
