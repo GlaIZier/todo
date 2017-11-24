@@ -26,6 +26,7 @@ app.use(function (req, res, next) {
   setTimeout(next, 1000)
 });
 
+/*
 // Search. Journals
 app.post('/ks/v2/Journals/search', function (req, res) {
   // path.join(__dirname, '../public', 'index1.html')
@@ -90,6 +91,7 @@ app.get(/^\/ks\/v2\/ArticleProducts\/(.*)/, function (req, res) {
   res.sendFile(path.join(__dirname, '/data', 'article.json'));
 });
 
+ */
 // Web application for all other urls
 app.get(/.*/, function (req, res) {
   res.sendFile(__dirname + '/app-redux/index.html')

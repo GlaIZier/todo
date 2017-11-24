@@ -1,7 +1,7 @@
 {
-  "name": "content-classifier",
-  "version": "0.0.9",
-  "description": "content-classifier",
+  "name": "todo",
+  "version": "1.0",
+  "description": "Single page application for the todo app",
   "main": "index.js",
   "scripts": {
     "start:local": "node server.js LOCAL",
@@ -12,7 +12,7 @@
     "build:prod": "webpack -p --env=PROD"
   },
   "keywords": [
-    "content-classifier"
+    "todo"
   ],
   "author": "Mikhail Khokhlushin",
   "license": "ISC",

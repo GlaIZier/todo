@@ -1,17 +1,19 @@
 const path = require('path');
 const webpack = require('webpack');
-const APP_ENTRY_POINT = './app-redux/index.js';
 const merge = require('webpack-merge');
-// output path for packed bundle content.
-const OUTPUT_PATH = path.join(__dirname, '../src/main/resources/static');
-const APP_FOLDER = path.resolve(__dirname, "app-redux");
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+
+
+const APP_ENTRY_POINT = './app-redux/index.js';
+// output path for packed bundle content.
+const OUTPUT_PATH = path.join(__dirname, '../src/main/webapp/resources/js/spa');
+const APP_FOLDER = path.resolve(__dirname, "app-redux");
 
 module.exports = (env = 'LOCAL') => {
   console.log(`Bundling with ${env} environment...`);
    // server will use this path to output bundled static content: localhost:3000/dist/spa.js;
    // localhost/dist/images/loading.gif
-  const PUBLIC_PATH = (env !== 'LOCAL') ? '/content-classifier/' : '/';
+  const PUBLIC_PATH = (env !== 'LOCAL') ? '/todo/' : '/';
 
   const config = {
     entry: [
