@@ -1,6 +1,6 @@
 {
   "name": "todo",
-  "version": "1.0",
+  "version": "1.0.0",
   "description": "Single page application for the todo app",
   "main": "index.js",
   "scripts": {

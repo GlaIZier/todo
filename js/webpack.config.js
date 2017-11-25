@@ -91,11 +91,14 @@ module.exports = (env = 'LOCAL') => {
        config.plugins.push(new webpack.HotModuleReplacementPlugin());
     }
 
-    return merge(config, {
-        devtool: 'cheap-module-eval-source-map'
-    });
+    // Todo do we need it?
+    // return merge(config, {
+    //     devtool: 'cheap-module-eval-source-map'
+    // });
+    return config;
 
   } else {
+    // Todo do we need it?
     return merge(config, {
         plugins: [
             new webpack.DefinePlugin({
