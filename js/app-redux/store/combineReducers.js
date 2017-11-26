@@ -1,5 +1,5 @@
-import {combineReducers} from "redux";
-import auth from "../redux/auth";
+import {combineReducers} from 'redux';
+import auth from '../redux/auth';
 // import search from '../redux/search';
 // import articles from '../redux/articles';
 // import article from '../redux/article';
