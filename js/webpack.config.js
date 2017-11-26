@@ -81,7 +81,7 @@ module.exports = (env = 'LOCAL') => {
   };
 
   if (env !== 'PROD') {
-
+    console.log('Non-prod profile has been found in webpack');
     if (env === 'LOCAL') {
        // adding hot-middleware client to entry after babel but before APP_ENTRY_POINT
        config.entry.splice(1, 0, 'webpack-hot-middleware/client');
@@ -89,6 +89,7 @@ module.exports = (env = 'LOCAL') => {
        // When the build completes, Webpack does not exit but stays active, watching the source files for changes.
        // If Webpack detects a source file change, it rebuilds only the changed module(s).
        config.plugins.push(new webpack.HotModuleReplacementPlugin());
+      console.log('Local profile has been found in webpack. Hot reloading middleware has been added')
     }
 
     // Todo do we need it?
@@ -98,7 +99,8 @@ module.exports = (env = 'LOCAL') => {
     return config;
 
   } else {
-    // Todo do we need it?
+    console.log('Prod profile has been found in webpack');
+    // Todo do we need it? Remove it?
     return merge(config, {
         plugins: [
             new webpack.DefinePlugin({
