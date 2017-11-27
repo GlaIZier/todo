@@ -10,32 +10,34 @@ import {requireAuthentication} from '../pages/AuthenticatedPage';
 import NoPermissions from '../pages/NoPermissions/NoPermissions';
 
 export default function RouterContainer() {
-    //<Router history={useBasename(() => browserHistory)({ basename: '/content-classifier' })}
+  //<Router history={useBasename(() => browserHistory)({ basename: '/content-classifier' })}
 
-    if (__LOCAL__) {
-        return (
-            <Router history={browserHistory}>
-                <Route path="/" component={App}>
-                    <IndexRedirect to="articles"/>
-                    <Route path="login" component={LoginPage} key="login"/>
-                    <Route path="articles" component={requireAuthentication(ArticlesPage)} key="articles"/>
-                    <Route path="articles/:articleId" component={requireAuthentication(ArticlePage)} key="article"/>
-                    <Route path="403" component={NoPermissions} key="noPermissions"/>
-                    <Route path="*" component={NotFound}/>
-                </Route>
-            </Router>);
-    } else {
-        return (
-            <Router history={browserHistory}>
-                <Route path="/content-classifier/" component={App}>
-                    <IndexRedirect to="articles"/>
-                    <Route path="login" component={LoginPage} key="login"/>
-                    <Route path="articles" component={requireAuthentication(ArticlesPage)} key="articles"/>
-                    <Route path="articles/:articleId" component={requireAuthentication(ArticlePage)} key="article"/>
-                    <Route path="403" component={NoPermissions} key="noPermissions"/>
-                    <Route path="*" component={NotFound}/>
-                </Route>
-            </Router>);
-    }
+  // Todo try to import here constants from routes
+  if (__LOCAL__) {
+    console.log('Creating router for local profile...');
+    return (
+      <Router history={browserHistory}>
+        <Route path="/" component={App}>
+          <IndexRedirect to="tasks"/>
+          <Route path="login" component={LoginPage} key="login"/>
+          <Route path="tasks" component={requireAuthentication(ArticlesPage)} key="tasks"/>
+          <Route path="articles/:taskId" component={requireAuthentication(ArticlePage)} key="task"/>
+          <Route path="403" component={NoPermissions} key="noPermissions"/>
+          <Route path="*" component={NotFound}/>
+        </Route>
+      </Router>);
+  } else {
+    return (
+      <Router history={browserHistory}>
+        <Route path="/todo/spa/" component={App}>
+          <IndexRedirect to="tasks"/>
+          <Route path="login" component={LoginPage} key="login"/>
+          <Route path="tasks" component={requireAuthentication(ArticlesPage)} key="tasks"/>
+          <Route path="articles/:taskId" component={requireAuthentication(ArticlePage)} key="task"/>
+          <Route path="403" component={NoPermissions} key="noPermissions"/>
+          <Route path="*" component={NotFound}/>
+        </Route>
+      </Router>);
+  }
 
 }

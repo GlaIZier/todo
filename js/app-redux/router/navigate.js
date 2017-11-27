@@ -18,9 +18,9 @@ export const getURL = (pageName, props) => {
     }
   }
   if (__LOCAL__) {
-      return template({props: encodedProps});
+    return template({props: encodedProps});
   } else {
-      return '/content-classifier' + template({props: encodedProps});
+    return routes[root] + template({props: encodedProps});
   }
 };
 
