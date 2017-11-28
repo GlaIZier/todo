@@ -14,12 +14,9 @@ export function* loginSaga(action) {
     // indirect async call is used to help to test this middleware
     const payload = yield call(Services.authService.login, username, password);
     console.debug('Payload inside loginSaga() after AuthService.login() success: ' + payload);
-    window.localStorage.setItem('cc-user', JSON.stringify(payload.payload));
+    window.localStorage.setItem('todo-user', JSON.stringify(payload.payload));
 
-    const journals = yield call(Services.authService.allowedJournals);
-    window.localStorage.setItem('cc-user-journals', JSON.stringify(journals));
-
-    yield put(loginSuccessAC(payload.payload, journals));
+    yield put(loginSuccessAC(payload.payload));
     yield put(navigateSagaAC('articles'));
   } catch (e) {
     console.error('Login error: ', e);
