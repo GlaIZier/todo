@@ -7,17 +7,18 @@ import Services from '../config/config.services';
 
 export function* loginSaga(action) {
   try {
-    const {payload: {username, password}} = action;
+    const {payload: {login, password}} = action;
 
     // saga itself inside put function can dispatch actions to reducers
     yield put(loginStartAC());
     // indirect async call is used to help to test this middleware
-    const payload = yield call(Services.authService.login, username, password);
+    const payload = yield call(Services.authService.login, login, password);
     console.debug('Payload inside loginSaga() after AuthService.login() success: ' + payload);
-    window.localStorage.setItem('todo-user', JSON.stringify(payload.payload));
+    let user = payload.data;
+    window.localStorage.setItem('todo-user', JSON.stringify(user));
 
-    yield put(loginSuccessAC(payload.payload));
-    yield put(navigateSagaAC('articles'));
+    yield put(loginSuccessAC(user));
+    yield put(navigateSagaAC('tasks'));
   } catch (e) {
     console.error('Login error: ', e);
     yield put(loginFailAC(e.responseJSON.message));
@@ -28,8 +29,7 @@ export function* loginSaga(action) {
 export function* logoutSaga() {
   try {
     yield call(Services.authService.logout);
-    window.localStorage.removeItem('cc-user');
-    window.localStorage.removeItem('cc-user-journals');
+    window.localStorage.removeItem('todo-user');
     yield put(logoutSuccessAC());
   } catch (e) {
     console.error(e);

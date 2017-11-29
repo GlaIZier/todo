@@ -11,22 +11,22 @@ class AuthService {
   }
 
   // Change to promises instead of Q when spr project will use them too?
-  login = (username = '', password = '') => {
+  login = (login = '', password = '') => {
 
     // function sleep(time) {
     //   return new Promise((resolve) => setTimeout(resolve, time));
     // }
     //
     // return sleep(1000).then(() => {
-    //   console.log('Inside AuthService.login ' + username + ' ' + password)
+    //   console.log('Inside AuthService.login ' + login + ' ' + password)
     // })
-    console.debug('Inside AuthService.login() ' + username + ' ' + password);
+    console.debug('Inside AuthService.login() ' + login + ' ' + password);
     const defer = Q.defer();
 
-    const url = `${this.config.authApiBaseUrl}/authenticate`;
+    const url = `${this.config.loginApiUrl}`;
     /* eslint-disable quotes */
     const credentials = {
-      "username": username,
+      "login": login,
       "password": password
     };
     /* eslint-enable quotes */
@@ -37,9 +37,9 @@ class AuthService {
     $.ajax({
       url,
       method: 'POST',
-      contentType: 'application/json',
-      dataType: 'json',
-      data: JSON.stringify(credentials)
+      // contentType: 'application/json',
+      // dataType: 'json',
+      data: credentials
     })
       .then(payload => {
         console.debug('Payload inside AuthService.login ajax then(): ' + payload);
@@ -50,34 +50,13 @@ class AuthService {
     return defer.promise;
   };
 
-  allowedJournals = () => {
-
-      const defer = Q.defer();
-      const url = `${this.config.authApiBaseUrl}/settings/journals`;
-
-      $.ajax({
-          url,
-          method: 'GET',
-          contentType: 'application/json',
-          dataType: 'json'
-      })
-          .then(payload => {
-              console.debug('Payload inside AuthService.allowedJournals ajax then(): ' + payload);
-              defer.resolve(payload)
-          })
-          .fail(e => defer.reject(e));
-
-      return defer.promise;
-
-  };
-
   logout = () => {
     console.debug('Inside AuthService.logout()');
     const defer = Q.defer();
 
     $.ajax({
-      url: `${this.config.authApiBaseUrl}/logout`,
-      method: 'GET',
+      url: `${this.config.logoutApiUrl}`,
+      method: 'POST',
     })
       .then(payload => defer.resolve(payload))
       .fail(e => defer.reject(e));

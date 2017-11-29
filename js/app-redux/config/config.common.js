@@ -1,7 +1,9 @@
 const appConfig = () => {
   // const baseUrl = '/api/v1';
-  const apiBaseUrl = __LOCAL__ ? '' : '';
-  const authApiBaseUrl = __LOCAL__ ? '' : '';
+  const apiBaseUrl = 'https://localhost:8443/todo/api/';
+
+  const loginApiUrl = apiBaseUrl + 'auth/login';
+  const logoutApiUrl = apiBaseUrl + 'auth/me/logout';
 
   let journalsSearchBaseUrl = apiBaseUrl + '';
   let articlesSearchBaseUrl = apiBaseUrl + '';
@@ -11,7 +13,7 @@ const appConfig = () => {
   let articleConceptsBaseUrlTemplate = apiBaseUrl + '';
   let articleHumanConceptsBaseUrlTemplate = apiBaseUrl + '';
   // here lot's of empty results for journals
-  let journalPolicyBaseUrlTemplate = authApiBaseUrl + '';
+  let journalPolicyBaseUrlTemplate = loginApiUrl + '';
 
   let journalTaxonomiesBaseUrlTemplate = apiBaseUrl + '';
   let topConceptsBaseUrlTemplate = apiBaseUrl + '';
@@ -22,25 +24,25 @@ const appConfig = () => {
   let conceptHumanEditionBaseUrlTemplate = apiBaseUrl + '';
 
   // Enable mock
-  if (__LOCAL__) {
-    journalsSearchBaseUrl = '';
-    articlesSearchBaseUrl = '';
-
-    articleInfoBaseUrlTemplate = '';
-    articleJournalBaseUrlTemplate = '';
-    articleConceptsBaseUrlTemplate = '';
-    articleHumanConceptsBaseUrlTemplate = '';
-    // here lot's of empty results for journals
-    journalPolicyBaseUrlTemplate = '';
-
-    journalTaxonomiesBaseUrlTemplate = '';
-    topConceptsBaseUrlTemplate = '';
-    childConceptsBaseUrlTemplate = '';
-
-    conceptsSearchBaseUrl = '';
-    conceptEditionBaseUrlTemplate = '';
-    conceptHumanEditionBaseUrlTemplate = '';
-  }
+  // if (__LOCAL__) {
+  //   journalsSearchBaseUrl = '';
+  //   articlesSearchBaseUrl = '';
+  //
+  //   articleInfoBaseUrlTemplate = '';
+  //   articleJournalBaseUrlTemplate = '';
+  //   articleConceptsBaseUrlTemplate = '';
+  //   articleHumanConceptsBaseUrlTemplate = '';
+  //   // here lot's of empty results for journals
+  //   journalPolicyBaseUrlTemplate = '';
+  //
+  //   journalTaxonomiesBaseUrlTemplate = '';
+  //   topConceptsBaseUrlTemplate = '';
+  //   childConceptsBaseUrlTemplate = '';
+  //
+  //   conceptsSearchBaseUrl = '';
+  //   conceptEditionBaseUrlTemplate = '';
+  //   conceptHumanEditionBaseUrlTemplate = '';
+  // }
 
 
   const statusAll = 'all';
@@ -51,7 +53,8 @@ const appConfig = () => {
 
   return {
     // baseUrl: baseUrl,
-    authApiBaseUrl: authApiBaseUrl,
+    loginApiUrl: loginApiUrl,
+    logoutApiUrl: logoutApiUrl,
 
     journalsSearchBaseUrl: journalsSearchBaseUrl,
     articlesSearchBaseUrl: articlesSearchBaseUrl,
