@@ -3,15 +3,15 @@ import auth from '../redux/auth';
 // import search from '../redux/search';
 // import articles from '../redux/articles';
 // import article from '../redux/article';
-// import notifications from '../redux/notifications';
+import notifications from '../redux/notifications';
 
 
 const rootReducer = combineReducers({
-  auth
+  auth,
   // search,
   // articles,
   // article,
-  // notifications
+  notifications
 });
 
 export default rootReducer;
