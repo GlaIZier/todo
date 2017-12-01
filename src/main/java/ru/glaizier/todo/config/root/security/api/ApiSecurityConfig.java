@@ -18,7 +18,8 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
     // These api urls are not protected because they are used for registration and authentication
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .antMatcher("/api/**")
-                .csrf().disable();
+            .antMatcher("/api/**")
+            .cors().and()
+            .csrf().disable();
     }
 }

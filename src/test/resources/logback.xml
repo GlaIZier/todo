@@ -25,6 +25,7 @@
     </appender>
 
     <logger name="ru.glaizier.todo" level="DEBUG"/>
+    <!--<logger name="org.springframework" level="DEBUG"/>-->
 
     <!-- Default level for loggers is DEBUG-->
     <root level="ERROR">

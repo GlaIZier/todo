@@ -4,7 +4,9 @@ import javax.servlet.http.Cookie;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,8 +27,8 @@ import ru.glaizier.todo.security.token.TokenService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {
-        ServletConfig.class,
-        RootConfig.class
+    ServletConfig.class,
+    RootConfig.class
 })
 @WebAppConfiguration
 public class ApiSecurityTest {
@@ -47,9 +49,9 @@ public class ApiSecurityTest {
     @Before
     public void setup() {
         mvc = MockMvcBuilders
-                .webAppContextSetup(context)
-                .apply(springSecurity())
-                .build();
+            .webAppContextSetup(context)
+            .apply(springSecurity())
+            .build();
     }
 
     @Test
@@ -57,8 +59,8 @@ public class ApiSecurityTest {
         // need to provide dummy cookie or we will get NullPointerException while getting cookies in filter:
         // req.getCookies
         mvc.perform(get(testUri).cookie(new Cookie("dummy", "dummy")))
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
+            .andDo(print())
+            .andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -67,11 +69,11 @@ public class ApiSecurityTest {
         // exchange prelast and preprelast chars, because last char is =
         String invalidToken = token.substring(0, token.length() - 3);
         invalidToken = invalidToken + token.charAt(token.length() - 2) + token.charAt(token.length() - 1) +
-                token.charAt(token.length() - 1);
+            token.charAt(token.length() - 1);
 
         mvc.perform(get(testUri).cookie(new Cookie(propertiesService.getApiTokenCookieName(), invalidToken)))
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
+            .andDo(print())
+            .andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -81,8 +83,8 @@ public class ApiSecurityTest {
         String token = tokenService.createToken("u");
 
         mvc.perform(get(testUri).cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
-                .andDo(print())
-                .andExpect(status().isOk());
+            .andDo(print())
+            .andExpect(status().isOk());
     }
 
     @Test
@@ -90,7 +92,35 @@ public class ApiSecurityTest {
         String token = tokenService.createToken("dummyLogin");
 
         mvc.perform(get(testUri).cookie(new Cookie(propertiesService.getApiTokenCookieName(), token)))
-                .andDo(print())
-                .andExpect(status().isNotFound());
+            .andDo(print())
+            .andExpect(status().isNotFound());
+    }
+
+    /**
+     * To make Spring's {@link org.springframework.web.filter.CorsFilter} work we have to add "Origin" header
+     * or it won't do anything with a request
+     */
+    @Test
+    public void getCorsHeaderForLogin() throws Exception {
+        String token = tokenService.createToken("dummyLogin");
+
+        mvc.perform(
+            post("/api/auth/login")
+                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
+                .header("Origin", "http://externalhost.com"))
+            .andDo(print())
+            .andExpect(header().string("Access-Control-Allow-Origin", "*"));
+    }
+
+    @Test
+    public void getCorsHeaderForTasks() throws Exception {
+        String token = tokenService.createToken("dummyLogin");
+
+        mvc.perform(
+            post(testUri)
+                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
+                .header("Origin", "http://externalhost.com"))
+            .andDo(print())
+            .andExpect(header().string("Access-Control-Allow-Origin", "*"));
     }
 }

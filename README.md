@@ -86,10 +86,19 @@ http://localhost:8443/todo/v2/api-docs
 
 ## Additional info
 ### Knowing problems
+#### Possible build problems
 If there are some problems that mvn couldn't find some resources try first
 ```bash
 mvn clean compile
 ```
+
+#### Api access
+If there is a problem with accessing API like 
+```
+net::ERR_INSECURE_RESPONSE
+```
+try to go to some application page first and accept that you understand that security certificate is untrusted. 
+Todo uses a self-signed certificate. 
 
 ### Profiles
 There are 3 profiles in the application: memory, default and prod. They defer from each other by using different 
