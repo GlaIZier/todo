@@ -4,13 +4,11 @@
 Spring mvc todo list app
 
 ## Tests
-### Embedded (HSQL) and memory db implementation
 ```
-mvn clean verify
+mvn clean verify -P <memory/default/prod>
 ```
-### Production Postgres db tests
-Remove @Ignore from ProdPersistenceTest and run tests again. Make sure that Postgres db is started and contains 
-Role user and admin and doesn't contain any task or user
+Also some tests are marked with @Ignore. You can remove this annotation to make them run. For some cases external 
+Postgres db is needed.
 
 ## Deploy and run
 ### Deploy to standalone tomcat
@@ -21,11 +19,16 @@ Role "manager-gui" and user with that role must be set up in these files.
 ```
 mvn clean tomcat7:redeploy -P <memory/default/prod>
 ```
+In case of prod profile you need an external Postgres database
 
-### Run embedded Maven plugin tomcat
+### Run Maven plugin's embedded tomcat
 #### Embedded db (HSQL) implementation
 ```
 mvn tomcat7:run
+```
+or 
+```
+mvn tomcat7:run -P default
 ```
 #### Memory db implementation
 ```
@@ -36,27 +39,15 @@ mvn clean tomcat7:run -P memory
 ```
 mvn clean tomcat7:run -P prod
 ```
+In this case you need an external Postgres database.
 
-### Docker
-You need to install Docker locally to make all these steps work.
-#### Postgresql docker
-You can use docker postgres to make this application work with the production database and the production profile.
-Pull image first
-```bash
-docker pull postgres:9.6.1
+### Run application in docker container
+You need to install Docker locally to make this work, but you don't have to install the prod external database.
+Go to docker folder and run
 ```
-Run docker with relative volume mount, bridge ports, name postgres and remove container after finish from project root directory
-```$bash
-docker run --rm -p 5432:5432 -v $PWD/src/main/resources/sql/postgresql:/docker-entrypoint-initdb.d --name postgres postgres:9.6.1
+make run profile=<memory/default/prod>
 ```
-Enter the container
-```
-docker exec -it <postgres-container-id> bash
-```
-Connect to the db to make sure that it works 
-```bash
-psql -U todoer -d tododb -h localhost
-```
+
 
 ## Endpoints
 ### Application
@@ -99,6 +90,27 @@ net::ERR_INSECURE_RESPONSE
 ```
 try to go to some application page first and accept that you understand that security certificate is untrusted. 
 Todo uses a self-signed certificate. 
+
+### Postgresql docker implementation to use with prod profile
+You can use docker postgres to make this application work with the production database and the production profile (-P prod).
+Install docker.
+Pull the image:
+```bash
+docker pull postgres:9.6.1
+```
+Run docker with relative volume mount, bridge ports, name postgres and remove container after finish from project root directory:
+```$bash
+docker run --rm -p 5432:5432 -v $PWD/src/main/resources/sql/postgresql:/docker-entrypoint-initdb.d --name postgres postgres:9.6.1
+```
+Enter the container:
+```
+docker exec -it <postgres-container-id> bash
+```
+Connect to the db to make sure that it works 
+```bash
+psql -U todoer -d tododb -h localhost
+```
+
 
 ### Profiles
 There are 3 profiles in the application: memory, default and prod. They defer from each other by using different 

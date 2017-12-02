@@ -4,7 +4,6 @@ package ru.glaizier.todo.config.root.security.api;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 /**
  * The order is needed to be before WebSecurityConfig, because WebSecurity config matches all paths, but
@@ -12,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  */
 @Configuration
 @Order(2)
-public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
+public class ApiSecurityConfig extends ApiSecurityConfigAdapter {
 
     @Override
     // These api urls are not protected because they are used for registration and authentication

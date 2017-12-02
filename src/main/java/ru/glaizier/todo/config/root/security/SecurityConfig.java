@@ -1,7 +1,5 @@
 package ru.glaizier.todo.config.root.security;
 
-import java.util.Arrays;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -10,10 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 import ru.glaizier.todo.config.root.security.api.ApiSecurityConfig;
 import ru.glaizier.todo.config.root.security.api.ApiTasksSecurityConfig;
 import ru.glaizier.todo.config.root.security.web.MemoryWebSecurityConfig;
@@ -60,18 +54,5 @@ public class SecurityConfig {
     @Bean
     public LogoutHandler apiLogoutHandler() {
         return new ApiLogoutHandler(tokenService(), propertiesService.getApiTokenCookieName());
-    }
-
-    /**
-     * Is used for api consumption from other hosts: allows other host to use api
-     */
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", configuration);
-        return source;
     }
 }
