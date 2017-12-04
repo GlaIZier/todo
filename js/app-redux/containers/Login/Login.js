@@ -16,13 +16,13 @@ class Login extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
+      login: '',
       password: '',
     };
   }
 
   handleUserChange = (event) => {
-    this.setState({username: event.target.value});
+    this.setState({login: event.target.value});
   };
 
   handlePasswordChange = (event) => {
@@ -77,14 +77,14 @@ class Login extends PureComponent {
                   onSubmit={this.handleLogin}>
                   <fieldset>
                     <FormGroup>
-                      <ControlLabel htmlFor="username" className="col-sm-3">User Name</ControlLabel>
+                      <ControlLabel htmlFor="login" className="col-sm-3">User Name</ControlLabel>
                       <Col md={9}>
                         <FormControl
-                          id="username"
+                          id="login"
                           type="text"
-                          value={this.state.username}
+                          value={this.state.login}
                           onChange={this.handleUserChange}
-                          placeholder="Enter your username"/>
+                          placeholder="Enter your login"/>
                       </Col>
                     </FormGroup>
                     <FormGroup>
