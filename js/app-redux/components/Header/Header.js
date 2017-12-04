@@ -45,7 +45,7 @@ class Header extends PureComponent {
       }
     }
 
-    const logout =
+    let logout =
       (this.props.user) ?
         <div className="navbar-header" style={styles.navbarHeader}>
               <span className="navbar-brand" style={styles.navbarBrand}>
@@ -58,7 +58,7 @@ class Header extends PureComponent {
         :
         null
 
-    const modal =
+    let modal =
       <Modal show={this.state.showModal} onHide={this.closeModal}>
         <Modal.Header closeButton>
           <Modal.Title>Logging out</Modal.Title>
@@ -72,20 +72,63 @@ class Header extends PureComponent {
         </Modal.Footer>
       </Modal>
 
-    return (
-      <div className="top-panel">
-        <div id="navbar-bootstrap-override" className="navbar navbar-default neutral-dark" role="navigation">
-          <div className="container">
+    modal = logout;
+    logout = modal;
 
-            <div className="navbar-header">
-              <a href="/content-classifier/"><img className="navbar-logo" src={LogoPng}/></a>
-              <a className="navbar-brand" href="/content-classifier/">Content Classifier Tool</a>
-            </div>
-            {logout}
+    //     <div className="top-panel">
+    //     <div id="navbar-bootstrap-override" className="navbar navbar-default neutral-dark" role="navigation">
+    //     <div className="container">
+    //
+    //     <div className="navbar-header">
+    //     <a href="/content-classifier/"><img className="navbar-logo" src={LogoPng}/></a>
+    //     <a className="navbar-brand" href="/content-classifier/">Content Classifier Tool</a>
+    //   </div>
+    //   {logout}
+    // </div>
+    // </div>
+    // {modal}
+    // </div>
+
+    // Todo make links with navigate function
+    return (
+      <nav className="navbar navbar-default">
+        <div className="container">
+          {/*<!-- Brand and toggle get grouped for better mobile display -->*/}
+          <div className="navbar-header">
+            <button type="button" className="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <span className="sr-only">Toggle navigation</span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
+            </button>
+
+            <a className="navbar-left" href="/todo/">
+              <img alt="Todo" height="45px" src={LogoPng}/>
+            </a>
           </div>
+
+          {/*<!-- Collect the nav links, forms, and other content for toggling -->*/}
+          <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul className="nav navbar-nav">
+              <li><a href="/todo/tasks}">Tasks</a></li>
+            </ul>
+            {/*sec:authorize="isAuthenticated()"*/}
+            <ul className="nav navbar-nav navbar-right">
+              {/*sec:authentication="name"*/}
+              <li className="navbar-text">Signed in as <span >someone</span></li>
+              <li><a href="/todo/logout}">Sign out</a></li>
+            </ul>
+            {/*sec:authorize="!isAuthenticated()"*/}
+            <ul className="nav navbar-nav navbar-right">
+              <li><a href="/todo/login}">Sign in</a></li>
+              <li><a href="/todo/register">Sign up</a></li>
+            </ul>
+          </div>
+          {/*<!-- /.navbar-collapse -->*/}
         </div>
-        {modal}
-      </div>
+        {/*<!-- /.container-fluid -->*/}
+      </nav>
     );
   }
 }
