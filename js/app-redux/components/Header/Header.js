@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import LogoPng from '../../images/wiley.png';
+import LogoPng from '../../images/todo.png';
 import {Button, Modal} from 'react-bootstrap';
 import './styles/header.css';
 
@@ -36,27 +36,27 @@ class Header extends PureComponent {
   };
 
   render() {
-    const styles = {
-      navbarHeader: {
-        float: 'right'
-      },
-      navbarBrand: {
-        borderLeft: '2px solid white'
-      }
-    }
+    // const styles = {
+    //   navbarHeader: {
+    //     float: 'right'
+    //   },
+    //   navbarBrand: {
+    //     borderLeft: '2px solid white'
+    //   }
+    // };
 
-    let logout =
-      (this.props.user) ?
-        <div className="navbar-header" style={styles.navbarHeader}>
-              <span className="navbar-brand" style={styles.navbarBrand}>
-                {this.props.user.username}
-              </span>
-          <a className="navbar-brand" onClick={this.openModal}>
-            <span className="glyphicon glyphicon-log-out" alt="Logout"/>
-          </a>
-        </div>
-        :
-        null
+    // let logout =
+    //   (this.props.user) ?
+    //     <div className="navbar-header" style={styles.navbarHeader}>
+    //           <span className="navbar-brand" style={styles.navbarBrand}>
+    //             {this.props.user.username}
+    //           </span>
+    //       <a className="navbar-brand" onClick={this.openModal}>
+    //         <span className="glyphicon glyphicon-log-out" alt="Logout"/>
+    //       </a>
+    //     </div>
+    //     :
+    //     null;
 
     let modal =
       <Modal show={this.state.showModal} onHide={this.closeModal}>
@@ -70,10 +70,19 @@ class Header extends PureComponent {
           <Button onClick={this.closeModal}>No</Button>
           <Button bsStyle="warning" onClick={this.handleLogout}>Yes</Button>
         </Modal.Footer>
-      </Modal>
+      </Modal>;
 
-    modal = logout;
-    logout = modal;
+    const userHeader =
+      (this.props.user) ?
+        <ul className="nav navbar-nav navbar-right">
+          <li className="navbar-text">Signed in as <span >someone</span></li>
+          <li><a className="todo-a-log-out" onClick={this.openModal}>Sign out</a></li>
+        </ul>
+        :
+        <ul className="nav navbar-nav navbar-right">
+          <li><a href="/todo/login}">Sign in</a></li>
+          <li><a href="/todo/register">Sign up</a></li>
+        </ul>;
 
     //     <div className="top-panel">
     //     <div id="navbar-bootstrap-override" className="navbar navbar-default neutral-dark" role="navigation">
@@ -113,21 +122,14 @@ class Header extends PureComponent {
             <ul className="nav navbar-nav">
               <li><a href="/todo/tasks}">Tasks</a></li>
             </ul>
-            {/*sec:authorize="isAuthenticated()"*/}
-            <ul className="nav navbar-nav navbar-right">
-              {/*sec:authentication="name"*/}
-              <li className="navbar-text">Signed in as <span >someone</span></li>
-              <li><a href="/todo/logout}">Sign out</a></li>
-            </ul>
-            {/*sec:authorize="!isAuthenticated()"*/}
-            <ul className="nav navbar-nav navbar-right">
-              <li><a href="/todo/login}">Sign in</a></li>
-              <li><a href="/todo/register">Sign up</a></li>
-            </ul>
+            {userHeader}
           </div>
           {/*<!-- /.navbar-collapse -->*/}
         </div>
         {/*<!-- /.container-fluid -->*/}
+        <div>
+          {modal}
+        </div>
       </nav>
     );
   }

@@ -21,19 +21,20 @@ export default function RouterContainer() {
           <IndexRedirect to="tasks"/>
           <Route path="login" component={LoginPage} key="login"/>
           <Route path="tasks" component={requireAuthentication(ArticlesPage)} key="tasks"/>
-          <Route path="articles/:taskId" component={requireAuthentication(ArticlePage)} key="task"/>
+          <Route path="tasks/:taskId" component={requireAuthentication(ArticlePage)} key="task"/>
           <Route path="403" component={NoPermissions} key="noPermissions"/>
           <Route path="*" component={NotFound}/>
         </Route>
       </Router>);
   } else {
+    console.log('Creating router for not local profile...');
     return (
       <Router history={browserHistory}>
         <Route path="/todo/spa/" component={App}>
           <IndexRedirect to="tasks"/>
           <Route path="login" component={LoginPage} key="login"/>
           <Route path="tasks" component={requireAuthentication(ArticlesPage)} key="tasks"/>
-          <Route path="articles/:taskId" component={requireAuthentication(ArticlePage)} key="task"/>
+          <Route path="tasks/:taskId" component={requireAuthentication(ArticlePage)} key="task"/>
           <Route path="403" component={NoPermissions} key="noPermissions"/>
           <Route path="*" component={NotFound}/>
         </Route>

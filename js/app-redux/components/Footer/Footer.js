@@ -7,7 +7,7 @@ class Footer extends PureComponent {
     return (
       <div className='footer'>
         <div className='container'>
-          <p>&copy; 2017 John Wiley &amp; Sons, Ltd</p>
+          <p>&copy; 2017 Todo single page application</p>
         </div>
       </div>
     );
