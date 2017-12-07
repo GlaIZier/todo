@@ -21,7 +21,10 @@ export function* loginSaga(action) {
     yield put(navigateSagaAC('tasks'));
   } catch (e) {
     console.error('Login error: ', e);
-    yield put(loginFailAC(e.responseJSON.message));
+    if (!e.responseJSON)
+      yield put(loginFailAC('Unknown error occurred! Check console for more information.'));
+    else
+      yield put(loginFailAC(e.responseJSON.error.message));
     // yield call(errorHandlerSaga, e, 'sagas.login.failed', action);
   }
 }

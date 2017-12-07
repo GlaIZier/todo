@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {getFilters, getProcessing, searchSagaAC} from '../../redux/search';
-import {getArticles, getLoading, getNextPageOffset, loadNextPageSagaAC} from '../../redux/articles';
+import {getLoading, getNextPageOffset, getTasks, loadNextPageSagaAC} from '../../redux/articles';
 import {articleNavigateSagaAC} from '../../redux/navigate';
 import SearchPanel from '../../components/SearchPanel';
 import SearchResult from '../../components/SearchResult';
@@ -54,7 +54,7 @@ function mapStateToProps(state) {
     return {
         filters: getFilters(state),
         processing: getProcessing(state),
-        articles: getArticles(state),
+      articles: getTasks(state),
         nextPageOffset: getNextPageOffset(state),
         loading: getLoading(state)
     }

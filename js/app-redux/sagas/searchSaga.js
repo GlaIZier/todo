@@ -1,12 +1,12 @@
 import {call, put, select, takeEvery} from 'redux-saga/effects';
 import {getFilters, getJournalIds, SEARCH, searchFailAC, searchStartAC, searchSuccessAC} from '../redux/search';
 import {
-  ARTICLES_PAGE_LOADING,
   articlesPageLoadingStartAC,
   articlesPageLoadingSuccessAC,
   articlesSearchStartAC,
   articlesSearchSuccessAC,
-  getNextPageOffset
+  getNextPageOffset,
+  TASKS_PAGE_LOADING
 } from '../redux/articles';
 import {notifyDangerSagaAC, notifyInfoSagaAC} from '../redux/notifications';
 import Services from '../config/config.services';
@@ -142,5 +142,5 @@ export function* watchSearch() {
 }
 
 export function* watchArticlesPageLoading() {
-  yield takeEvery(ARTICLES_PAGE_LOADING, loadNextPageSaga);
+  yield takeEvery(TASKS_PAGE_LOADING, loadNextPageSaga);
 }
