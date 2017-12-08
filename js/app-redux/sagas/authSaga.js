@@ -21,10 +21,14 @@ export function* loginSaga(action) {
     yield put(navigateSagaAC('tasks'));
   } catch (e) {
     console.error('Login error: ', e);
-    if (!e.responseJSON)
-      yield put(loginFailAC('Unknown error occurred! Check console for more information.'));
-    else
+    if (e.responseJSON)
       yield put(loginFailAC(e.responseJSON.error.message));
+    else if (e.responseText)
+      yield put(loginFailAC(e.responseText));
+    else if (e.message)
+      yield put(loginFailAC(e.message));
+    else
+      yield put(loginFailAC('Unknown error occurred! Check console for more information.'));
     // yield call(errorHandlerSaga, e, 'sagas.login.failed', action);
   }
 }
@@ -36,7 +40,15 @@ export function* logoutSaga() {
     yield put(logoutSuccessAC());
   } catch (e) {
     console.error(e);
-    yield put(notifyDangerSagaAC(`Logout failed: ${e.message}. Try one more time or reload the page!`));
+    if (e.responseJSON)
+      yield put(notifyDangerSagaAC(`Logout failed: ${e.responseJSON.error.message}. Try one more time or reload the page!`));
+    if (e.responseText)
+      yield put(notifyDangerSagaAC(`Logout failed: ${e.responseText}. Try one more time or reload the page!`));
+    else if (e.message)
+      yield put(notifyDangerSagaAC(`Logout failed: ${e.message}. Try one more time or reload the page!`));
+    else
+      yield put(notifyDangerSagaAC('Unknown error occurred! Check console for more information.'));
+
   }
 }
 

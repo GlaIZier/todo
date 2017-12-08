@@ -57,6 +57,7 @@ class AuthService {
     $.ajax({
       url: `${this.config.logoutApiUrl}`,
       method: 'POST',
+      data: ''
     })
       .then(payload => defer.resolve(payload))
       .fail(e => defer.reject(e));
