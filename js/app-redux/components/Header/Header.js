@@ -4,7 +4,7 @@ import LogoPng from '../../images/todo.png';
 import {Button, Modal} from 'react-bootstrap';
 import './styles/header.css';
 
-
+// Todo change logo link
 class Header extends PureComponent {
 
   static propTypes = {

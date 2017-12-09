@@ -1,5 +1,7 @@
 import {Map} from 'immutable';
+import config from '../config/config.common';
 
+// Todo try to add reading from cookie instead of localStorage
 const initialState = new Map({
   hasError: false,
   errorMessage: '',
@@ -13,7 +15,7 @@ const initialState = new Map({
       "present": true
     }
    */
-  user: JSON.parse(window.localStorage.getItem('todo-user')),
+  user: JSON.parse(window.localStorage.getItem(config.constants.localStorageUserItemName)),
 });
 
 // reducer

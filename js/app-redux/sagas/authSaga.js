@@ -3,6 +3,10 @@ import {LOGIN, loginFailAC, loginStartAC, loginSuccessAC, LOGOUT, logoutSuccessA
 import {navigateSagaAC} from '../redux/navigate';
 import {notifyDangerSagaAC} from '../redux/notifications';
 import Services from '../config/config.services';
+import Cookies from 'js-cookie';
+import config from '../config/config.common';
+
+
 // import { errorHandlerSaga } from './errorHandlerSaga';
 
 export function* loginSaga(action) {
@@ -11,11 +15,15 @@ export function* loginSaga(action) {
 
     // saga itself inside put function can dispatch actions to reducers
     yield put(loginStartAC());
+
     // indirect async call is used to help to test this middleware
     const payload = yield call(Services.authService.login, login, password);
     console.debug('Payload inside loginSaga() after AuthService.login() success: ' + payload);
+
     let user = payload.data;
-    window.localStorage.setItem('todo-user', JSON.stringify(user));
+    window.localStorage.setItem(config.constants.localStorageUserItemName, JSON.stringify(user));
+    Cookies.set(config.constants.apiTokenCookieName, user.token, {expires: config.constants.apiTokenExpireDays});
+
 
     yield put(loginSuccessAC(user));
     yield put(navigateSagaAC('tasks'));

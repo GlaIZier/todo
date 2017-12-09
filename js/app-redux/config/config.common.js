@@ -51,6 +51,16 @@ const appConfig = () => {
   const dateSort = 'calc';
   const nameSort = 'name';
 
+  // notifications
+  const notificationsTimeoutMs = 3000;
+
+  // token cookie
+  const apiTokenExpireDays = 1;
+  const apiTokenCookieName = 'todo-api-token-cookie';
+
+  // localStorage
+  const localStorageUserItemName = 'todo-user';
+
   return {
     // baseUrl: baseUrl,
     loginApiUrl: loginApiUrl,
@@ -78,7 +88,13 @@ const appConfig = () => {
       statusUnpublished: statusUnpublished,
       dateSort: dateSort,
       nameSort: nameSort,
-      notificationTimeout: 3000
+
+      notificationTimeout: notificationsTimeoutMs,
+
+      apiTokenExpireDays: apiTokenExpireDays,
+      apiTokenCookieName: apiTokenCookieName,
+
+      localStorageUserItemName: localStorageUserItemName
     }
   }
 };
