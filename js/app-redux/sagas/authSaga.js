@@ -43,8 +43,12 @@ export function* loginSaga(action) {
 
 export function* logoutSaga() {
   try {
-    yield call(Services.authService.logout);
+    const token = Cookies.get(config.constants.apiTokenCookieName);
+    yield call(Services.authService.logout, token);
+
     window.localStorage.removeItem('todo-user');
+    Cookies.remove(config.constants.apiTokenCookieName);
+
     yield put(logoutSuccessAC());
   } catch (e) {
     console.error(e);

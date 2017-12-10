@@ -57,6 +57,8 @@ const appConfig = () => {
   // token cookie
   const apiTokenExpireDays = 1;
   const apiTokenCookieName = 'todo-api-token-cookie';
+  const apiTokenHeaderName = 'TODO-API-TOKEN-HEADER';
+
 
   // localStorage
   const localStorageUserItemName = 'todo-user';
@@ -93,6 +95,7 @@ const appConfig = () => {
 
       apiTokenExpireDays: apiTokenExpireDays,
       apiTokenCookieName: apiTokenCookieName,
+      apiTokenHeaderName: apiTokenHeaderName,
 
       localStorageUserItemName: localStorageUserItemName
     }
