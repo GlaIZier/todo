@@ -5,8 +5,6 @@ import {notifyDangerSagaAC} from '../redux/notifications';
 import Services from '../config/config.services';
 import Cookies from 'js-cookie';
 import config from '../config/config.common';
-
-
 // import { errorHandlerSaga } from './errorHandlerSaga';
 
 export function* loginSaga(action) {

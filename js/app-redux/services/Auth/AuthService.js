@@ -63,6 +63,7 @@ class AuthService {
       url: `${this.config.logoutApiUrl}`,
       method: 'POST',
       headers: headers,
+      crossDomain: true,
       data: ''
     })
       .then(payload => defer.resolve(payload))

@@ -112,6 +112,7 @@ public class ApiSecurityTest {
             .andExpect(header().string("Access-Control-Allow-Origin", "*"));
     }
 
+    // Todo write test for preflight request
     @Test
     public void getCorsHeaderForTasks() throws Exception {
         String token = tokenService.createToken("dummyLogin");

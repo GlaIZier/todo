@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
 
@@ -24,7 +25,7 @@ import ru.glaizier.todo.security.token.TokenService;
  */
 @Configuration
 @Order(1)
-public class ApiTasksSecurityConfig extends ApiSecurityConfigAdapter {
+public class ApiTasksSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private TokenService tokenService;
 
