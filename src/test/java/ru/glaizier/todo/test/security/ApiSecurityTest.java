@@ -4,6 +4,7 @@ import javax.servlet.http.Cookie;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -12,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.test.annotation.IfProfileValue;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -107,21 +109,34 @@ public class ApiSecurityTest {
         mvc.perform(
             post("/api/auth/login")
                 .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
-                .header("Origin", "http://externalhost.com"))
+                .header(HttpHeaders.ORIGIN, "http://externalhost.com"))
             .andDo(print())
-            .andExpect(header().string("Access-Control-Allow-Origin", "*"));
+            .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*"));
     }
 
-    // Todo write test for preflight request
     @Test
-    public void getCorsHeaderForTasks() throws Exception {
+    public void getCorsHeaderForPostTasks() throws Exception {
         String token = tokenService.createToken("dummyLogin");
 
         mvc.perform(
             post(testUri)
                 .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
-                .header("Origin", "http://externalhost.com"))
+                .header(HttpHeaders.ORIGIN, "http://externalhost.com")
+                .header(propertiesService.getApiTokenHeaderName(), token))
             .andDo(print())
-            .andExpect(header().string("Access-Control-Allow-Origin", "*"));
+            .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*"));
+    }
+
+    @Test
+    public void getCorsHeaderForPreflightRequestForPostTasks() throws Exception {
+        String token = tokenService.createToken("dummyLogin");
+
+        mvc.perform(
+            options(testUri)
+                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
+                .header(HttpHeaders.ORIGIN, "http://externalhost.com")
+                .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "POST"))
+            .andDo(print())
+            .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*"));
     }
 }
