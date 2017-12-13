@@ -6,9 +6,11 @@ const getConfig = require('./webpack.config');
 // const express = require('express');
 // const app = new (require('express'))()
 const express = require('express');
+const path = require('path');
+
+// Todo try to create https express
 const app = express();
 const port = 3000;
-const path = require('path');
 
 let config;
 if (process.argv[2]) {
