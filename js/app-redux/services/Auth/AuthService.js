@@ -64,7 +64,10 @@ class AuthService {
       method: 'POST',
       headers: headers,
       crossDomain: true,
-      data: ''
+      data: '',
+      xhrFields: {
+        withCredentials: true
+      }
     })
       .then(payload => defer.resolve(payload))
       .fail(e => defer.reject(e));

@@ -62,8 +62,8 @@ public class AuthRestController extends ExceptionHandlingController {
         return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/me/logout", method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
-            consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+    @RequestMapping(value = "/me/logout", method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE/*,
+            consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE}*/)
     public ResponseEntity<OutputResponse> logoutUser(HttpServletRequest req, HttpServletResponse resp, Authentication auth) {
         logoutHandler.logout(req, resp, auth);
         return new ResponseEntity<>(OutputResponse.OK, HttpStatus.OK);

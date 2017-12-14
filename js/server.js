@@ -3,14 +3,19 @@ const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const getConfig = require('./webpack.config');
 
-// const express = require('express');
-// const app = new (require('express'))()
 const express = require('express');
 const path = require('path');
 
-// Todo try to create https express
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
+// const express = require('express');
+// const app = new (require('express'))()
+
+
 const app = express();
 const port = 3000;
+const httpsPort = 3443;
 
 let config;
 if (process.argv[2]) {
@@ -101,10 +106,33 @@ app.get(/.*/, function (req, res) {
 
 // app.use('/images/', express.static(__dirname + '/app-redux/images'));
 
-app.listen(port, function (error) {
+const privateKey = fs.readFileSync('keys/express.key', 'utf8');
+const certificate = fs.readFileSync('keys/express.crt', 'utf8');
+const credentials = {key: privateKey, cert: certificate};
+
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(credentials, app);
+
+httpServer.listen(port, function (error) {
   if (error) {
     console.error(error)
   } else {
-    console.info("==> 🌎  Listening on port %s. Open up http://localhost:%s/ in your browser.", port, port)
+    console.info("HTTP ==> 🌎 Listening on port %s. Open up http://localhost:%s/ in your browser.", port, port)
   }
 });
+
+httpsServer.listen(httpsPort, function (error) {
+  if (error) {
+    console.error(error)
+  } else {
+    console.info("HTTPS ==> 🌎  Listening on port %s. Open up https://localhost:%s/ in your browser.", httpsPort, httpsPort)
+  }
+});
+
+// app.listen(port, function (error) {
+//   if (error) {
+//     console.error(error)
+//   } else {
+//     console.info("==> 🌎  Listening on port %s. Open up http://localhost:%s/ in your browser.", port, port)
+//   }
+// });
