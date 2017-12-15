@@ -1,27 +1,36 @@
 package ru.glaizier.todo.security.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.web.util.matcher.RequestMatcher;
-import org.springframework.web.filter.OncePerRequestFilter;
-import ru.glaizier.todo.model.dto.api.HttpResponse;
-import ru.glaizier.todo.model.dto.api.output.OutputError;
-import ru.glaizier.todo.properties.PropertiesService;
+import java.io.IOException;
+import java.lang.invoke.MethodHandles;
+import java.util.regex.Pattern;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.lang.invoke.MethodHandles;
-import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import ru.glaizier.todo.model.dto.api.HttpResponse;
+import ru.glaizier.todo.model.dto.api.output.OutputError;
+import ru.glaizier.todo.properties.PropertiesService;
 import static ru.glaizier.todo.log.MdcConstants.TOKEN;
 
+/**
+ * Important!
+ * This is not necessary. I could send a header for authentication, not cookie. Hence, in this situation there would be
+ * no CSRF attack at all. But I realized it late, when this functionality had been already done. So, I preserve Api
+ * authentication with cookie for now. Maybe later I will remove it and replace with header authentication. Anyway,
+ * I understand more about Filter chain in Spring Security because of this.
+ */
 public class ApiCsrfFilter extends OncePerRequestFilter {
 
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -37,7 +46,7 @@ public class ApiCsrfFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
 
         if (requireCsrfProtectionMatcher.matches(request)) {
             final String csrfTokenValue = request.getHeader(propertiesService.getApiTokenHeaderName());
@@ -54,7 +63,8 @@ public class ApiCsrfFilter extends OncePerRequestFilter {
 
             if (csrfTokenValue == null || !csrfTokenValue.equals(csrfCookieValue)) {
                 writeErrorToResponse(csrfTokenValue, response, HttpStatus.FORBIDDEN,
-                        new OutputError(new HttpResponse(HttpStatus.FORBIDDEN.value(), "Missing or non-matching CSRF-token!")));
+                    new OutputError(
+                        new HttpResponse(HttpStatus.FORBIDDEN.value(), "Missing or non-matching CSRF-token!")));
                 return;
             }
 

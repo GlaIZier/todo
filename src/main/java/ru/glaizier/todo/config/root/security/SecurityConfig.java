@@ -74,8 +74,9 @@ public class SecurityConfig {
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         // Need to add custom headers too
         configuration.setAllowedHeaders(Collections.singletonList(propertiesService.getApiTokenHeaderName()));
-        // Todo read about it
         // Todo check bug with the same two todo-api-token-cookie if we use the classical and spa at the same time
+        // Todo check that we have AllowHeader Header during spa interaction
+        // Allow to send cookies with cross-origin requests
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/**", configuration);

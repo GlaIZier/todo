@@ -111,7 +111,9 @@ public class ApiSecurityTest {
                 .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
                 .header(HttpHeaders.ORIGIN, "http://externalhost.com"))
             .andDo(print())
-            .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*"));
+            // value is not * because of the allowCredentials true
+            .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "http://externalhost.com"))
+            .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true"));
     }
 
     @Test
@@ -124,7 +126,8 @@ public class ApiSecurityTest {
                 .header(HttpHeaders.ORIGIN, "http://externalhost.com")
                 .header(propertiesService.getApiTokenHeaderName(), token))
             .andDo(print())
-            .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*"));
+            .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "http://externalhost.com"))
+            .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true"));
     }
 
     @Test
@@ -137,6 +140,8 @@ public class ApiSecurityTest {
                 .header(HttpHeaders.ORIGIN, "http://externalhost.com")
                 .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "POST"))
             .andDo(print())
-            .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*"));
+            .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "http://externalhost.com"))
+            .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "GET,POST,PUT,DELETE,OPTIONS"))
+            .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true"));
     }
 }
