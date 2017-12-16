@@ -1,9 +1,8 @@
 {
   "root": "/todo/spa/",
-  "localRoot": "/",
-  "login": "/login",
-  "tasks": "/tasks/",
-  "task": "/tasks/<%-props.id%>",
-  "403": "/403",
+  "login": "/todo/spa/login",
+  "tasks": "/todo/spa/tasks",
+  "task": "/todo/spa/tasks/<%-props.id%>",
+  "403": "/todo/spa/403",
   "404": "/404"
 }

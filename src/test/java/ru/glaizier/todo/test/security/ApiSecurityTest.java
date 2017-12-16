@@ -1,14 +1,5 @@
 package ru.glaizier.todo.test.security;
 
-import javax.servlet.http.Cookie;
-
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,11 +12,18 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
 import ru.glaizier.todo.properties.PropertiesService;
 import ru.glaizier.todo.security.token.TokenService;
+
+import javax.servlet.http.Cookie;
+
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {
@@ -108,7 +106,6 @@ public class ApiSecurityTest {
 
         mvc.perform(
             post("/api/auth/login")
-                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
                 .header(HttpHeaders.ORIGIN, "http://externalhost.com"))
             .andDo(print())
             // value is not * because of the allowCredentials true
@@ -122,7 +119,6 @@ public class ApiSecurityTest {
 
         mvc.perform(
             post(testUri)
-                .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
                 .header(HttpHeaders.ORIGIN, "http://externalhost.com")
                 .header(propertiesService.getApiTokenHeaderName(), token))
             .andDo(print())
@@ -138,10 +134,13 @@ public class ApiSecurityTest {
             options(testUri)
                 .cookie(new Cookie(propertiesService.getApiTokenCookieName(), token))
                 .header(HttpHeaders.ORIGIN, "http://externalhost.com")
-                .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "POST"))
+                    .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "POST")
+                    .header(HttpHeaders.ACCESS_CONTROL_REQUEST_HEADERS, propertiesService.getApiTokenHeaderName()))
             .andDo(print())
             .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "http://externalhost.com"))
             .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "GET,POST,PUT,DELETE,OPTIONS"))
-            .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true"));
+                .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true"))
+                .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, propertiesService.getApiTokenHeaderName()));
+
     }
 }

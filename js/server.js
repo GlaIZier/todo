@@ -100,7 +100,7 @@ app.get(/^\/ks\/v2\/ArticleProducts\/(.*)/, function (req, res) {
 
  */
 // Web application for all other urls
-app.get(/.*/, function (req, res) {
+app.get(/todo\/spa.*/, function (req, res) {
   res.sendFile(__dirname + '/app-redux/index.html')
 });
 
