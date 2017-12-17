@@ -1,14 +1,9 @@
 package ru.glaizier.todo.properties;
 
+import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.ToString;
 
 @Service
 @EqualsAndHashCode
@@ -45,27 +40,31 @@ public class FilePropertiesService implements PropertiesService {
     private final String dbPassword;
     private final Integer dbMaxPoolSize;
 
+    @NonNull
+    private final String appEndpointRoot;
+
     // Say this spring to inject values through this constructor, because spring injects through defaults constructor
     // by default
     // Can't inject do field injection because of the lombok's @Builder. It creates constructor but without @Value
     // on the fields
     @Autowired
     private FilePropertiesService(
-        @Value("${spring.profiles.active}") String springProfilesActive,
-        @Value("${spring.profiles.memory.name}") String springProfilesMemoryName,
-        @Value("${spring.profiles.default.name}") String springProfilesDefaultName,
-        @Value("${spring.profiles.prod.name}") String springProfilesProdName,
-        @Value("${api.token.cookie.name}") String apiTokenCookieName,
-        @Value("${api.token.header.name}") String apiTokenHeaderName,
-        @Value("${api.token.expire.seconds}") int apiTokenExpireDurationInSeconds,
-        @Value("${api.token.signing.key}") String apiTokenSigningKey,
-        @Value("${api.token.session.attribute.name}") String apiTokenSessionAttributeName,
-        @Value("${password.encoder.secret}") String passwordEncoderSecret,
-        @Value("${db.url}") String dbUrl,
-        @Value("${db.driver}") String dbDriver,
-        @Value("${db.login}") String dbLogin,
-        @Value("${db.password}") String dbPassword,
-        @Value("${db.maxpoolsize}") Integer dbMaxPoolSize
+            @Value("${spring.profiles.active}") String springProfilesActive,
+            @Value("${spring.profiles.memory.name}") String springProfilesMemoryName,
+            @Value("${spring.profiles.default.name}") String springProfilesDefaultName,
+            @Value("${spring.profiles.prod.name}") String springProfilesProdName,
+            @Value("${api.token.cookie.name}") String apiTokenCookieName,
+            @Value("${api.token.header.name}") String apiTokenHeaderName,
+            @Value("${api.token.expire.seconds}") int apiTokenExpireDurationInSeconds,
+            @Value("${api.token.signing.key}") String apiTokenSigningKey,
+            @Value("${api.token.session.attribute.name}") String apiTokenSessionAttributeName,
+            @Value("${password.encoder.secret}") String passwordEncoderSecret,
+            @Value("${db.url}") String dbUrl,
+            @Value("${db.driver}") String dbDriver,
+            @Value("${db.login}") String dbLogin,
+            @Value("${db.password}") String dbPassword,
+            @Value("${db.maxpoolsize}") Integer dbMaxPoolSize,
+            @Value("${app.endpoint.root}") String appEndpointRoot
     ) {
         this.springProfilesActive = springProfilesActive;
         this.springProfilesMemoryName = springProfilesMemoryName;
@@ -85,5 +84,7 @@ public class FilePropertiesService implements PropertiesService {
         this.dbLogin = dbLogin;
         this.dbPassword = dbPassword;
         this.dbMaxPoolSize = dbMaxPoolSize;
+
+        this.appEndpointRoot = appEndpointRoot;
     }
 }

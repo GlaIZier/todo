@@ -5,6 +5,8 @@ import {notifyDangerSagaAC} from '../redux/notifications';
 import Services from '../config/config.services';
 import Cookies from 'js-cookie';
 import config from '../config/config.common';
+import routes from '../router/routes.json';
+
 // import { errorHandlerSaga } from './errorHandlerSaga';
 
 export function* loginSaga(action) {
@@ -20,8 +22,10 @@ export function* loginSaga(action) {
 
     let user = payload.data;
     window.localStorage.setItem(config.constants.localStorageUserItemName, JSON.stringify(user));
-    // Cookies.re
-    Cookies.set(config.constants.apiTokenCookieName, user.token, {expires: config.constants.apiTokenExpireDays});
+    Cookies.set(config.constants.apiTokenCookieName, user.token, {
+      expires: config.constants.apiTokenExpireDays,
+      path: routes.appRoot
+    });
 
 
     yield put(loginSuccessAC(user));

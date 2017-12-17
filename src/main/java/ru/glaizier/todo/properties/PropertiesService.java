@@ -3,11 +3,8 @@ package ru.glaizier.todo.properties;
 public interface PropertiesService {
     // Spring profile
     String getSpringProfilesActive();
-
     String getSpringProfilesMemoryName();
-
     String getSpringProfilesDefaultName();
-
     String getSpringProfilesProdName();
 
     // Api
@@ -26,4 +23,7 @@ public interface PropertiesService {
     String getDbLogin();
     String getDbPassword();
     Integer getDbMaxPoolSize();
+
+    // App
+    String getAppEndpointRoot();
 }

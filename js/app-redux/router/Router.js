@@ -24,6 +24,7 @@ export default function RouterContainer() {
       </Route>
     </Router>);
 
+  // Todo remove it after tests
   // if (__LOCAL__) {
   //   console.log('Creating router for local profile...');
   //   return (

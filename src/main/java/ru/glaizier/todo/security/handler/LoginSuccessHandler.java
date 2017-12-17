@@ -1,17 +1,16 @@
 package ru.glaizier.todo.security.handler;
 
-import java.io.IOException;
+import lombok.NonNull;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import ru.glaizier.todo.properties.PropertiesService;
+import ru.glaizier.todo.security.token.TokenService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-
-import lombok.NonNull;
-import ru.glaizier.todo.security.token.TokenService;
+import java.io.IOException;
 
 // We extend standard, used by Spring Security authentication handler to add token for api to cookie
 public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
@@ -20,16 +19,13 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
     private final TokenService tokenService;
 
     @NonNull
-    private final String tokenCookieName;
+    private final PropertiesService propertiesService;
 
-    private final int tokenCookieMaxAge;
 
     public LoginSuccessHandler(TokenService tokenService,
-                               String tokenCookieName,
-                               int tokenCookieMaxAge) {
+                               PropertiesService propertiesService) {
         this.tokenService = tokenService;
-        this.tokenCookieName = tokenCookieName;
-        this.tokenCookieMaxAge = tokenCookieMaxAge;
+        this.propertiesService = propertiesService;
     }
 
     @Override
@@ -37,9 +33,9 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
                                         Authentication auth) throws IOException, ServletException {
         String token = tokenService.createToken(auth.getName());
 
-        Cookie jwtTokenCookie = new Cookie(tokenCookieName, token);
-        jwtTokenCookie.setPath("/todo");
-        jwtTokenCookie.setMaxAge(tokenCookieMaxAge);
+        Cookie jwtTokenCookie = new Cookie(propertiesService.getApiTokenCookieName(), token);
+        jwtTokenCookie.setPath(propertiesService.getAppEndpointRoot());
+        jwtTokenCookie.setMaxAge(propertiesService.getApiTokenExpireDurationInSeconds());
         httpServletResponse.addCookie(jwtTokenCookie);
 
         super.onAuthenticationSuccess(httpServletRequest, httpServletResponse, auth);

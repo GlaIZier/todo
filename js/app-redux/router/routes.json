@@ -1,4 +1,5 @@
 {
+  "appRoot": "/todo",
   "root": "/todo/spa/",
   "login": "/todo/spa/login",
   "tasks": "/todo/spa/tasks",

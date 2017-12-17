@@ -53,8 +53,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return new LoginSuccessHandler(tokenService(),
-            propertiesService.getApiTokenCookieName(), propertiesService.getApiTokenExpireDurationInSeconds());
+        return new LoginSuccessHandler(tokenService(), propertiesService);
     }
 
     @Bean

@@ -59,7 +59,6 @@ const appConfig = () => {
   const apiTokenCookieName = 'todo-api-token-cookie';
   const apiTokenHeaderName = 'TODO-API-TOKEN-HEADER';
 
-
   // localStorage
   const localStorageUserItemName = 'todo-user';
 
