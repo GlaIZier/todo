@@ -1,7 +1,6 @@
 import {Map} from 'immutable';
 import config from '../config/config.common';
 
-// Todo try to add reading from cookie instead of localStorage
 const initialState = new Map({
   hasError: false,
   errorMessage: '',

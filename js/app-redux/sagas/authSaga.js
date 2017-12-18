@@ -22,6 +22,7 @@ export function* loginSaga(action) {
 
     let user = payload.data;
     window.localStorage.setItem(config.constants.localStorageUserItemName, JSON.stringify(user));
+    // Todo separate spa and classical app cookies
     Cookies.set(config.constants.apiTokenCookieName, user.token, {
       expires: config.constants.apiTokenExpireDays,
       path: routes.appRoot
@@ -47,7 +48,8 @@ export function* loginSaga(action) {
 export function* logoutSaga() {
   try {
     const token = Cookies.get(config.constants.apiTokenCookieName);
-    yield call(Services.authService.logout, token);
+    if (token !== undefined)
+      yield call(Services.authService.logout, token);
 
     window.localStorage.removeItem('todo-user');
     Cookies.remove(config.constants.apiTokenCookieName);
@@ -63,7 +65,6 @@ export function* logoutSaga() {
       yield put(notifyDangerSagaAC(`Logout failed: ${e.message}. Try one more time or reload the page!`));
     else
       yield put(notifyDangerSagaAC('Unknown error occurred! Check console for more information.'));
-
   }
 }
 
