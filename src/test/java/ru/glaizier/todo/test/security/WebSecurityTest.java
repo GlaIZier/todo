@@ -58,22 +58,22 @@ public class WebSecurityTest {
     @Test
     public void getTasksUnauthenticatedAndRedirectToLogin() throws Exception {
         mvc
-            .perform(get("/tasks").secure(true))
+            .perform(get("/web/tasks").secure(true))
                 .andDo(print())
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("http://localhost/login"))
-                .andExpect(header().string("Location", equalTo("http://localhost/login")))
+            .andExpect(redirectedUrl("http://localhost/web/login"))
+            .andExpect(header().string("Location", equalTo("http://localhost/web/login")))
                 .andExpect(unauthenticated());
     }
 
     @Test
     public void getTasksSlashUnauthenticatedAndRedirectToLogin() throws Exception {
         mvc
-            .perform(get("/tasks/").secure(true))
+            .perform(get("/web/tasks/").secure(true))
                 .andDo(print())
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("http://localhost/login"))
-                .andExpect(header().string("Location", equalTo("http://localhost/login")))
+            .andExpect(redirectedUrl("http://localhost/web/login"))
+            .andExpect(header().string("Location", equalTo("http://localhost/web/login")))
                 .andExpect(unauthenticated());
     }
 
@@ -81,7 +81,7 @@ public class WebSecurityTest {
     @WithMockUser(value = "fake")
     public void getTasksAuthenticatedWhenFakeUserIsPresent() throws Exception {
         mvc
-            .perform(get("/tasks").secure(true))
+            .perform(get("/web/tasks").secure(true))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(authenticated().withUsername("fake").withRoles("USER"));
@@ -100,11 +100,11 @@ public class WebSecurityTest {
 //            .andExpect(cookie().maxAge("todo-remember-me-cookie", 0));
 
         mvc
-            .perform(post("/logout").with(csrf()).secure(true))
+            .perform(post("/web/logout").with(csrf()).secure(true))
                 .andDo(print())
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/"))
-                .andExpect(header().string("Location", equalTo("/")))
+            .andExpect(redirectedUrl("/web"))
+            .andExpect(header().string("Location", equalTo("/web")))
                 .andExpect(unauthenticated())
                 .andExpect(cookie().maxAge(propertiesService.getApiTokenCookieName(), 0))
                 .andExpect(cookie().maxAge("todo-remember-me-cookie", 0));
@@ -124,12 +124,12 @@ public class WebSecurityTest {
 //                .andExpect(authenticated().withUsername("u").withRoles("USER"));
 
         mvc
-            .perform(post("/login").param("user", "u").param("password", "p")
+            .perform(post("/web/login").param("user", "u").param("password", "p")
                 .with(csrf()).secure(true))
                 .andDo(print())
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/"))
-                .andExpect(header().string("Location", equalTo("/")))
+            .andExpect(redirectedUrl("/web"))
+            .andExpect(header().string("Location", equalTo("/web")))
                 .andExpect(authenticated().withUsername("u").withRoles("USER"));
     }
 
@@ -145,12 +145,12 @@ public class WebSecurityTest {
 //                .andExpect(authenticated().withUsername("u").withRoles("USER", "ADMIN"));
 
         mvc
-            .perform(post("/login").param("user", "a").param("password", "p")
+            .perform(post("/web/login").param("user", "a").param("password", "p")
                 .with(csrf()).secure(true))
                 .andDo(print())
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/"))
-                .andExpect(header().string("Location", equalTo("/")))
+            .andExpect(redirectedUrl("/web"))
+            .andExpect(header().string("Location", equalTo("/web")))
                 .andExpect(authenticated().withUsername("a").withRoles("USER", "ADMIN"));
     }
 
@@ -175,12 +175,12 @@ public class WebSecurityTest {
     public void postLoginAuthenticatedWithRememberMeCookieAndRedirectToRoot() throws Exception {
         // use post() instead of formlogin() because formlogin() doesn't provide method to attach remember-me param
         mvc
-                .perform(post("/login").param("user", "u").param("password", "p")
+            .perform(post("/web/login").param("user", "u").param("password", "p")
                     .param("remember-me", "on").with(csrf()).secure(true))
                 .andDo(print())
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/"))
-                .andExpect(header().string("Location", equalTo("/")))
+            .andExpect(redirectedUrl("/web"))
+            .andExpect(header().string("Location", equalTo("/web")))
                 .andExpect(authenticated().withUsername("u").withRoles("USER"))
                 .andExpect(cookie().exists("todo-remember-me-cookie"));
     }

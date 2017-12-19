@@ -1,7 +1,10 @@
 package ru.glaizier.todo.controller.view;
 
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import java.lang.invoke.MethodHandles;
 
+import javax.validation.Valid;
+
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +15,12 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
 import ru.glaizier.todo.model.dto.input.InputUser;
 import ru.glaizier.todo.persistence.Persistence;
 
-import java.lang.invoke.MethodHandles;
-
-import javax.validation.Valid;
-
 @Controller
+@RequestMapping(value = "/web")
 public class RegisterController {
 
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -52,7 +53,7 @@ public class RegisterController {
             return new ModelAndView("register", "user", inputUser);
 
         persistence.saveUser(inputUser.getLogin(), inputUser.getPassword());
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:/web");
     }
 
 }

@@ -13,7 +13,7 @@
 <body>
 <div th:replace="general/menu :: menu">...</div>
 <div class="container">
-    <form th:object="${user}" th:action="@{/register}" class="form-horizontal" method="POST">
+    <form th:object="${user}" th:action="@{/web/register}" class="form-horizontal" method="POST">
         <h2>Please register</h2>
         <div class="div-register">
             <label for="login" class="col-sm-3 control-label">Login</label>

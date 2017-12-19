@@ -50,7 +50,7 @@ public class RegisterControllerTest {
 
     @Test
     public void show() throws Exception {
-        mvc.perform(get("/register/").secure(true))
+        mvc.perform(get("/web/register/").secure(true))
                 .andExpect(status().isOk())
                 .andExpect(view().name("register"));
     }
@@ -62,10 +62,10 @@ public class RegisterControllerTest {
         RegisterController controller =
                 new RegisterController(persistence);
         MockMvc mockMvc = standaloneSetup(controller).build();
-        mockMvc.perform(post("/register/")
+        mockMvc.perform(post("/web/register/")
                 .param("login", "login")
                 .param("password", "password"))
-                .andExpect(redirectedUrl("/"));
+            .andExpect(redirectedUrl("/web"));
         verify(persistence).saveUser("login", "password".toCharArray());
     }
 
@@ -77,7 +77,7 @@ public class RegisterControllerTest {
                 new RegisterController(persistence);
         MockMvc mockMvc = standaloneSetup(controller).build();
 
-        mockMvc.perform(post("/register/")
+        mockMvc.perform(post("/web/register/")
                 .param("login", "")
                 .param("password", "")
                 .with(csrf()))

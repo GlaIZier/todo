@@ -42,7 +42,7 @@ public class LoginControllerTest {
 
     @Test
     public void show() throws Exception {
-        mvc.perform(get("/login/").secure(true))
+        mvc.perform(get("/web/login/").secure(true))
                 .andExpect(status().isOk())
                 .andExpect(view().name("login"));
     }
@@ -50,9 +50,9 @@ public class LoginControllerTest {
     @Test
     @WithMockUser("fake")
     public void redirectToHomeWhenLogined() throws Exception {
-        mvc.perform(get("/login/").secure(true))
+        mvc.perform(get("/web/login/").secure(true))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/"));
+            .andExpect(redirectedUrl("/web"));
     }
 
 }

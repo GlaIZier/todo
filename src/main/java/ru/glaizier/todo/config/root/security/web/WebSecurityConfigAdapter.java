@@ -27,14 +27,14 @@ public abstract class WebSecurityConfigAdapter extends WebSecurityConfigurerAdap
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
             // secure /tasks
-            .antMatchers("/tasks/**").hasRole("USER")
+            .antMatchers("/web/tasks/**").hasRole("USER")
             .anyRequest().permitAll()
 
             // login
             .and()
             .formLogin()
-            .loginPage("/login")
-            .failureUrl("/login?error")
+            .loginPage("/web/login")
+            .failureUrl("/web/login?error")
             .usernameParameter("user")
             .passwordParameter("password")
             .successHandler(authenticationSuccessHandler)
@@ -42,10 +42,10 @@ public abstract class WebSecurityConfigAdapter extends WebSecurityConfigurerAdap
             // logout
             .and()
             .logout()
-            .logoutUrl("/logout")
+            .logoutUrl("/web/logout")
             // make this to enable get logout because by default it's forbidden to use get with csrf protection
-            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-            .logoutSuccessUrl("/")
+            .logoutRequestMatcher(new AntPathRequestMatcher("/web/logout"))
+            .logoutSuccessUrl("/web")
             .invalidateHttpSession(true)
             // Session invalidation is called by default. remember-me-cookie is removed by default.
             // If it is added here then set-cookie header appears twice

@@ -43,7 +43,7 @@ public class TaskControllerTest {
     @Test
     @WithMockUser("fake")
     public void show() throws Exception {
-        mvc.perform(get("/tasks/").secure(true))
+        mvc.perform(get("/web/tasks/").secure(true))
                 .andExpect(status().isOk())
                 .andExpect(view().name("tasks"));
     }

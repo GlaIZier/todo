@@ -1,16 +1,18 @@
 package ru.glaizier.todo.security.handler;
 
-import lombok.NonNull;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-import ru.glaizier.todo.properties.PropertiesService;
-import ru.glaizier.todo.security.token.TokenService;
+import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+
+import lombok.NonNull;
+import ru.glaizier.todo.properties.PropertiesService;
+import ru.glaizier.todo.security.token.TokenService;
 
 // We extend standard, used by Spring Security authentication handler to add token for api to cookie
 public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
@@ -23,9 +25,11 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 
 
     public LoginSuccessHandler(TokenService tokenService,
-                               PropertiesService propertiesService) {
+                               PropertiesService propertiesService,
+                               String defaultTargetUrl) {
         this.tokenService = tokenService;
         this.propertiesService = propertiesService;
+        super.setDefaultTargetUrl(defaultTargetUrl);
     }
 
     @Override

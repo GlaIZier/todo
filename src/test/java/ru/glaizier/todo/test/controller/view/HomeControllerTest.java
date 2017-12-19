@@ -40,13 +40,13 @@ public class HomeControllerTest {
 
     @Test
     public void redirectToHttps() throws Exception {
-        mvc.perform(get("/"))
+        mvc.perform(get("/web"))
             .andExpect(status().isFound());
     }
 
     @Test
     public void showForHttps() throws Exception {
-        mvc.perform(get("/").secure(true))
+        mvc.perform(get("/web").secure(true))
                 .andExpect(status().isOk())
                 .andExpect(view().name("home"));
     }

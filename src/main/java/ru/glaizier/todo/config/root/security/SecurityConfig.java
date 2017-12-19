@@ -1,5 +1,8 @@
 package ru.glaizier.todo.config.root.security;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -11,6 +14,7 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 import ru.glaizier.todo.config.root.security.api.ApiSecurityConfig;
 import ru.glaizier.todo.config.root.security.api.ApiTasksSecurityConfig;
 import ru.glaizier.todo.config.root.security.web.MemoryWebSecurityConfig;
@@ -20,9 +24,6 @@ import ru.glaizier.todo.security.handler.ApiLogoutHandler;
 import ru.glaizier.todo.security.handler.LoginSuccessHandler;
 import ru.glaizier.todo.security.token.JwtTokenService;
 import ru.glaizier.todo.security.token.TokenService;
-
-import java.util.Arrays;
-import java.util.Collections;
 
 @EnableWebSecurity
 @Import({
@@ -53,7 +54,8 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return new LoginSuccessHandler(tokenService(), propertiesService);
+        // Todo move this to properties and test it properly
+        return new LoginSuccessHandler(tokenService(), propertiesService, "/web");
     }
 
     @Bean
