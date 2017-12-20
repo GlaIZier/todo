@@ -54,7 +54,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        // Todo move this to properties and test it properly
+        // Todo? move to properties
         return new LoginSuccessHandler(tokenService(), propertiesService, "/web");
     }
 

@@ -24,6 +24,7 @@ public abstract class WebSecurityConfigAdapter extends WebSecurityConfigurerAdap
 
 
     @Override
+    // Todo? move to properties?
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
             // secure /tasks
