@@ -24,32 +24,30 @@ class Tasks extends PureComponent {
 
   render() {
     return (
-      <h3>Hello from tasks!</h3>
+      <div className="container">
+        <div className="react-app">
+          <header className="header">
+            <h2>Todo</h2>
+            <div className="todo-input-group input-group">
+              <input id="new-task-input" type="text" className="todo-input form-control"
+                     placeholder="What needs to be done?"
+                     aria-describedby="basic-addon"
+                     onkeyup="Task.pressSaveTask(event)"
+              />
+              <span className="todo-new clickable input-group-addon" id="basic-addon"
+                    onclick="Task.saveTask()">New task</span>
+            </div>
+          </header>
+          <div className="todos" id="todos">
+            <div className="todo well well-sm">
+              <span className="todo-text" onclick="Task.clickUpdateTask(this)">Just do something else</span>
+              <span className="todo-remove clickable glyphicon glyphicon-remove" aria-hidden="true"
+                    onclick="Task.deleteTask(this)"></span>
+            </div>
+          </div>
+        </div>
+      </div>
     )
-    // return (
-    //     <div>
-    //         <SearchPanel
-    //             filters={this.props.filters}
-    //             processing={this.props.processing}
-    //             search={this.props.searchSagaAC}
-    //         />
-    //         <div className="container">
-    //             <InfiniteScroll
-    //                 loadNextPage={this.props.loadNextPageSagaAC}
-    //                 hasMore={!!(this.props.nextPageOffset && this.props.nextPageOffset > 0)}
-    //                 globally={false}
-    //                 loading={this.props.loading}
-    //             >
-    //                 <div id='cc-articles-search-results'>
-    //                     <SearchResult
-    //                         articles={this.props.articles}
-    //                         articleNavigate={this.props.articleNavigateSagaAC}
-    //                     />
-    //                 </div>
-    //             </InfiniteScroll>
-    //         </div>
-    //     </div>
-    // )
   }
 }
 
