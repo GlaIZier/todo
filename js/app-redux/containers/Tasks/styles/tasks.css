@@ -1,9 +1,17 @@
-#cc-loading-gif {
+.react-app {
     text-align: center;
-    padding-bottom: 15px;
+    max-width: 330px;
+    margin: 0 auto;
 }
 
-#cc-articles-search-results {
-    max-height: 620px;
-    overflow-y: auto;
+.clickable {
+    cursor: pointer;
+}
+
+.todo-remove {
+    float: right;
+}
+
+.todo {
+    margin-bottom: 0;
 }

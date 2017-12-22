@@ -3,6 +3,7 @@ import {render} from 'react-dom';
 import {Provider} from 'react-redux';
 import {AppRouter} from './router';
 import store from './store/store';
+import './styles/bootstrap.min.css';
 import './styles/main.css';
 
 render(
