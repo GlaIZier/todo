@@ -22,7 +22,6 @@ export function* loginSaga(action) {
 
     let user = payload.data;
     window.localStorage.setItem(config.constants.localStorageUserItemName, JSON.stringify(user));
-    // Todo separate spa and classical app cookies
     Cookies.set(config.constants.apiTokenCookieName, user.token, {
       expires: config.constants.apiTokenExpireDays,
       path: routes.appRoot

@@ -5,7 +5,7 @@ class Footer extends PureComponent {
 
   render() {
     return (
-      <div className='footer'>
+      <div className='footer navbar-fixed-bottom'>
         <div className='container'>
           <p>&copy; 2017 Todo single page application</p>
         </div>

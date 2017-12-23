@@ -75,7 +75,7 @@ class Header extends PureComponent {
     const userHeader =
       (this.props.user) ?
         <ul className="nav navbar-nav navbar-right">
-          <li className="navbar-text">Signed in as <span >someone</span></li>
+          <li className="navbar-text">Signed in as <span>{this.props.user.login}</span></li>
           <li><a className="todo-a-log-out" onClick={this.openModal}>Sign out</a></li>
         </ul>
         :
