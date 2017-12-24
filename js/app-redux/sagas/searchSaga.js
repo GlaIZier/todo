@@ -5,9 +5,9 @@ import {
   articlesPageLoadingSuccessAC,
   articlesSearchStartAC,
   articlesSearchSuccessAC,
-  getNextPageOffset,
-  TASKS_PAGE_LOADING
-} from '../redux/articles';
+  getErrorMessage,
+  TASKS_LOADING
+} from '../redux/tasks';
 import {notifyDangerSagaAC, notifyInfoSagaAC} from '../redux/notifications';
 import Services from '../config/config.services';
 import {getAllowedJournals} from '../redux/auth';
@@ -73,7 +73,7 @@ export function* loadNextPageSaga() {
 
     const filters = yield select(getFilters);
     const journalIds = yield select(getJournalIds);
-    const nextPageOffset = yield select(getNextPageOffset);
+    const nextPageOffset = yield select(getErrorMessage);
 
     const articlesResponse = yield call(Services.searchService.searchArticles, journalIds, filters, nextPageOffset);
     // const response = yield call(Services.apiService.searchArticles, filters, nextPageOffset);
@@ -142,5 +142,5 @@ export function* watchSearch() {
 }
 
 export function* watchArticlesPageLoading() {
-  yield takeEvery(TASKS_PAGE_LOADING, loadNextPageSaga);
+  yield takeEvery(TASKS_LOADING, loadNextPageSaga);
 }

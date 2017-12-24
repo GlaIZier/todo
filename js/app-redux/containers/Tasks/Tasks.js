@@ -2,11 +2,8 @@ import React, {PureComponent} from 'react';
 // import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {searchSagaAC} from '../../redux/search';
-import {loadNextPageSagaAC} from '../../redux/articles';
+import {loadTasksSagaAC} from '../../redux/tasks';
 import {articleNavigateSagaAC} from '../../redux/navigate';
-// import SearchPanel from '../../components/SearchPanel';
-// import SearchResult from '../../components/SearchResult';
-// import InfiniteScroll from '../../components/InfiniteScroll';
 import './styles/tasks.css';
 
 class Tasks extends PureComponent {
@@ -17,7 +14,7 @@ class Tasks extends PureComponent {
   //     searchSagaAC: PropTypes.func.isRequired,
   //     articles: PropTypes.array.isRequired,
   //     nextPageOffset: PropTypes.number,
-  //     loadNextPageSagaAC: PropTypes.func.isRequired,
+  //     loadTasksSagaAC: PropTypes.func.isRequired,
   //     loading: PropTypes.bool.isRequired,
   //     articleNavigateSagaAC: PropTypes.func.isRequired
   // };
@@ -57,9 +54,9 @@ function mapStateToProps(state) {
     // filters: getFilters(state),
     // processing: getProcessing(state),
     // articles: getTasks(state),
-    // nextPageOffset: getNextPageOffset(state),
+    // nextPageOffset: getErrorMessage(state),
     // loading: getLoading(state)
   }
 }
 
-export default connect(mapStateToProps, {searchSagaAC, loadNextPageSagaAC, articleNavigateSagaAC})(Tasks)
+export default connect(mapStateToProps, {searchSagaAC, loadTasksSagaAC, articleNavigateSagaAC})(Tasks)
