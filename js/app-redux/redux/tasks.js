@@ -20,8 +20,7 @@ export default function reducer(tasks = initialState, action = {}) {
       return tasks.set('loading', true);
 
     case TASKS_LOADING_SUCCESS:
-      return tasks.set('nextPageOffset', payload.tasks.nextPageOffset).set('tasks',
-        tasks.get('tasks').concat(fromJS(payload.tasks.tasks))).set('loading', false);
+      return tasks.set('tasks', tasks.get('tasks').concat(fromJS(payload.tasks.tasks))).set('loading', false);
 
     case TASKS_LOADING_FAIL:
       return tasks.set('loading', false).set('errorMessage', payload.errorMessage);
