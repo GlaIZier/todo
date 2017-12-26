@@ -14,6 +14,10 @@ class Tasks extends PureComponent {
     loading: PropTypes.bool.isRequired
   };
 
+  // componentDidMount() {
+  //   this.props.articleLoadingSagaAC(this.props.articleId);
+  // }
+
   render() {
     const tasksContainer = (
       <div className="todos" id="todos">
