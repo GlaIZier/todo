@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 import auth from '../redux/auth';
-import tasks from '../redux/tasks';
+import tasks from '../redux/task';
 // import search from '../redux/search';
 // import article from '../redux/article';
 import notifications from '../redux/notifications';

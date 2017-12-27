@@ -1,4 +1,5 @@
 import {watchLogin, watchLogout} from './authSaga';
+import {watchTasksLoading} from './taskSaga';
 // import {watchArticlesPageLoading, watchSearch} from './searchSaga';
 // import {
 //     watchAddFoundConceptSaga,
@@ -17,6 +18,8 @@ export default function* rootSaga() {
   yield [
     watchLogin(),
     watchLogout(),
+
+    watchTasksLoading(),
 
     // watchSearch(),
     // watchArticlesPageLoading(),

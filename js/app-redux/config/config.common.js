@@ -5,23 +5,9 @@ const appConfig = () => {
   const loginApiUrl = apiBaseUrl + 'auth/login';
   const logoutApiUrl = apiBaseUrl + 'auth/me/logout';
 
-  let journalsSearchBaseUrl = apiBaseUrl + '';
-  let articlesSearchBaseUrl = apiBaseUrl + '';
+  const tasksApiUrl = apiBaseUrl + 'me/tasks';
 
-  let articleInfoBaseUrlTemplate = apiBaseUrl + '/ArticleProducts/<%-props.id%>';
-  let articleJournalBaseUrlTemplate = apiBaseUrl + '';
-  let articleConceptsBaseUrlTemplate = apiBaseUrl + '';
-  let articleHumanConceptsBaseUrlTemplate = apiBaseUrl + '';
-  // here lot's of empty results for journals
-  let journalPolicyBaseUrlTemplate = loginApiUrl + '';
-
-  let journalTaxonomiesBaseUrlTemplate = apiBaseUrl + '';
-  let topConceptsBaseUrlTemplate = apiBaseUrl + '';
-  let childConceptsBaseUrlTemplate = apiBaseUrl + '';
-
-  let conceptsSearchBaseUrl = apiBaseUrl + '';
-  let conceptEditionBaseUrlTemplate = apiBaseUrl + '';
-  let conceptHumanEditionBaseUrlTemplate = apiBaseUrl + '';
+  // let articleInfoBaseUrlTemplate = apiBaseUrl + '/ArticleProducts/<%-props.id%>';
 
   // Enable mock
   // if (__LOCAL__) {
@@ -67,20 +53,8 @@ const appConfig = () => {
     loginApiUrl: loginApiUrl,
     logoutApiUrl: logoutApiUrl,
 
-    journalsSearchBaseUrl: journalsSearchBaseUrl,
-    articlesSearchBaseUrl: articlesSearchBaseUrl,
+    tasksApiUrl: tasksApiUrl,
 
-    articleInfoBaseUrlTemplate: articleInfoBaseUrlTemplate,
-    articleJournalBaseUrlTemplate: articleJournalBaseUrlTemplate,
-    articleConceptsBaseUrlTemplate: articleConceptsBaseUrlTemplate,
-    articleHumanConceptsBaseUrlTemplate: articleHumanConceptsBaseUrlTemplate,
-    journalTaxonomiesBaseUrlTemplate: journalTaxonomiesBaseUrlTemplate,
-    topConceptsBaseUrlTemplate: topConceptsBaseUrlTemplate,
-    childConceptsBaseUrlTemplate: childConceptsBaseUrlTemplate,
-    journalPolicyBaseUrlTemplate: journalPolicyBaseUrlTemplate,
-    conceptsSearchBaseUrl: conceptsSearchBaseUrl,
-    conceptEditionBaseUrlTemplate: conceptEditionBaseUrlTemplate,
-    conceptHumanEditionBaseUrlTemplate: conceptHumanEditionBaseUrlTemplate,
     // add here another settings if needed
 
     constants: {

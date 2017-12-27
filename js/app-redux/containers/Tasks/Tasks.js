@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {getLoading, getTasks, loadTasksSagaAC} from '../../redux/tasks';
+import {getLoading, getTasks, loadTasksSagaAC} from '../../redux/task';
 import './styles/tasks.css';
 // import {articleNavigateSagaAC} from '../../redux/navigate';
 // import {searchSagaAC} from '../../redux/search';
@@ -14,9 +14,9 @@ class Tasks extends PureComponent {
     loading: PropTypes.bool.isRequired
   };
 
-  // componentDidMount() {
-  //   this.props.articleLoadingSagaAC(this.props.articleId);
-  // }
+  componentDidMount() {
+    this.props.loadTasksSagaAC();
+  }
 
   render() {
     const tasksContainer = (
@@ -56,7 +56,6 @@ class Tasks extends PureComponent {
 }
 
 function mapStateToProps(state) {
-  console.log(state);
   return {
     tasks: getTasks(state),
     loading: getLoading(state)

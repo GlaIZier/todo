@@ -1,16 +1,7 @@
 import {call, put, select, takeEvery} from 'redux-saga/effects';
 import {getFilters, getJournalIds, SEARCH, searchFailAC, searchStartAC, searchSuccessAC} from '../redux/search';
-import {
-  articlesPageLoadingStartAC,
-  articlesPageLoadingSuccessAC,
-  articlesSearchStartAC,
-  articlesSearchSuccessAC,
-  getErrorMessage,
-  TASKS_LOADING
-} from '../redux/tasks';
 import {notifyDangerSagaAC, notifyInfoSagaAC} from '../redux/notifications';
 import Services from '../config/config.services';
-import {getAllowedJournals} from '../redux/auth';
 
 export function* searchSaga(action) {
   try {
@@ -28,15 +19,12 @@ export function* searchSaga(action) {
 
       if (journalIds.length === 0) {
         yield put(searchFailAC('No journals found'));
-        yield put(articlesSearchSuccessAC({ articles: [], nextPageOffset: 0}));
         yield put(notifyDangerSagaAC('No journal(s) with given title have been found'));
         return;
       }
     } else {
       journalIds = allowedJournals;
     }
-
-    yield put(articlesSearchStartAC());
 
     const articlesResponse = yield call(Services.searchService.searchArticles, journalIds, filters, offset);
     // console.log(JSON.stringify(articlesResponse, null, 2));

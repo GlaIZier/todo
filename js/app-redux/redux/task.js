@@ -9,7 +9,7 @@ const initialState = fromJS({
     // }
   ],
   loading: false,
-  errorMessage: ''
+  errorMessage: null
 });
 
 // reducer
@@ -17,10 +17,11 @@ export default function reducer(tasks = initialState, action = {}) {
   const {type, payload} = action;
   switch (type) {
     case TASKS_LOADING_START:
-      return tasks.set('loading', true);
+      return tasks.set('loading', true).set('errorMessage', null);
 
     case TASKS_LOADING_SUCCESS:
-      return tasks.set('tasks', tasks.get('tasks').concat(fromJS(payload.tasks.tasks))).set('loading', false);
+      return tasks.set('tasks', tasks.get('tasks').concat(fromJS(payload.tasks.tasks)))
+        .set('loading', false).set('errorMessage', null);
 
     case TASKS_LOADING_FAIL:
       return tasks.set('loading', false).set('errorMessage', payload.errorMessage);

@@ -6,6 +6,7 @@ import store from './store/store';
 import './styles/bootstrap.min.css';
 import './styles/main.css';
 
+// Todo remove all unnecessary components
 render(
   <Provider store={store}>
     <AppRouter />

@@ -22,7 +22,6 @@ class AuthService {
     // return sleep(1000).then(() => {
     //   console.log('Inside AuthService.login ' + login + ' ' + password)
     // })
-    console.debug('Inside AuthService.login() ' + login + ' ' + password);
     const defer = Q.defer();
 
     const url = `${this.config.loginApiUrl}`;
@@ -53,7 +52,6 @@ class AuthService {
   };
 
   logout = (token = '') => {
-    console.debug('Inside AuthService.logout()');
     const defer = Q.defer();
 
     const headers = {};
