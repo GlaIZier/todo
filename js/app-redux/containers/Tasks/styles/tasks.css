@@ -12,6 +12,6 @@
     float: right;
 }
 
-.todo {
+#todos .todo {
     margin-bottom: 0;
 }

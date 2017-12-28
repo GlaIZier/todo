@@ -22,8 +22,8 @@ class Tasks extends PureComponent {
     const tasksContainer = (
       <div className="todos" id="todos">
         {this.props.tasks.map(function (task, i) {
-          return <div className="todo well well-sm">
-            <div key={i}>
+          return <div className="todo well well-sm" key={i}>
+            <div>
               <span className="todo-text" onclick="Task.clickUpdateTask(this)">{task.todo}</span>
               <span className="todo-remove clickable glyphicon glyphicon-remove" aria-hidden="true"
                     onclick="Task.deleteTask(this)"/>

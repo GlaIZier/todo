@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {Button, Col, ControlLabel, Form, FormControl, FormGroup, Row} from 'react-bootstrap';
 import {getErrorMessage, getHasError, getProcessing, loginSagaAC} from '../../redux/auth';
+import './styles/login.css';
 
 class Login extends PureComponent {
 
@@ -38,13 +39,6 @@ class Login extends PureComponent {
 
   render() {
 
-    const styles = {
-      scrollableContent: {
-        paddingTop: '130px',
-        paddingBottom: '170px'
-      }
-    };
-
     const invalidCredentialsError = (this.props.hasError) &&
       <Row className="row">
         <Col md={3}/>
@@ -56,64 +50,63 @@ class Login extends PureComponent {
 
     return (
       <div id="login-component">
-        <div className="scrollable-content" style={styles.scrollableContent}>
-          <div className="container">
+        <div className="container">
 
-            {/*<div ng-if="servererror"  className="row">*/}
-            {/*<div className="col-md-3"></div>*/}
-            {/*<div className="col-md-6">*/}
-            {/*<p className="alert alert-danger">Cannot log you in. Server responses '{{errormessage}}'.</p>*/}
-            {/*</div>*/}
-            {/*<div className="col-md-3"></div>*/}
-            {/*</div>*/}
+          {/*<div ng-if="servererror"  className="row">*/}
+          {/*<div className="col-md-3"></div>*/}
+          {/*<div className="col-md-6">*/}
+          {/*<p className="alert alert-danger">Cannot log you in. Server responses '{{errormessage}}'.</p>*/}
+          {/*</div>*/}
+          {/*<div className="col-md-3"></div>*/}
+          {/*</div>*/}
 
-            {invalidCredentialsError}
+          {invalidCredentialsError}
 
-            <Row>
-              <Col md={3}/>
-              <Col md={6}>
-                <Form
-                  horizontal
-                  onSubmit={this.handleLogin}>
-                  <fieldset>
-                    <FormGroup>
-                      <ControlLabel htmlFor="login" className="col-sm-3">User Name</ControlLabel>
-                      <Col md={9}>
-                        <FormControl
-                          id="login"
-                          type="text"
-                          value={this.state.login}
-                          onChange={this.handleUserChange}
-                          placeholder="Enter your login"/>
-                      </Col>
-                    </FormGroup>
-                    <FormGroup>
-                      <ControlLabel htmlFor="password" className="col-sm-3">Password</ControlLabel>
-                      <Col md={9}>
-                        <FormControl
-                          id="password"
-                          type="password"
-                          value={this.state.password}
-                          onChange={this.handlePasswordChange}
-                          placeholder="Enter your password"/>
-                      </Col>
-                    </FormGroup>
-                    <FormGroup>
-                      <Col sm={9} smOffset={3}>
-                        <Button
-                          className="btn-primary"
-                          type="submit"
-                          disabled={this.props.processing}>
-                          Log In
-                        </Button>
-                      </Col>
-                    </FormGroup>
-                  </fieldset>
-                </Form>
-              </Col>
-              <Col md={3}/>
-            </Row>
-          </div>
+          <Row>
+            <Col md={3}/>
+            <Col md={6}>
+              <Form
+                horizontal
+                onSubmit={this.handleLogin}>
+                <fieldset>
+                  <h2 className="form-signin-heading">Please sign in</h2>
+                  <FormGroup>
+                    <ControlLabel htmlFor="login" className="col-sm-3">User Name</ControlLabel>
+                    <Col md={9}>
+                      <FormControl
+                        id="login"
+                        type="text"
+                        value={this.state.login}
+                        onChange={this.handleUserChange}
+                        placeholder="Enter your login"/>
+                    </Col>
+                  </FormGroup>
+                  <FormGroup>
+                    <ControlLabel htmlFor="password" className="col-sm-3">Password</ControlLabel>
+                    <Col md={9}>
+                      <FormControl
+                        id="password"
+                        type="password"
+                        value={this.state.password}
+                        onChange={this.handlePasswordChange}
+                        placeholder="Enter your password"/>
+                    </Col>
+                  </FormGroup>
+                  <FormGroup>
+                    <Col sm={9} smOffset={3}>
+                      <Button
+                        className="btn-primary"
+                        type="submit"
+                        disabled={this.props.processing}>
+                        Log In
+                      </Button>
+                    </Col>
+                  </FormGroup>
+                </fieldset>
+              </Form>
+            </Col>
+            <Col md={3}/>
+          </Row>
         </div>
       </div>
     )
