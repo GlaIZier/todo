@@ -5,6 +5,8 @@ const appConfig = () => {
   const loginApiUrl = apiBaseUrl + 'auth/login';
   const logoutApiUrl = apiBaseUrl + 'auth/me/logout';
 
+  const registerApiUrl = apiBaseUrl + 'users';
+
   const tasksApiUrl = apiBaseUrl + 'me/tasks';
 
   // let articleInfoBaseUrlTemplate = apiBaseUrl + '/ArticleProducts/<%-props.id%>';
@@ -52,6 +54,8 @@ const appConfig = () => {
     // baseUrl: baseUrl,
     loginApiUrl: loginApiUrl,
     logoutApiUrl: logoutApiUrl,
+
+    registerApiUrl: registerApiUrl,
 
     tasksApiUrl: tasksApiUrl,
 

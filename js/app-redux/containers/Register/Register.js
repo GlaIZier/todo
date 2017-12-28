@@ -2,16 +2,14 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {Button, Col, ControlLabel, Form, FormControl, FormGroup, Row} from 'react-bootstrap';
-import {getErrorMessage, getHasError, getProcessing, loginSagaAC} from '../../redux/auth';
+import {getProcessing, registerSagaAC} from '../../redux/register';
 import './styles/register.css';
 
 class Register extends PureComponent {
 
   static propTypes = {
-    loginSagaAC: PropTypes.func.isRequired,
+    registerSagaAC: PropTypes.func.isRequired,
     processing: PropTypes.bool.isRequired,
-    hasError: PropTypes.bool.isRequired,
-    errorMessage: PropTypes.string.isRequired
   };
 
   constructor(props) {
@@ -34,34 +32,14 @@ class Register extends PureComponent {
     e.preventDefault();
     e.stopPropagation();
 
-    this.props.loginSagaAC({...this.state});
+    this.props.registerSagaAC({...this.state});
   };
 
   render() {
 
-    const invalidCredentialsError = (this.props.hasError) &&
-      <Row className="row">
-        <Col md={3}/>
-        <Col md={6}>
-          <p className="alert alert-danger">{this.props.errorMessage}</p>
-        </Col>
-        <Col md={3}/>
-      </Row>;
-
     return (
       <div id="login-component">
         <div className="container">
-
-          {/*<div ng-if="servererror"  className="row">*/}
-          {/*<div className="col-md-3"></div>*/}
-          {/*<div className="col-md-6">*/}
-          {/*<p className="alert alert-danger">Cannot log you in. Server responses '{{errormessage}}'.</p>*/}
-          {/*</div>*/}
-          {/*<div className="col-md-3"></div>*/}
-          {/*</div>*/}
-
-          {invalidCredentialsError}
-
           <Row>
             <Col md={3}/>
             <Col md={6}>
@@ -115,11 +93,9 @@ class Register extends PureComponent {
 
 function mapStateToProps(state) {
   return {
-    hasError: getHasError(state),
-    errorMessage: getErrorMessage(state),
     processing: getProcessing(state)
   }
 }
 
 // mapDispatchToProps as second arg. Each function inside is assumed to be an action creator
-export default connect(mapStateToProps, {loginSagaAC})(Register)
+export default connect(mapStateToProps, {registerSagaAC})(Register)

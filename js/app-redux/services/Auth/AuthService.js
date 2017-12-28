@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import Q from 'q';
-import config from '../../config/config.common';
 
 // import Promise from 'promise';
 
@@ -43,7 +42,6 @@ class AuthService {
       data: credentials
     })
       .then(payload => {
-        console.debug('Payload inside AuthService.login ajax then(): ' + payload);
         defer.resolve(payload)
       })
       .fail(e => defer.reject(e));
@@ -55,7 +53,7 @@ class AuthService {
     const defer = Q.defer();
 
     const headers = {};
-    headers[config.constants.apiTokenHeaderName] = token;
+    headers[this.config.constants.apiTokenHeaderName] = token;
 
     $.ajax({
       url: `${this.config.logoutApiUrl}`,

@@ -18,7 +18,6 @@ export function* loginSaga(action) {
 
     // indirect async call is used to help to test this middleware
     const payload = yield call(Services.authService.login, login, password);
-    console.debug('Payload inside loginSaga() after AuthService.login() success: ' + payload);
 
     let user = payload.data;
     window.localStorage.setItem(config.constants.localStorageUserItemName, JSON.stringify(user));
@@ -58,7 +57,7 @@ export function* logoutSaga() {
     console.error(e);
     if (e.responseJSON)
       yield put(notifyDangerSagaAC(`Logout failed: ${e.responseJSON.error.message}. Try one more time or reload the page!`));
-    if (e.responseText)
+    else if (e.responseText)
       yield put(notifyDangerSagaAC(`Logout failed: ${e.responseText}. Try one more time or reload the page!`));
     else if (e.message)
       yield put(notifyDangerSagaAC(`Logout failed: ${e.message}. Try one more time or reload the page!`));
