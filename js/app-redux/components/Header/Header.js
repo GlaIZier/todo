@@ -72,6 +72,7 @@ class Header extends PureComponent {
         </Modal.Footer>
       </Modal>;
 
+    // Todo check all links in a
     const userHeader =
       (this.props.user) ?
         <ul className="nav navbar-nav navbar-right">
@@ -80,8 +81,8 @@ class Header extends PureComponent {
         </ul>
         :
         <ul className="nav navbar-nav navbar-right">
-          <li><a href="/todo/login}">Sign in</a></li>
-          <li><a href="/todo/register">Sign up</a></li>
+          <li><a href="/todo/spa/login">Sign in</a></li>
+          <li><a href="/todo/spa/register">Sign up</a></li>
         </ul>;
 
     //     <div className="top-panel">
@@ -112,7 +113,7 @@ class Header extends PureComponent {
               <span className="icon-bar"></span>
             </button>
 
-            <a className="navbar-left" href="/todo/">
+            <a className="navbar-left" href="/todo/spa">
               <img alt="Todo" height="45px" src={LogoPng}/>
             </a>
           </div>
@@ -120,7 +121,7 @@ class Header extends PureComponent {
           {/*<!-- Collect the nav links, forms, and other content for toggling -->*/}
           <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul className="nav navbar-nav">
-              <li><a href="/todo/tasks}">Tasks</a></li>
+              <li><a href="/todo/spa/tasks">Tasks</a></li>
             </ul>
             {userHeader}
           </div>

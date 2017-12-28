@@ -26,11 +26,11 @@ class LoginPage extends PureComponent {
   checkAuth = (user) => {
     if (user)
       this.props.navigateSagaAC('root')
-  }
+  };
 
   render() {
     return (
-      <Login />
+      <Login/>
     );
   }
 }

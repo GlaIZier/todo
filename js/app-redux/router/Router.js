@@ -3,6 +3,7 @@ import {browserHistory, IndexRedirect, Route, Router} from 'react-router';
 //import { useBasename } from 'history';
 import {App} from '../containers/App';
 import {LoginPage} from '../pages/LoginPage';
+import {RegisterPage} from '../pages/RegisterPage';
 import {TasksPage} from '../pages/TasksPage';
 import {ArticlePage} from '../pages/ArticlePage';
 import {NotFound} from '../pages/NotFound';
@@ -17,6 +18,7 @@ export default function RouterContainer() {
       <Route path="/todo/spa" component={App}>
         <IndexRedirect to="tasks"/>
         <Route path="login" component={LoginPage} key="login"/>
+        <Route path="register" component={RegisterPage} key="register"/>
         <Route path="tasks" component={requireAuthentication(TasksPage)} key="tasks"/>
         <Route path="tasks/:taskId" component={requireAuthentication(ArticlePage)} key="task"/>
         <Route path="403" component={NoPermissions} key="noPermissions"/>
