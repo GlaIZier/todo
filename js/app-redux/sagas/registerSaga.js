@@ -4,7 +4,6 @@ import {navigateSagaAC} from '../redux/navigate';
 import {notifyDangerSagaAC, notifySuccessSagaAC} from '../redux/notifications';
 import Services from '../config/config.services';
 
-// Todo check register backend if user already exists
 export function* registerSaga(action) {
   try {
     const {payload: {login, password}} = action;

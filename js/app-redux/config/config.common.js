@@ -40,7 +40,7 @@ const appConfig = () => {
   const nameSort = 'name';
 
   // notifications
-  const notificationsTimeoutMs = 3000;
+  const notificationsTimeoutMs = 4000;
 
   // token cookie
   const apiTokenExpireDays = 1;
