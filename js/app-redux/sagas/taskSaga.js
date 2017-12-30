@@ -18,6 +18,11 @@ export function* loadTasksSaga() {
   }
 }
 
+export function* addTaskSaga() {
+
+}
+
+
 function parseTasksResponse(response) {
   let tasks = {
     tasks: []
