@@ -22,6 +22,13 @@ export function* addTaskSaga() {
 
 }
 
+export function* editTaskSaga() {
+
+}
+
+export function* deleteTaskSaga() {
+
+}
 
 function parseTasksResponse(response) {
   let tasks = {
