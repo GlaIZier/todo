@@ -1,11 +1,11 @@
 import {call, put, takeEvery} from 'redux-saga/effects';
-import {TASKS_LOADING, tasksLoadingStartAC, tasksLoadingSuccessAC} from '../redux/task';
+import {TASKS_LOADING, tasksUpdatingStartAC, tasksLoadingSuccessAC, tasksUpdatingFailAC} from '../redux/task';
 import {notifyDangerSagaAC} from '../redux/notifications';
 import Services from '../config/config.services';
 
 export function* loadTasksSaga() {
   try {
-    yield put(tasksLoadingStartAC());
+    yield put(tasksUpdatingStartAC());
 
     const tasksResponse = yield call(Services.taskService.loadTasks);
     const tasks = parseTasksResponse(tasksResponse);
@@ -13,8 +13,22 @@ export function* loadTasksSaga() {
     yield put(tasksLoadingSuccessAC(tasks));
   } catch (e) {
     console.error('Error: ', e);
-    // yield put(articlesPageLoadingFailAC(e.message));
-    yield put(notifyDangerSagaAC(`Loading next page failed: ${e.message}. Try to reload the page.`));
+    if (e.responseJSON) {
+      yield put(tasksUpdatingFailAC(e.responseJSON.error.message));
+      yield put(notifyDangerSagaAC(`Loading tasks failed: ${e.responseJSON.error.message}. Try one more time or reload the page!`));
+    }
+    else if (e.responseText) {
+      yield put(tasksUpdatingFailAC(e.responseText));
+      yield put(notifyDangerSagaAC(`Loading tasks failed: ${e.responseText}. Try one more time or reload the page!`));
+    }
+    else if (e.message) {
+      yield put(tasksUpdatingFailAC(e.message));
+      yield put(notifyDangerSagaAC(`Loading tasks failed: ${e.message}. Try one more time or reload the page!`));
+    }
+    else {
+      yield put(tasksUpdatingFailAC('Unknown error occurred! Check console for more information.'));
+      yield put(notifyDangerSagaAC('Unknown error occurred! Check console for more information.'));
+    }
   }
 }
 
@@ -26,7 +40,7 @@ export function* editTaskSaga() {
 
 }
 
-export function* deleteTaskSaga() {
+export function* deleteeTaskSaga() {
 
 }
 

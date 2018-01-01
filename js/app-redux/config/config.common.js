@@ -11,6 +11,7 @@ const appConfig = () => {
 
   // let articleInfoBaseUrlTemplate = apiBaseUrl + '/ArticleProducts/<%-props.id%>';
 
+  // Todo add mocks for express
   // Enable mock
   // if (__LOCAL__) {
   //   journalsSearchBaseUrl = '';
