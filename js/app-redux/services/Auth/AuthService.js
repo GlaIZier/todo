@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import Q from 'q';
+import Cookies from 'js-cookie';
 
 // import Promise from 'promise';
 
@@ -49,9 +50,10 @@ class AuthService {
     return defer.promise;
   };
 
-  logout = (token = '') => {
+  logout = () => {
     const defer = Q.defer();
 
+    const token = Cookies.get(this.config.constants.apiTokenCookieName);
     const headers = {};
     headers[this.config.constants.apiTokenHeaderName] = token;
 

@@ -47,7 +47,7 @@ export function* logoutSaga() {
   try {
     const token = Cookies.get(config.constants.apiTokenCookieName);
     if (token !== undefined)
-      yield call(Services.authService.logout, token);
+      yield call(Services.authService.logout);
 
     window.localStorage.removeItem('todo-user');
     Cookies.remove(config.constants.apiTokenCookieName);

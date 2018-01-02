@@ -62,6 +62,7 @@ export const tasksUpdatingFailAC = (errorMessage) => ({
 export const loadTasksSagaAC = () => ({
   type: TASKS_LOADING
 });
-export const addTaskSagaAC = () => ({
-  type: TASK_ADDING
+export const addTaskSagaAC = (todo) => ({
+  type: TASK_ADDING,
+  payload: {todo}
 });

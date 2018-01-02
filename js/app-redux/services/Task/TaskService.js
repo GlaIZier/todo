@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import Q from 'q';
+import Cookies from 'js-cookie';
 
 // import Promise from 'promise';
 
@@ -12,13 +13,38 @@ class TaskService {
   }
 
   loadTasks = () => {
-    console.debug('Inside TaskService.loadTasks()');
     const defer = Q.defer();
 
     $.ajax({
       url: `${this.config.tasksApiUrl}`,
       method: 'GET',
       crossDomain: true,
+      xhrFields: {
+        withCredentials: true
+      }
+    })
+      .then(payload => defer.resolve(payload))
+      .fail(e => defer.reject(e));
+
+    return defer.promise;
+  };
+
+  addTask = (todo = '') => {
+    const defer = Q.defer();
+
+    const token = Cookies.get(this.config.constants.apiTokenCookieName);
+    const headers = {};
+    headers[this.config.constants.apiTokenHeaderName] = token;
+
+    const data = {};
+    data['todo'] = todo;
+
+    $.ajax({
+      url: `${this.config.tasksApiUrl}`,
+      method: 'POST',
+      headers: headers,
+      crossDomain: true,
+      data: data,
       xhrFields: {
         withCredentials: true
       }

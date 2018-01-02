@@ -1,7 +1,8 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {getLoading, getTasks, loadTasksSagaAC} from '../../redux/task';
+import {getLoading, getTasks, loadTasksSagaAC, addTaskSagaAC} from '../../redux/task';
+import $ from 'jquery';
 import './styles/tasks.css';
 // import {articleNavigateSagaAC} from '../../redux/navigate';
 // import {searchSagaAC} from '../../redux/search';
@@ -11,12 +12,29 @@ class Tasks extends PureComponent {
   static propTypes = {
     tasks: PropTypes.array.isRequired,
     loadTasksSagaAC: PropTypes.func.isRequired,
+    addTaskSagaAC: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired
   };
 
   componentDidMount() {
     this.props.loadTasksSagaAC();
   }
+
+  handlePressSaveTask = (event) => {
+    console.log(event);
+    // if (event.keyCode === 13)
+    //   this.handleAddTask();
+  };
+
+  handleAddTask = () => {
+    const newTaskInput = $('#new-task-input');
+    const newTodo = newTaskInput.val();
+    newTaskInput.val('');
+    if (newTodo === '')
+      return;
+
+    this.props.addTaskSagaAC(newTodo);
+  };
 
   render() {
     const tasksContainer = (
@@ -42,10 +60,10 @@ class Tasks extends PureComponent {
               <input id="new-task-input" type="text" className="todo-input form-control"
                      placeholder="What needs to be done?"
                      aria-describedby="basic-addon"
-                     onkeyup="Task.pressSaveTask(event)"
+                     onKeyUp={this.handlePressSaveTask(event)}
               />
               <span className="todo-new clickable input-group-addon" id="basic-addon"
-                    onclick="Task.saveTask()">New task</span>
+                    onClick={this.handleAddTask()}>New task</span>
             </div>
           </header>
           {tasksContainer}
@@ -62,4 +80,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, {loadTasksSagaAC})(Tasks)
+export default connect(mapStateToProps, {loadTasksSagaAC, addTaskSagaAC})(Tasks)
