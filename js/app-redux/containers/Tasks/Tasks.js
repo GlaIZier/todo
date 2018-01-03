@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {getLoading, getTasks, loadTasksSagaAC, addTaskSagaAC} from '../../redux/task';
+import {addTaskSagaAC, getLoading, getTasks, loadTasksSagaAC} from '../../redux/task';
 import $ from 'jquery';
 import './styles/tasks.css';
 // import {articleNavigateSagaAC} from '../../redux/navigate';
@@ -20,13 +20,14 @@ class Tasks extends PureComponent {
     this.props.loadTasksSagaAC();
   }
 
-  handlePressSaveTask = (event) => {
-    console.log(event);
-    // if (event.keyCode === 13)
-    //   this.handleAddTask();
+  handlePressSaveTask = (e) => {
+    if (e.keyCode === 13)
+      this.handleAddTask(e);
   };
 
-  handleAddTask = () => {
+  handleAddTask = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     const newTaskInput = $('#new-task-input');
     const newTodo = newTaskInput.val();
     newTaskInput.val('');
@@ -60,10 +61,10 @@ class Tasks extends PureComponent {
               <input id="new-task-input" type="text" className="todo-input form-control"
                      placeholder="What needs to be done?"
                      aria-describedby="basic-addon"
-                     onKeyUp={this.handlePressSaveTask(event)}
+                     onKeyUp={this.handlePressSaveTask}
               />
               <span className="todo-new clickable input-group-addon" id="basic-addon"
-                    onClick={this.handleAddTask()}>New task</span>
+                    onClick={this.handleAddTask}>New task</span>
             </div>
           </header>
           {tasksContainer}

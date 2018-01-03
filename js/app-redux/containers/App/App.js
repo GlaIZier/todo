@@ -6,6 +6,7 @@ import Footer from '../../components/Footer/index';
 import {connect} from 'react-redux';
 import {getUser, logoutSagaAC} from '../../redux/auth';
 import {getNotifications} from '../../redux/notifications';
+import './styles/app.css';
 
 
 class App extends PureComponent {
