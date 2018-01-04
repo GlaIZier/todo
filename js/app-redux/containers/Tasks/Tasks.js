@@ -4,8 +4,7 @@ import {connect} from 'react-redux';
 import {addTaskSagaAC, getLoading, getTasks, loadTasksSagaAC} from '../../redux/task';
 import $ from 'jquery';
 import './styles/tasks.css';
-// import {articleNavigateSagaAC} from '../../redux/navigate';
-// import {searchSagaAC} from '../../redux/search';
+import {List} from 'immutable';
 
 class Tasks extends PureComponent {
 
@@ -15,6 +14,13 @@ class Tasks extends PureComponent {
     addTaskSagaAC: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      updateTaskMode: List([])
+    };
+  }
 
   componentDidMount() {
     this.props.loadTasksSagaAC();
@@ -37,17 +43,31 @@ class Tasks extends PureComponent {
     this.props.addTaskSagaAC(newTodo);
   };
 
+  handleUpdateTask = (e, task) => {
+    console.log(e);
+    console.log(task);
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.setState({updateTaskMode: this.state.updateTaskMode.update(task.id, () => true)});
+  };
+
   render() {
+    const self = this;
     const tasksContainer = (
       <div className="todos" id="todos">
         {this.props.tasks.map(function (task, i) {
-          return <div className="todo well well-sm" key={i}>
-            <div>
-              <span className="todo-text" onclick="Task.clickUpdateTask(this)">{task.todo}</span>
-              <span className="todo-remove clickable glyphicon glyphicon-remove" aria-hidden="true"
-                    onclick="Task.deleteTask(this)"/>
+          return (self.state.updateTaskMode.get(task.id) === true) ?
+            <div key={i}>update</div>
+            :
+            <div className="todo well well-sm" key={i}>
+              <div>
+                <span className="todo-text" onClick={(e) => self.handleUpdateTask(e, task)}
+                      id={task.id}>{task.todo}</span>
+                <span className="todo-remove clickable glyphicon glyphicon-remove" aria-hidden="true"
+                      onclick="Task.deleteTask(this)"/>
+              </div>
             </div>
-          </div>
         })}
       </div>
     );
