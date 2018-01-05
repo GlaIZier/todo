@@ -1,10 +1,10 @@
-import React, {PureComponent} from 'react';
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {addTaskSagaAC, getLoading, getTasks, loadTasksSagaAC} from '../../redux/task';
-import $ from 'jquery';
-import './styles/tasks.css';
-import {List} from 'immutable';
+import React, {PureComponent} from "react";
+import PropTypes from "prop-types";
+import {connect} from "react-redux";
+import {addTaskSagaAC, getLoading, getTasks, loadTasksSagaAC} from "../../redux/task";
+import $ from "jquery";
+import "./styles/tasks.css";
+import {List} from "immutable";
 
 class Tasks extends PureComponent {
 
@@ -43,7 +43,7 @@ class Tasks extends PureComponent {
     this.props.addTaskSagaAC(newTodo);
   };
 
-  handleUpdateTask = (e, task) => {
+  handleClickUpdateTask = (e, task) => {
     console.log(e);
     console.log(task);
     e.preventDefault();
@@ -52,17 +52,29 @@ class Tasks extends PureComponent {
     this.setState({updateTaskMode: this.state.updateTaskMode.update(task.id, () => true)});
   };
 
+  handleUpdateTask = (e, prevTask) => {
+    console.log(`handleUpdateTask ${e} ${prevTask}`);
+  };
+
+  // Todo check how to create component without
   render() {
     const self = this;
     const tasksContainer = (
       <div className="todos" id="todos">
         {this.props.tasks.map(function (task, i) {
           return (self.state.updateTaskMode.get(task.id) === true) ?
-            <div key={i}>update</div>
+            <input
+              key={i}
+              id="update-task-input"
+              type="text"
+              className="todo-input form-control"
+              defaultValue={task.todo}
+              onKeyUp={(e) => self.handleUpdateTask(e, task.todo)}
+            />
             :
             <div className="todo well well-sm" key={i}>
               <div>
-                <span className="todo-text" onClick={(e) => self.handleUpdateTask(e, task)}
+                <span className="todo-text" onClick={(e) => self.handleClickUpdateTask(e, task)}
                       id={task.id}>{task.todo}</span>
                 <span className="todo-remove clickable glyphicon glyphicon-remove" aria-hidden="true"
                       onclick="Task.deleteTask(this)"/>
@@ -80,7 +92,6 @@ class Tasks extends PureComponent {
             <div className="todo-input-group input-group">
               <input id="new-task-input" type="text" className="todo-input form-control"
                      placeholder="What needs to be done?"
-                     aria-describedby="basic-addon"
                      onKeyUp={this.handlePressSaveTask}
               />
               <span className="todo-new clickable input-group-addon" id="basic-addon"
