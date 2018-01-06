@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {addTaskSagaAC, getLoading, getTasks, loadTasksSagaAC} from '../../redux/task';
+import {addTaskSagaAC, getLoading, getTasks, loadTasksSagaAC, updateTaskSagaAC} from '../../redux/task';
 import $ from 'jquery';
 import './styles/tasks.css';
 import {List} from 'immutable';
@@ -12,7 +12,8 @@ class Tasks extends PureComponent {
     tasks: PropTypes.array.isRequired,
     loading: PropTypes.bool.isRequired,
     loadTasksSagaAC: PropTypes.func.isRequired,
-    addTaskSagaAC: PropTypes.func.isRequired
+    addTaskSagaAC: PropTypes.func.isRequired,
+    updateTaskSagaAC: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -60,6 +61,7 @@ class Tasks extends PureComponent {
 
     const updatedTodo = e.target.value;
     this.setState({updatedTasks: this.state.updatedTasks.update(prevTask.id, () => undefined)});
+    this.props.updateTaskSagaAC(prevTask.id, updatedTodo);
     console.log(`updatedTodo after enter: ${updatedTodo}`);
 
     // var id = $(self).parent().attr('id');
@@ -143,4 +145,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, {loadTasksSagaAC, addTaskSagaAC})(Tasks)
+export default connect(mapStateToProps, {loadTasksSagaAC, addTaskSagaAC, updateTaskSagaAC})(Tasks)

@@ -55,6 +55,32 @@ class TaskService {
     return defer.promise;
   };
 
+  updateTask = (id = null, todo = '') => {
+    const defer = Q.defer();
+
+    const token = Cookies.get(this.config.constants.apiTokenCookieName);
+    const headers = {};
+    headers[this.config.constants.apiTokenHeaderName] = token;
+
+    const data = {};
+    data['todo'] = todo;
+
+    $.ajax({
+      url: `${this.config.tasksApiUrl}/${id}`,
+      method: 'PUT',
+      headers: headers,
+      crossDomain: true,
+      data: data,
+      xhrFields: {
+        withCredentials: true
+      }
+    })
+      .then(payload => defer.resolve(payload))
+      .fail(e => defer.reject(e));
+
+    return defer.promise;
+  };
+
 }
 
 export default TaskService;
