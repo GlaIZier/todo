@@ -1,24 +1,24 @@
-import React, {PureComponent} from "react";
-import PropTypes from "prop-types";
-import {connect} from "react-redux";
-import {addTaskSagaAC, getLoading, getTasks, loadTasksSagaAC} from "../../redux/task";
-import $ from "jquery";
-import "./styles/tasks.css";
-import {List} from "immutable";
+import React, {PureComponent} from 'react';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {addTaskSagaAC, getLoading, getTasks, loadTasksSagaAC} from '../../redux/task';
+import $ from 'jquery';
+import './styles/tasks.css';
+import {List} from 'immutable';
 
 class Tasks extends PureComponent {
 
   static propTypes = {
     tasks: PropTypes.array.isRequired,
+    loading: PropTypes.bool.isRequired,
     loadTasksSagaAC: PropTypes.func.isRequired,
-    addTaskSagaAC: PropTypes.func.isRequired,
-    loading: PropTypes.bool.isRequired
+    addTaskSagaAC: PropTypes.func.isRequired
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      updateTaskMode: List([])
+      updatedTasks: List([])
     };
   }
 
@@ -43,33 +43,64 @@ class Tasks extends PureComponent {
     this.props.addTaskSagaAC(newTodo);
   };
 
-  handleClickUpdateTask = (e, task) => {
-    console.log(e);
-    console.log(task);
+  handleClickUpdateTask = (e, prevTask) => {
     e.preventDefault();
     e.stopPropagation();
 
-    this.setState({updateTaskMode: this.state.updateTaskMode.update(task.id, () => true)});
+    this.setState({updatedTasks: this.state.updatedTasks.update(prevTask.id, () => prevTask.todo)});
   };
 
   handleUpdateTask = (e, prevTask) => {
-    console.log(`handleUpdateTask ${e} ${prevTask}`);
+    // esc key
+    if (e.keyCode === 27)
+      this.setState({updatedTasks: this.state.updatedTasks.update(prevTask.id, () => undefined)});
+    // enter key
+    if (e.keyCode !== 13)
+      return;
+
+    const updatedTodo = e.target.value;
+    this.setState({updatedTasks: this.state.updatedTasks.update(prevTask.id, () => undefined)});
+    console.log(`updatedTodo after enter: ${updatedTodo}`);
+
+    // var id = $(self).parent().attr('id');
+    // var headers = _getApiTokenHeader();
+    // var updatedTodo = $(self).val();
+    // $.ajax({
+    //   type: 'PUT',
+    //   url: _host + config.apiBaseUrl + config.meTasksEndpoint + "/" + id + "?todo=" + updatedTodo,
+    //   headers: headers
+    // })
+    //   .done(function (response, status, jq) {
+    //     var updatedTask = response.data;
+    //     _finishUpdateTask(self, updatedTodo);
+    //     console.log("Updated task: " + JSON.stringify(updatedTask));
+    //   })
+    //   .fail(function (xhr, status, error) {
+    //     if (_processUnauthenticated(xhr.status)) {
+    //       alert("You have been logged out");
+    //       return;
+    //     }
+    //     console.error(error);
+    //     alert("Error: " + error + ". Try to reload the page");
+    //     _finishUpdateTask(self, prevTodo)
+    //   });
   };
 
-  // Todo check how to create component without
+  // Todo check how to create component without handleChange
+  // Todo make select all by default after clicking on chnage task
   render() {
     const self = this;
     const tasksContainer = (
       <div className="todos" id="todos">
         {this.props.tasks.map(function (task, i) {
-          return (self.state.updateTaskMode.get(task.id) === true) ?
+          return (self.state.updatedTasks.get(task.id) !== undefined) ?
             <input
               key={i}
               id="update-task-input"
               type="text"
               className="todo-input form-control"
               defaultValue={task.todo}
-              onKeyUp={(e) => self.handleUpdateTask(e, task.todo)}
+              onKeyUp={(e) => self.handleUpdateTask(e, task)}
             />
             :
             <div className="todo well well-sm" key={i}>
