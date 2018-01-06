@@ -81,6 +81,29 @@ class TaskService {
     return defer.promise;
   };
 
+  deleteTask = (id = null) => {
+    const defer = Q.defer();
+
+    const token = Cookies.get(this.config.constants.apiTokenCookieName);
+    const headers = {};
+    headers[this.config.constants.apiTokenHeaderName] = token;
+
+    $.ajax({
+      url: `${this.config.tasksApiUrl}/${id}`,
+      method: 'DELETE',
+      headers: headers,
+      crossDomain: true,
+      xhrFields: {
+        withCredentials: true
+      }
+    })
+      .then(payload => defer.resolve(payload))
+      .fail(e => defer.reject(e));
+
+    return defer.promise;
+  };
+
+
 }
 
 export default TaskService;

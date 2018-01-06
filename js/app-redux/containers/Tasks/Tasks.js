@@ -1,7 +1,14 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {addTaskSagaAC, getLoading, getTasks, loadTasksSagaAC, updateTaskSagaAC} from '../../redux/task';
+import {
+  addTaskSagaAC,
+  getLoading,
+  getTasks,
+  loadTasksSagaAC,
+  updateTaskSagaAC,
+  deleteTaskSagaAC
+} from '../../redux/task';
 import $ from 'jquery';
 import './styles/tasks.css';
 import {List} from 'immutable';
@@ -63,29 +70,13 @@ class Tasks extends PureComponent {
     this.setState({updatedTasks: this.state.updatedTasks.update(prevTask.id, () => undefined)});
     this.props.updateTaskSagaAC(prevTask.id, updatedTodo);
     console.log(`updatedTodo after enter: ${updatedTodo}`);
+  };
 
-    // var id = $(self).parent().attr('id');
-    // var headers = _getApiTokenHeader();
-    // var updatedTodo = $(self).val();
-    // $.ajax({
-    //   type: 'PUT',
-    //   url: _host + config.apiBaseUrl + config.meTasksEndpoint + "/" + id + "?todo=" + updatedTodo,
-    //   headers: headers
-    // })
-    //   .done(function (response, status, jq) {
-    //     var updatedTask = response.data;
-    //     _finishUpdateTask(self, updatedTodo);
-    //     console.log("Updated task: " + JSON.stringify(updatedTask));
-    //   })
-    //   .fail(function (xhr, status, error) {
-    //     if (_processUnauthenticated(xhr.status)) {
-    //       alert("You have been logged out");
-    //       return;
-    //     }
-    //     console.error(error);
-    //     alert("Error: " + error + ". Try to reload the page");
-    //     _finishUpdateTask(self, prevTodo)
-    //   });
+  handleDeleteTask = (e, taskId) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.props.deleteTaskSagaAC(taskId);
   };
 
   // Todo check how to create component without handleChange
@@ -109,8 +100,8 @@ class Tasks extends PureComponent {
               <div>
                 <span className="todo-text" onClick={(e) => self.handleClickUpdateTask(e, task)}
                       id={task.id}>{task.todo}</span>
-                <span className="todo-remove clickable glyphicon glyphicon-remove" aria-hidden="true"
-                      onclick="Task.deleteTask(this)"/>
+                <span className="todo-remove todo-clickable glyphicon glyphicon-remove" aria-hidden="true"
+                      onClick={(e) => self.handleDeleteTask(e, task.id)}/>
               </div>
             </div>
         })}
@@ -145,4 +136,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, {loadTasksSagaAC, addTaskSagaAC, updateTaskSagaAC})(Tasks)
+export default connect(mapStateToProps, {loadTasksSagaAC, addTaskSagaAC, updateTaskSagaAC, deleteTaskSagaAC})(Tasks)

@@ -2,6 +2,8 @@ import {call, put, takeEvery} from 'redux-saga/effects';
 import {
   TASKS_LOADING,
   TASK_ADDING,
+  TASK_UPDATING,
+  TASK_DELETING,
   tasksUpdatingStartAC,
   tasksLoadingSuccessAC,
   taskAddingSuccessAC,
@@ -86,15 +88,15 @@ export function* updateTaskSaga(action) {
     console.error('Error: ', e);
     if (e.responseJSON) {
       yield put(tasksUpdatingFailAC(e.responseJSON.error.message));
-      yield put(notifyDangerSagaAC(`Adding task failed: ${e.responseJSON.error.message}. Try one more time or reload the page!`));
+      yield put(notifyDangerSagaAC(`Updating task failed: ${e.responseJSON.error.message}. Try one more time or reload the page!`));
     }
     else if (e.responseText) {
       yield put(tasksUpdatingFailAC(e.responseText));
-      yield put(notifyDangerSagaAC(`Adding task failed: ${e.responseText}. Try one more time or reload the page!`));
+      yield put(notifyDangerSagaAC(`Updating task failed: ${e.responseText}. Try one more time or reload the page!`));
     }
     else if (e.message) {
       yield put(tasksUpdatingFailAC(e.message));
-      yield put(notifyDangerSagaAC(`Adding task failed: ${e.message}. Try one more time or reload the page!`));
+      yield put(notifyDangerSagaAC(`Updating task failed: ${e.message}. Try one more time or reload the page!`));
     }
     else {
       yield put(tasksUpdatingFailAC('Unknown error occurred! Check console for more information.'));
@@ -103,8 +105,35 @@ export function* updateTaskSaga(action) {
   }
 }
 
-export function* deleteTaskSaga() {
+export function* deleteTaskSaga(action) {
+  try {
+    const {payload: {id}} = action;
 
+    yield put(tasksUpdatingStartAC());
+
+    const deletedTaskResponse = yield call(Services.taskService.deleteTask, id);
+    const deletedTask = deletedTaskResponse.data;
+
+    yield put(taskUpdatingSuccessAC(deletedTask));
+  } catch (e) {
+    console.error('Error: ', e);
+    if (e.responseJSON) {
+      yield put(tasksUpdatingFailAC(e.responseJSON.error.message));
+      yield put(notifyDangerSagaAC(`Deleting task failed: ${e.responseJSON.error.message}. Try one more time or reload the page!`));
+    }
+    else if (e.responseText) {
+      yield put(tasksUpdatingFailAC(e.responseText));
+      yield put(notifyDangerSagaAC(`Deleting task failed: ${e.responseText}. Try one more time or reload the page!`));
+    }
+    else if (e.message) {
+      yield put(tasksUpdatingFailAC(e.message));
+      yield put(notifyDangerSagaAC(`Deleting task failed: ${e.message}. Try one more time or reload the page!`));
+    }
+    else {
+      yield put(tasksUpdatingFailAC('Unknown error occurred! Check console for more information.'));
+      yield put(notifyDangerSagaAC('Unknown error occurred! Check console for more information.'));
+    }
+  }
 }
 
 function parseTasksResponse(response) {
@@ -127,4 +156,12 @@ export function* watchTasksLoading() {
 
 export function* watchTaskAdding() {
   yield takeEvery(TASK_ADDING, addTaskSaga);
+}
+
+export function* watchTaskUpdating() {
+  yield takeEvery(TASK_UPDATING, addTaskSaga);
+}
+
+export function* watchTaskDeleting() {
+  yield takeEvery(TASK_DELETING, addTaskSaga);
 }

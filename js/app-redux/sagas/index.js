@@ -1,6 +1,6 @@
 import {watchLogin, watchLogout} from './authSaga';
 import {watchRegister} from './registerSaga';
-import {watchTasksLoading, watchTaskAdding} from './taskSaga';
+import {watchTasksLoading, watchTaskAdding, watchTaskUpdating, watchTaskDeleting} from './taskSaga';
 // import {watchArticlesPageLoading, watchSearch} from './searchSaga';
 // import {
 //     watchAddFoundConceptSaga,
@@ -24,6 +24,8 @@ export default function* rootSaga() {
 
     watchTasksLoading(),
     watchTaskAdding(),
+    watchTaskUpdating(),
+    watchTaskDeleting(),
 
     // watchSearch(),
     // watchArticlesPageLoading(),
