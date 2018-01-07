@@ -28,14 +28,28 @@ export default function reducer(tasks = initialState, action = {}) {
       return tasks.set('tasks', tasks.get('tasks').push(fromJS(payload.task)))
         .set('loading', false).set('errorMessage', null);
 
-    // Todo change logic of updating and deleting here
-    case TASK_UPDATING_SUCCESS:
-      return tasks.set('tasks', tasks.get('tasks').push(fromJS(payload.task)))
-        .set('loading', false).set('errorMessage', null);
+    case TASK_UPDATING_SUCCESS: {
+      const updatedIndex = tasks.get('tasks').findIndex(function (item) {
+        return item.get('id') === payload.task.id;
+      });
 
-    case TASK_DELETING_SUCCESS:
-      return tasks.set('tasks', tasks.get('tasks').push(fromJS(payload.task)))
+      const updatedTasks = tasks.get('tasks').update(updatedIndex, function (item) {
+        return item.set('todo', payload.task.todo);
+      });
+
+      return tasks.set('tasks', updatedTasks)
         .set('loading', false).set('errorMessage', null);
+    }
+
+
+    case TASK_DELETING_SUCCESS: {
+      const deletedIndex = tasks.get('tasks').findIndex(function (item) {
+        return item.get('id') === payload.id;
+      });
+
+      return tasks.set('tasks', tasks.get('tasks').delete(deletedIndex))
+        .set('loading', false).set('errorMessage', null);
+    }
 
     case TASKS_UPDATING_FAIL:
       return tasks.set('loading', false).set('errorMessage', payload.errorMessage);
@@ -68,6 +82,7 @@ export const tasksUpdatingStartAC = () => ({type: TASKS_UPDATING_START});
 export const tasksLoadingSuccessAC = tasks => ({type: TASKS_LOADING_SUCCESS, payload: {tasks}});
 export const taskAddingSuccessAC = task => ({type: TASK_ADDING_SUCCESS, payload: {task}});
 export const taskUpdatingSuccessAC = task => ({type: TASK_UPDATING_SUCCESS, payload: {task}});
+export const taskDeletingSuccessAC = id => ({type: TASK_DELETING_SUCCESS, payload: {id}});
 export const tasksUpdatingFailAC = (errorMessage) => ({
   type: TASKS_UPDATING_FAIL,
   payload: {errorMessage}

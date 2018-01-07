@@ -8,6 +8,7 @@ import {
   tasksLoadingSuccessAC,
   taskAddingSuccessAC,
   taskUpdatingSuccessAC,
+  taskDeletingSuccessAC,
   tasksUpdatingFailAC
 } from '../redux/task';
 import {notifyDangerSagaAC} from '../redux/notifications';
@@ -114,7 +115,7 @@ export function* deleteTaskSaga(action) {
     const deletedTaskResponse = yield call(Services.taskService.deleteTask, id);
     const deletedTask = deletedTaskResponse.data;
 
-    yield put(taskUpdatingSuccessAC(deletedTask));
+    yield put(taskDeletingSuccessAC(deletedTask.id));
   } catch (e) {
     console.error('Error: ', e);
     if (e.responseJSON) {
@@ -159,9 +160,9 @@ export function* watchTaskAdding() {
 }
 
 export function* watchTaskUpdating() {
-  yield takeEvery(TASK_UPDATING, addTaskSaga);
+  yield takeEvery(TASK_UPDATING, updateTaskSaga);
 }
 
 export function* watchTaskDeleting() {
-  yield takeEvery(TASK_DELETING, addTaskSaga);
+  yield takeEvery(TASK_DELETING, deleteTaskSaga);
 }

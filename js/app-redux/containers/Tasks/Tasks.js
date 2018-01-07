@@ -69,7 +69,6 @@ class Tasks extends PureComponent {
     const updatedTodo = e.target.value;
     this.setState({updatedTasks: this.state.updatedTasks.update(prevTask.id, () => undefined)});
     this.props.updateTaskSagaAC(prevTask.id, updatedTodo);
-    console.log(`updatedTodo after enter: ${updatedTodo}`);
   };
 
   handleDeleteTask = (e, taskId) => {
@@ -80,7 +79,8 @@ class Tasks extends PureComponent {
   };
 
   // Todo check how to create component without handleChange
-  // Todo make select all by default after clicking on chnage task
+  // Todo make select all by default after clicking on chanage task
+  // Add gif on loading?
   render() {
     const self = this;
     const tasksContainer = (

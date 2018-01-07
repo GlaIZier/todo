@@ -62,15 +62,11 @@ class TaskService {
     const headers = {};
     headers[this.config.constants.apiTokenHeaderName] = token;
 
-    const data = {};
-    data['todo'] = todo;
-
     $.ajax({
-      url: `${this.config.tasksApiUrl}/${id}`,
+      url: `${this.config.tasksApiUrl}/${id}?todo=${todo}`,
       method: 'PUT',
       headers: headers,
       crossDomain: true,
-      data: data,
       xhrFields: {
         withCredentials: true
       }
