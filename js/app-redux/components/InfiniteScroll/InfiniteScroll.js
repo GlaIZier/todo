@@ -95,7 +95,7 @@ class InfiniteScroll extends PureComponent {
         this.props.startLoadNextPage();
         // call handleLoadNextPage after detachScrollListener to allow
         // for non-async handleLoadNextPage functions
-        // @TODO: review timeout
+      // Maybe introduce timeout
         if (this.props.hasMore) {
             this.props.loadNextPage();
         }

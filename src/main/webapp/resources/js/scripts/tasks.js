@@ -27,7 +27,6 @@ var Task = Task || (function () {
       return false;
     };
 
-    // Todo add periodically check cookie authentication
     return {
 
       pressSaveTask: function (event) {

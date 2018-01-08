@@ -1,0 +1,24 @@
+{
+  "data": [
+    {
+      "data": {
+        "id": 1,
+        "login": "u",
+        "todo": "todo1Mock"
+      },
+      "_link": {
+        "self": "/api/me/tasks/1"
+      }
+    },
+    {
+      "data": {
+        "id": 2,
+        "login": "u",
+        "todo": "todo2Mock"
+      },
+      "_link": {
+        "self": "/api/me/tasks/2"
+      }
+    }
+  ]
+}
