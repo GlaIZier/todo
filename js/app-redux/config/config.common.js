@@ -1,6 +1,10 @@
 const appConfig = () => {
   // const baseUrl = '/api/v1';
-  const apiBaseUrl = 'https://localhost:8443/todo/api/';
+  let apiBaseUrl = 'https://localhost:8443/todo/api/';
+  if (__LOCAL__) {
+    console.log('Local Api urls is being used');
+    apiBaseUrl = 'https://localhost:3443/todo/api/';
+  }
 
   const loginApiUrl = apiBaseUrl + 'auth/login';
   const logoutApiUrl = apiBaseUrl + 'auth/me/logout';

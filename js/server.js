@@ -33,6 +33,44 @@ app.use(function (req, res, next) {
   setTimeout(next, 1000)
 });
 
+// Auth
+app.post('/todo/api/auth/login', function (req, res) {
+  res.sendFile(path.join(__dirname, '/data', 'auth-login-mock-response.json'));
+});
+
+app.post('/todo/api/auth/me/logout', function (req, res) {
+  res.sendFile(path.join(__dirname, '/data', 'auth-logout-mock-response.json'));
+});
+
+// Tasks
+app.get('/todo/api/me/tasks', function (req, res) {
+  res.sendFile(path.join(__dirname, '/data', 'tasks-get-mock-response.json'));
+});
+
+app.post('/todo/api/me/tasks', function (req, res) {
+  res.status(201);
+  res.sendFile(path.join(__dirname, '/data', 'task-post-mock-response.json'));
+});
+
+app.put(/^\/todo\/api\/me\/tasks\/(.*)/, function (req, res) {
+  res.status(200);
+  res.sendFile(path.join(__dirname, '/data', 'task-put-mock-response.json'));
+});
+
+app.delete(/^\/todo\/api\/me\/tasks\/(.*)/, function (req, res) {
+  res.status(200);
+  res.sendFile(path.join(__dirname, '/data', 'task-delete-mock-response.json'));
+});
+
+app.get(/^\/todo\/api\/me\/tasks\/(.*)/, function (req, res) {
+  res.sendFile(path.join(__dirname, '/data', 'task-get-mock-response.json'));
+});
+
+// Users
+app.post('/todo/api/users', function (req, res) {
+  res.status(201);
+  res.sendFile(path.join(__dirname, '/data', 'user-post-mock-response.json'));
+});
 /*
 // Search. Journals
 app.post('/ks/v2/Journals/search', function (req, res) {
