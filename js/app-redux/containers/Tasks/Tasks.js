@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {
   addTaskSagaAC,
+  deleteTaskSagaAC,
   getLoading,
   getTasks,
   loadTasksSagaAC,
-  updateTaskSagaAC,
-  deleteTaskSagaAC
+  updateTaskSagaAC
 } from '../../redux/task';
 import $ from 'jquery';
 import './styles/tasks.css';
@@ -79,7 +79,7 @@ class Tasks extends PureComponent {
   };
 
   // Todo check how to create component without handleChange
-  // Todo make select all by default after clicking on chanage task
+  // Todo make select all by default after clicking on change task
   // Add gif on loading?
   render() {
     const self = this;
@@ -118,7 +118,7 @@ class Tasks extends PureComponent {
                      placeholder="What needs to be done?"
                      onKeyUp={this.handlePressSaveTask}
               />
-              <span className="todo-new clickable input-group-addon" id="basic-addon"
+              <span className="todo-new todo-clickable input-group-addon" id="basic-addon"
                     onClick={this.handleAddTask}>New task</span>
             </div>
           </header>

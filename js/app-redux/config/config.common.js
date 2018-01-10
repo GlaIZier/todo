@@ -2,7 +2,7 @@ const appConfig = () => {
   // const baseUrl = '/api/v1';
   let apiBaseUrl = 'https://localhost:8443/todo/api/';
   if (__LOCAL__) {
-    console.log('Local Api urls is being used');
+    console.log('Local mock Api urls is being used');
     apiBaseUrl = 'https://localhost:3443/todo/api/';
   }
 
@@ -14,29 +14,6 @@ const appConfig = () => {
   const tasksApiUrl = apiBaseUrl + 'me/tasks';
 
   // let articleInfoBaseUrlTemplate = apiBaseUrl + '/ArticleProducts/<%-props.id%>';
-
-  // Todo add mocks for express
-  // Enable mock
-  // if (__LOCAL__) {
-  //   journalsSearchBaseUrl = '';
-  //   articlesSearchBaseUrl = '';
-  //
-  //   articleInfoBaseUrlTemplate = '';
-  //   articleJournalBaseUrlTemplate = '';
-  //   articleConceptsBaseUrlTemplate = '';
-  //   articleHumanConceptsBaseUrlTemplate = '';
-  //   // here lot's of empty results for journals
-  //   journalPolicyBaseUrlTemplate = '';
-  //
-  //   journalTaxonomiesBaseUrlTemplate = '';
-  //   topConceptsBaseUrlTemplate = '';
-  //   childConceptsBaseUrlTemplate = '';
-  //
-  //   conceptsSearchBaseUrl = '';
-  //   conceptEditionBaseUrlTemplate = '';
-  //   conceptHumanEditionBaseUrlTemplate = '';
-  // }
-
 
   const statusAll = 'all';
   const statusPublished = 'published';

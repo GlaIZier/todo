@@ -17,11 +17,11 @@ export const getURL = (pageName, props) => {
       }
     }
   }
-  if (__LOCAL__) {
-    return template({props: encodedProps});
-  } else {
-    return routes[root] + template({props: encodedProps});
-  }
+  // if (__LOCAL__) {
+  return template({props: encodedProps});
+  // } else {
+  //   return routes[root] + template({props: encodedProps});
+  // }
 };
 
 export const navigate = (pageName, props) => browserHistory.push(getURL(pageName, props));

@@ -5,6 +5,7 @@ import Notifications from '../../components/Notifications';
 import Footer from '../../components/Footer/index';
 import {connect} from 'react-redux';
 import {getUser, logoutSagaAC} from '../../redux/auth';
+import {navigateSagaAC} from '../../redux/navigate';
 import {getNotifications} from '../../redux/notifications';
 import './styles/app.css';
 
@@ -15,12 +16,13 @@ class App extends PureComponent {
     user: PropTypes.object,
     notifications: PropTypes.array,
     logoutSagaAC: PropTypes.func.isRequired,
+    navigateSagaAC: PropTypes.func.isRequired
   };
 
   render() {
     return (
       <div className='app-container'>
-        <Header logout={this.props.logoutSagaAC} user={this.props.user}/>
+        <Header user={this.props.user} logout={this.props.logoutSagaAC} navigate={this.props.navigateSagaAC}/>
         <Notifications notifications={this.props.notifications}/>
         {this.props.children}
         <Footer/>
@@ -36,4 +38,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, {logoutSagaAC})(App)
+export default connect(mapStateToProps, {logoutSagaAC, navigateSagaAC})(App)

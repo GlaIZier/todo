@@ -8,8 +8,9 @@ import './styles/header.css';
 class Header extends PureComponent {
 
   static propTypes = {
+    user: PropTypes.object,
     logout: PropTypes.func.isRequired,
-    user: PropTypes.object
+    navigate: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -33,6 +34,13 @@ class Header extends PureComponent {
 
     this.props.logout();
     this.closeModal()
+  };
+
+  handleNavigate = (e, pageName) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.props.navigate(pageName);
   };
 
   render() {
@@ -72,17 +80,20 @@ class Header extends PureComponent {
         </Modal.Footer>
       </Modal>;
 
-    // Todo check all links in a
     const userHeader =
       (this.props.user) ?
         <ul className="nav navbar-nav navbar-right">
           <li className="navbar-text">Signed in as <span>{this.props.user.login}</span></li>
-          <li><a className="todo-a-log-out" onClick={this.openModal}>Sign out</a></li>
+          <li><a className="todo-clickable" onClick={this.openModal}>Sign out</a></li>
         </ul>
         :
         <ul className="nav navbar-nav navbar-right">
-          <li><a href="/todo/spa/login">Sign in</a></li>
-          <li><a href="/todo/spa/register">Sign up</a></li>
+          <li><a className="todo-clickable" onClick={(e) => {
+            this.handleNavigate(e, 'login')
+          }}>Sign in</a></li>
+          <li><a className="todo-clickable" onClick={(e) => {
+            this.handleNavigate(e, 'register')
+          }}>Sign up</a></li>
         </ul>;
 
     //     <div className="top-panel">
@@ -113,15 +124,19 @@ class Header extends PureComponent {
               <span className="icon-bar"></span>
             </button>
 
-            <a className="navbar-left" href="/todo/spa">
-              <img alt="Todo" height="45px" src={LogoPng}/>
+            <a className="navbar-left" onClick={(e) => {
+              this.handleNavigate(e, 'root')
+            }}>
+              <img className="todo-clickable" alt="Todo" height="45px" src={LogoPng}/>
             </a>
           </div>
 
           {/*<!-- Collect the nav links, forms, and other content for toggling -->*/}
           <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul className="nav navbar-nav">
-              <li><a href="/todo/spa/tasks">Tasks</a></li>
+              <li><a className="todo-clickable" onClick={(e) => {
+                this.handleNavigate(e, 'tasks')
+              }}>Tasks</a></li>
             </ul>
             {userHeader}
           </div>

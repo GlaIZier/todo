@@ -2,6 +2,7 @@
   "appRoot": "/todo",
   "root": "/todo/spa/",
   "login": "/todo/spa/login",
+  "register": "/todo/spa/register",
   "tasks": "/todo/spa/tasks",
   "task": "/todo/spa/tasks/<%-props.id%>",
   "403": "/todo/spa/403",
