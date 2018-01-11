@@ -4,7 +4,6 @@ import LogoPng from '../../images/todo.png';
 import {Button, Modal} from 'react-bootstrap';
 import './styles/header.css';
 
-// Todo change logo link
 class Header extends PureComponent {
 
   static propTypes = {
@@ -110,7 +109,6 @@ class Header extends PureComponent {
     // {modal}
     // </div>
 
-    // Todo make links with navigate function
     return (
       <nav className="navbar navbar-default">
         <div className="container">

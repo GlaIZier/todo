@@ -39,6 +39,7 @@ class Tasks extends PureComponent {
       this.handleAddTask(e);
   };
 
+  // Todo add ref, delete jquery and add state for this component instead of using jquery
   handleAddTask = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -80,6 +81,7 @@ class Tasks extends PureComponent {
 
   // Todo check how to create component without handleChange
   // Todo make select all by default after clicking on change task
+  // Todo add disable button on loading
   // Add gif on loading?
   render() {
     const self = this;
