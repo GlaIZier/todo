@@ -9,7 +9,7 @@ import {
   loadTasksSagaAC,
   updateTaskSagaAC
 } from '../../redux/task';
-import $ from 'jquery';
+import ReactDOM from 'react-dom';
 import './styles/tasks.css';
 import {List} from 'immutable';
 
@@ -26,7 +26,8 @@ class Tasks extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      updatedTasks: List([])
+      updatedTasks: List([]),
+      newTodo: ''
     };
   }
 
@@ -43,9 +44,9 @@ class Tasks extends PureComponent {
   handleAddTask = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    const newTaskInput = $('#new-task-input');
-    const newTodo = newTaskInput.val();
-    newTaskInput.val('');
+    let newTaskInput = ReactDOM.findDOMNode(this.newTaskInput);
+    const newTodo = newTaskInput.value;
+    newTaskInput.value = '';
     if (newTodo === '')
       return;
 
@@ -79,10 +80,6 @@ class Tasks extends PureComponent {
     this.props.deleteTaskSagaAC(taskId);
   };
 
-  // Todo check how to create component without handleChange
-  // Todo make select all by default after clicking on change task
-  // Todo add disable button on loading
-  // Add gif on loading?
   render() {
     const self = this;
     const tasksContainer = (
@@ -94,16 +91,18 @@ class Tasks extends PureComponent {
               id="update-task-input"
               type="text"
               className="todo-input form-control"
+              disabled={self.props.loading}
               defaultValue={task.todo}
               onKeyUp={(e) => self.handleUpdateTask(e, task)}
             />
             :
             <div className="todo well well-sm" key={i}>
               <div>
-                <span className="todo-text" onClick={(e) => self.handleClickUpdateTask(e, task)}
+                <span className="todo-text" disabled={self.props.loading}
+                      onClick={(e) => self.handleClickUpdateTask(e, task)}
                       id={task.id}>{task.todo}</span>
                 <span className="todo-remove todo-clickable glyphicon glyphicon-remove" aria-hidden="true"
-                      onClick={(e) => self.handleDeleteTask(e, task.id)}/>
+                      disabled={self.props.loading} onClick={(e) => self.handleDeleteTask(e, task.id)}/>
               </div>
             </div>
         })}
@@ -118,10 +117,15 @@ class Tasks extends PureComponent {
             <div className="todo-input-group input-group">
               <input id="new-task-input" type="text" className="todo-input form-control"
                      placeholder="What needs to be done?"
+                     disabled={this.props.loading}
+                     defaultValue=''
+                     ref={(input) => {
+                       this.newTaskInput = input
+                     }}
                      onKeyUp={this.handlePressSaveTask}
               />
               <span className="todo-new todo-clickable input-group-addon" id="basic-addon"
-                    onClick={this.handleAddTask}>New task</span>
+                    disabled={this.props.loading} onClick={this.handleAddTask}>New task</span>
             </div>
           </header>
           {tasksContainer}
