@@ -38,7 +38,14 @@ module.exports = (env = 'LOCAL') => {
       // This make ids predictable, reduces total file size and is recommended
       new webpack.optimize.OccurrenceOrderPlugin(),
       // Doesn't let rewrite scripts when they contain errors
-      new webpack.NoEmitOnErrorsPlugin()
+      new webpack.NoEmitOnErrorsPlugin(),
+      // This plugin automatically load modules instead of having to import or require them everywhere
+      // It is needed to make bootstrap.min.js work with jquery
+      new webpack.ProvidePlugin({
+        jQuery: 'jquery',
+        $: 'jquery',
+        jquery: 'jquery'
+      })
     ],
     module: {
       rules: [

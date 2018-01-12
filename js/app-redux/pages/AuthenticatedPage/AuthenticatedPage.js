@@ -6,7 +6,10 @@ import {navigateSagaAC} from '../../redux/navigate';
 import Cookies from 'js-cookie';
 import config from '../../config/config.common';
 
-
+/**
+ * Different approach to create authentication in React is to check codes of errors during services calls and navigate
+ * to login page in case of 401 or 403
+ */
 export default function requireAuthentication(PureComponent) {
 
   class AuthenticatedPage extends React.PureComponent {

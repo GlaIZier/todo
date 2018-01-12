@@ -1,20 +1,19 @@
 import {call, put, takeEvery} from 'redux-saga/effects';
 import {
-  TASKS_LOADING,
   TASK_ADDING,
-  TASK_UPDATING,
   TASK_DELETING,
-  tasksUpdatingStartAC,
-  tasksLoadingSuccessAC,
+  TASK_UPDATING,
   taskAddingSuccessAC,
-  taskUpdatingSuccessAC,
   taskDeletingSuccessAC,
-  tasksUpdatingFailAC
+  TASKS_LOADING,
+  tasksLoadingSuccessAC,
+  tasksUpdatingFailAC,
+  tasksUpdatingStartAC,
+  taskUpdatingSuccessAC
 } from '../redux/task';
 import {notifyDangerSagaAC} from '../redux/notifications';
 import Services from '../config/config.services';
 
-// Todo add to functions navigate to login if 401 or 403 to catch
 export function* loadTasksSaga() {
   try {
     yield put(tasksUpdatingStartAC());
