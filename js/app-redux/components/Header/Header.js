@@ -130,7 +130,7 @@ class Header extends PureComponent {
           </div>
 
           {/*<!-- Collect the nav links, forms, and other content for toggling -->*/}
-          <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <div className="collapse navbar-collapse todo-navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul className="nav navbar-nav">
               <li><a className="todo-clickable" onClick={(e) => {
                 this.handleNavigate(e, 'tasks')

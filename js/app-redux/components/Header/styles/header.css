@@ -1,3 +1,7 @@
 .todo-clickable {
     cursor: pointer;
 }
+
+.todo-navbar-collapse {
+    text-align: center;
+}
