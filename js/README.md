@@ -27,9 +27,9 @@ webpack --version
 ### Work configuration
 We use `nvm` to manage multiple active node.js versions.
 
-* node v7.10.1
-* npm v4.2.0
-* webpack v3.5.5
+* node v8.9.1
+* npm v5.5.1
+* webpack v3.8.1
 
 ## Install project dependencies
 
@@ -49,13 +49,13 @@ There are different possibilities to start this application
 ```bash
 npm run start:local
 ```
-and go to localhost:3000
+and go to http://localhost:3000/todo/spa or to https://localhost:3443/todo/spa
 
 2. To start application without Java backend using Node Express server and responses from backend QA KS. From js/ folder run
 ```bash
 npm run start:dev
 ```
-and go to localhost:3000
+and go to http://localhost:3000/todo/spa or to https://localhost:3443/todo/spa
 
 3. To start application with Java backend and responses from QA KS in dev mode from js/ folder run
 ```bash
