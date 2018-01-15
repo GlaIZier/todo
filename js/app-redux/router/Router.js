@@ -1,14 +1,14 @@
 import React from 'react';
 import {browserHistory, IndexRedirect, Route, Router} from 'react-router';
-//import { useBasename } from 'history';
 import {App} from '../containers/App';
 import {LoginPage} from '../pages/LoginPage';
 import {RegisterPage} from '../pages/RegisterPage';
 import {TasksPage} from '../pages/TasksPage';
-import {ArticlePage} from '../pages/ArticlePage';
+import {TaskPage} from '../pages/TaskPage';
 import {NotFound} from '../pages/NotFound';
 import {requireAuthentication} from '../pages/AuthenticatedPage';
 import NoPermissions from '../pages/NoPermissions/NoPermissions';
+//import { useBasename } from 'history';
 
 export default function RouterContainer() {
   // <Router history={useBasename(() => browserHistory)({ basename: '/content-classifier' })}
@@ -21,7 +21,7 @@ export default function RouterContainer() {
         <Route path="login" component={LoginPage} key="login"/>
         <Route path="register" component={RegisterPage} key="register"/>
         <Route path="tasks" component={requireAuthentication(TasksPage)} key="tasks"/>
-        <Route path="tasks/:taskId" component={requireAuthentication(ArticlePage)} key="task"/>
+        <Route path="tasks/:taskId" component={requireAuthentication(TaskPage)} key="task"/>
         <Route path="403" component={NoPermissions} key="noPermissions"/>
         <Route path="*" component={NotFound}/>
       </Route>
