@@ -99,6 +99,23 @@ class TaskService {
     return defer.promise;
   };
 
+  loadTask = (id) => {
+    const defer = Q.defer();
+
+    $.ajax({
+      url: `${this.config.tasksApiUrl}/${id}`,
+      method: 'GET',
+      crossDomain: true,
+      xhrFields: {
+        withCredentials: true
+      }
+    })
+      .then(payload => defer.resolve(payload))
+      .fail(e => defer.reject(e));
+
+    return defer.promise;
+  };
+
 
 }
 

@@ -8,7 +8,7 @@ import {
   getTasks,
   loadTasksSagaAC,
   updateTaskSagaAC
-} from '../../redux/task';
+} from '../../redux/tasks';
 import ReactDOM from 'react-dom';
 import './styles/tasks.css';
 import {List} from 'immutable';
