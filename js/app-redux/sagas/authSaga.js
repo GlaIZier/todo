@@ -7,8 +7,6 @@ import Cookies from 'js-cookie';
 import config from '../config/config.common';
 import routes from '../router/routes.json';
 
-// import { errorHandlerSaga } from './errorHandlerSaga';
-
 export function* loginSaga(action) {
   try {
     const {payload: {login, password}} = action;

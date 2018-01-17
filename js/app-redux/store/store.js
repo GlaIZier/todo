@@ -26,22 +26,6 @@ if (!__PROD__) {
   console.log('Prod profile has been found in store. Saga middleware without logger has been added')
 }
 
-// if (process.env.NODE_ENV !== 'production') {
-//   console.log('NOT PRODUCTION!');
-//   store = createStore(
-//     rootReducer,
-//     {},
-//     applyMiddleware(sagaMiddleware, loggerMiddleware)
-//   );
-// } else {
-//   console.log('PRODUCTION!');
-//   store = createStore(
-//     rootReducer,
-//     {},
-//     applyMiddleware(sagaMiddleware)
-//   );
-// }
-
 // Start saga watch
 sagaMiddleware.run(rootSaga);
 

@@ -8,7 +8,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min';
 import './styles/main.css';
 
-// Todo add simple page with 1 article
 // Todo remove all unnecessary components
 render(
   <Provider store={store}>

@@ -15,12 +15,6 @@ const appConfig = () => {
 
   // let articleInfoBaseUrlTemplate = apiBaseUrl + '/ArticleProducts/<%-props.id%>';
 
-  const statusAll = 'all';
-  const statusPublished = 'published';
-  const statusUnpublished = 'unpublished';
-  const dateSort = 'calc';
-  const nameSort = 'name';
-
   // notifications
   const notificationsTimeoutMs = 4000;
 
@@ -44,12 +38,6 @@ const appConfig = () => {
     // add here another settings if needed
 
     constants: {
-      statusAll: statusAll,
-      statusPublished: statusPublished,
-      statusUnpublished: statusUnpublished,
-      dateSort: dateSort,
-      nameSort: nameSort,
-
       notificationTimeout: notificationsTimeoutMs,
 
       apiTokenExpireDays: apiTokenExpireDays,
