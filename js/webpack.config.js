@@ -12,9 +12,10 @@ const APP_FOLDER = path.resolve(__dirname, "app-redux");
 // Todo update readme for spa
 module.exports = (env = 'LOCAL') => {
   console.log(`Bundling with ${env} environment...`);
-   // server will use this path to output bundled static content: localhost:3000/dist/spa.js;
-   // localhost/dist/images/loading.gif
-  const PUBLIC_PATH = (env !== 'LOCAL') ? '/todo/' : '/';
+  // server will use this path to output bundled static content: localhost:3000/dist/spa.js;
+  // localhost/dist/images/loading.gif
+  // const PUBLIC_PATH = (env !== 'LOCAL') ? '/todo/' : '/';
+  const PUBLIC_PATH = '/todo/spa/';
 
   const config = {
     entry: [
@@ -30,8 +31,6 @@ module.exports = (env = 'LOCAL') => {
       new webpack.DefinePlugin({
         __LOCAL__: env === 'LOCAL',
         __DEV__: env === 'DEV',
-        __QA__: env === 'QA',
-        __PERF__: env === 'PERF',
         __PROD__: env === 'PROD'
       }),
       // Assign the module and chunk ids by occurrence count. Ids that are used often get lower (shorter) ids.
@@ -95,12 +94,12 @@ module.exports = (env = 'LOCAL') => {
   if (env !== 'PROD') {
     console.log('Non-prod profile has been found in webpack');
     if (env === 'LOCAL') {
-       // adding hot-middleware client to entry after babel but before APP_ENTRY_POINT
-       config.entry.splice(1, 0, 'webpack-hot-middleware/client');
-       // Webpack adds a small HMR runtime to the bundle, during the build process, that runs inside your app.
-       // When the build completes, Webpack does not exit but stays active, watching the source files for changes.
-       // If Webpack detects a source file change, it rebuilds only the changed module(s).
-       config.plugins.push(new webpack.HotModuleReplacementPlugin());
+      // adding hot-middleware client to entry after babel but before APP_ENTRY_POINT
+      config.entry.splice(1, 0, 'webpack-hot-middleware/client');
+      // Webpack adds a small HMR runtime to the bundle, during the build process, that runs inside your app.
+      // When the build completes, Webpack does not exit but stays active, watching the source files for changes.
+      // If Webpack detects a source file change, it rebuilds only the changed module(s).
+      config.plugins.push(new webpack.HotModuleReplacementPlugin());
       console.log('Local profile has been found in webpack. Hot reloading middleware has been added')
     }
 
@@ -114,14 +113,14 @@ module.exports = (env = 'LOCAL') => {
     console.log('Prod profile has been found in webpack');
     // Todo do we need it? Remove it?
     return merge(config, {
-        plugins: [
-            new webpack.DefinePlugin({
-                'process.env': {
-                    NODE_ENV: JSON.stringify('production')
-                }
-            }),
-            new UglifyJSPlugin()
-        ]
+      plugins: [
+        new webpack.DefinePlugin({
+          'process.env': {
+            NODE_ENV: JSON.stringify('production')
+          }
+        }),
+        new UglifyJSPlugin()
+      ]
     });
   }
 

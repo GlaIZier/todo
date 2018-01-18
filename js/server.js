@@ -71,72 +71,7 @@ app.post('/todo/api/users', function (req, res) {
   res.status(201);
   res.sendFile(path.join(__dirname, '/data', 'user-post-mock-response.json'));
 });
-/*
-// Search. Journals
-app.post('/ks/v2/Journals/search', function (req, res) {
-  // path.join(__dirname, '../public', 'index1.html')
-  res.sendFile(path.join(__dirname, '/data', 'search-journals.json'));
-});
 
-// Search. Articles
-app.post('/ks/v2/ArticleProducts/search', function (req, res) {
-  res.sendFile(path.join(__dirname, '/data', 'search-articles.json'));
-});
-
-
-// Article. Journal for article
-app.get(/^\/ks\/v2\/ArticleProducts\/(.*)\/Journals\/isPartOfJournal(.*)/, function (req, res) {
-  res.sendFile(path.join(__dirname, '/data', 'article-journal.json'));
-});
-
-// Article. Taxonomies for journal
-app.get(/^\/ks\/v2\/Journals\/(.*)\/ConceptSchemes\/describedWithConceptScheme/, function (req, res) {
-  res.sendFile(path.join(__dirname, '/data', 'article-journal-taxonomies.json'));
-});
-
-// Article. Search concepts in taxonomies
-app.post('/ks/v2/Concepts/search', function (req, res) {
-  res.sendFile(path.join(__dirname, '/data', 'article-search-concepts.json'));
-});
-
-// Any concept. Child concepts.
-app.get(/^\/ks\/v2\/Concepts\/(.*)\/Concepts\/narrower(.*)/, function (req, res) {
-    res.sendFile(path.join(__dirname, '/data', 'concept-children.json'));
-});
-
-// Article. Concepts.
-app.get(/^\/ks\/v2\/ConceptSchemes\/(.*)\/Concepts\/hasTopConcept(.*)/, function (req, res) {
-  res.sendFile(path.join(__dirname, '/data', 'taxonomies-top-concepts.json'));
-});
-
-// top. Concepts.
-app.get(/^\/ks\/v2\/ArticleProducts\/(.*)\/Concepts\/classifiedWithConcept(.*)/, function (req, res) {
-    res.sendFile(path.join(__dirname, '/data', 'article-concepts.json'));
-});
-
-
-app.delete(/^\/ks\/v2\/ArticleProducts\/(.*)\/Concepts\/(.*)\/classifiedWithConcept(.*)/, function (req, res) {
-    res.status(204);
-    res.sendFile(path.join(__dirname, '/data', 'concept-edit.txt'));
-});
-
-app.put(/^\/ks\/v2\/ArticleProducts\/(.*)\/Concepts\/(.*)\/classifiedByHuman(.*)/, function (req, res) {
-  res.status(200);
-  res.contentType('text/plain');
-  res.sendFile(path.join(__dirname, '/data', 'concept-edit.txt'));
-});
-
-app.delete(/^\/ks\/v2\/ArticleProducts\/(.*)\/Concepts\/(.*)\/classifiedByHuman(.*)/, function (req, res) {
-  res.status(204);
-  res.sendFile(path.join(__dirname, '/data', 'concept-edit.txt'));
-});
-
-// Article
-app.get(/^\/ks\/v2\/ArticleProducts\/(.*)/, function (req, res) {
-  res.sendFile(path.join(__dirname, '/data', 'article.json'));
-});
-
- */
 // Web application for all other urls
 app.get(/todo\/spa.*/, function (req, res) {
   res.sendFile(__dirname + '/app-redux/index.html')
