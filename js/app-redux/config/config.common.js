@@ -4,7 +4,8 @@ const appConfig = () => {
   if (__LOCAL__) {
     console.log('Local mock Api urls is being used');
     apiBaseUrl = 'https://localhost:3443/todo/api/';
-  }
+  } else
+    console.log('Real api urls is being used');
 
   const loginApiUrl = apiBaseUrl + 'auth/login';
   const logoutApiUrl = apiBaseUrl + 'auth/me/logout';

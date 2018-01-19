@@ -7,8 +7,6 @@
     "start:local": "node server.js LOCAL",
     "start:dev": "node server.js DEV",
     "build:dev": "webpack --env=DEV",
-    "build:qa": "webpack --env=DEV",
-    "build:perf": "webpack --env=PROD",
     "build:prod": "webpack -p --env=PROD"
   },
   "keywords": [
