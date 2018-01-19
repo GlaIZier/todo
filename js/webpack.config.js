@@ -17,7 +17,7 @@ module.exports = (env = 'LOCAL') => {
   // const PUBLIC_PATH = (env !== 'LOCAL') ? '/todo/' : '/';
   const PUBLIC_PATH = '/todo/spa/';
 
-  const config = {
+  let config = {
     entry: [
       'babel-polyfill',
       APP_ENTRY_POINT
@@ -103,7 +103,7 @@ module.exports = (env = 'LOCAL') => {
       console.log('Local profile has been found in webpack. Hot reloading middleware has been added')
     }
 
-    // Todo do we need it?
+    // Uncomment if u need final spa.js script file lightweight
     // return merge(config, {
     //     devtool: 'cheap-module-eval-source-map'
     // });
@@ -111,7 +111,7 @@ module.exports = (env = 'LOCAL') => {
 
   } else {
     console.log('Prod profile has been found in webpack');
-    // Todo do we need it? Remove it?
+    // Makes it unreadable
     return merge(config, {
       plugins: [
         new webpack.DefinePlugin({
