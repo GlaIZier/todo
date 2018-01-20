@@ -7,10 +7,9 @@ import org.springframework.security.authentication.AuthenticationCredentialsNotF
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-
 import ru.glaizier.todo.config.root.RootConfig;
 import ru.glaizier.todo.config.servlet.ServletConfig;
-import ru.glaizier.todo.controller.view.TaskController;
+import ru.glaizier.todo.controller.view.web.TaskController;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {

@@ -1,11 +1,11 @@
-package ru.glaizier.todo.controller.view;
-
-import javax.servlet.http.HttpServletRequest;
+package ru.glaizier.todo.controller.view.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping(value = "/web")
