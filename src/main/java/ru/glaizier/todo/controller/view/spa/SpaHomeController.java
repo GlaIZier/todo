@@ -1,14 +1,14 @@
-package ru.glaizier.todo.controller.view.web;
+package ru.glaizier.todo.controller.view.spa;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class HomeController {
+public class SpaHomeController {
 
-    @RequestMapping("/web")
+    @RequestMapping("/spa")
     public String home() {
-        return "home";
+        return "spa";
     }
 
 }
