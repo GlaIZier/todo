@@ -1,4 +1,4 @@
-package ru.glaizier.todo.test.controller.view;
+package ru.glaizier.todo.test.controller.view.web;
 
 import org.junit.Before;
 import org.junit.Test;
