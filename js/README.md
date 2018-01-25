@@ -25,7 +25,7 @@ webpack --version
 ```
 
 ### Work configuration
-We use `nvm` to manage multiple active node.js versions.
+Work checked with these versions:
 
 * node v8.9.1
 * npm v5.5.1
