@@ -63,7 +63,7 @@ npm run build:dev
 ```
 Start Java class src/main/java/com/wiley/contentclassifier/ContentClassifierApplication and go to localhost:8080
 
-4. To start application with Java backend and responses from QA KS in prod mode from the project folder run
+4. To start application with Java backend in prod mode from the project folder run
 ```bash
 gradle clean build && java -jar build/libs/ContentClassifier-0.0.1-SNAPSHOT.jar
 ```
