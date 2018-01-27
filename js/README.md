@@ -2,9 +2,9 @@
 
 ## Dependencies
 
-The following must be installed on the development / build box:
+The following must be installed for the development / build:
 
-* [Node.js](http://nodejs.org/) - used for build and run application
+* [Node.js](http://nodejs.org/) - used to build and run application
 * Webpack:
  ```
  sudo npm i -g webpack 
@@ -51,13 +51,13 @@ npm run start:local
 ```
 and go to http://localhost:3000/todo/spa or to https://localhost:3443/todo/spa
 
-2. To start application without Java backend using Node Express server and responses from backend QA KS. From js/ folder run
+2. To start application without Java backend using Node Express server and responses from backend. From js/ folder run
 ```bash
 npm run start:dev
 ```
 and go to http://localhost:3000/todo/spa or to https://localhost:3443/todo/spa
 
-3. To start application with Java backend and responses from QA KS in dev mode from js/ folder run
+3. To start application with Java backend and responses from the server in dev mode from js/ folder run
 ```bash
 npm run build:dev
 ```
