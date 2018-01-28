@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Todo single page application</title>
 </head>
 <body>
 <section id="app"></section>
-<script src="/todo/spa/spa.js"></script>
+<!--Todo Make it work with Java backend-->
+<script th:src="@{/resources/js/spa/spa.js}"></script>
 </body>
 </html>
