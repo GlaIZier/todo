@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class SpaHomeController {
 
-    @RequestMapping("/spa")
+    @RequestMapping("/spa/**")
     public String home() {
         return "spa";
     }

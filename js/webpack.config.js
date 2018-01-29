@@ -15,6 +15,7 @@ module.exports = (env = 'LOCAL') => {
   // server will use this path to output bundled static content: localhost:3000/dist/spa.js;
   // localhost/dist/images/loading.gif
   // const PUBLIC_PATH = (env !== 'LOCAL') ? '/todo/' : '/';
+  // Todo make it /resources/... like in backend
   const PUBLIC_PATH = '/todo/spa/';
 
   let config = {
