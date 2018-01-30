@@ -10,12 +10,12 @@ const OUTPUT_PATH = path.join(__dirname, '../src/main/webapp/resources/js/spa');
 const APP_FOLDER = path.resolve(__dirname, "app-redux");
 
 // Todo update readme for spa
+// Todo make clear resources folder structure for js, icons ...
 module.exports = (env = 'LOCAL') => {
   console.log(`Bundling with ${env} environment...`);
   // server will use this path to output bundled static content: localhost:3000/dist/spa.js;
   // localhost/dist/images/loading.gif
   // const PUBLIC_PATH = (env !== 'LOCAL') ? '/todo/' : '/';
-  // Todo make it /resources/... like in backend
   const PUBLIC_PATH = '/todo/spa/';
 
   let config = {
@@ -77,7 +77,9 @@ module.exports = (env = 'LOCAL') => {
           test: /\.(png|jpg|gif)$/,
           loader: 'file-loader',
           options: {
-            name: 'images/[name].[ext]',
+            name: '[name].[ext]',
+            outputPath: '../../icons/spa/',
+            publicPath: '../resources/icons/spa/'
           },
         },
         {

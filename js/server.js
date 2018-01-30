@@ -77,7 +77,8 @@ app.get(/todo\/spa.*/, function (req, res) {
   res.sendFile(__dirname + '/app-redux/index.html')
 });
 
-// app.use('/images/', express.static(__dirname + '/app-redux/images'));
+// Todo fix it
+// app.use('/todo/resources/icons/spa/todo.png', express.static(__dirname + '../src/main/webapp/resources/icons/todo.png'));
 
 const privateKey = fs.readFileSync('keys/express.key', 'utf8');
 const certificate = fs.readFileSync('keys/express.crt', 'utf8');
