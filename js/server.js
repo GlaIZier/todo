@@ -78,7 +78,9 @@ app.get(/todo\/spa.*/, function (req, res) {
 });
 
 // Todo fix it
-// app.use('/todo/resources/icons/spa/todo.png', express.static(__dirname + '../src/main/webapp/resources/icons/todo.png'));
+// app.use('/todo/resources', express.static(path.join(__dirname, '../src/main/webapp/resources')));
+// app.use('/static', express.static(path.join(__dirname, 'data')));
+
 
 const privateKey = fs.readFileSync('keys/express.key', 'utf8');
 const certificate = fs.readFileSync('keys/express.crt', 'utf8');

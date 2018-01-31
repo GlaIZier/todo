@@ -11,6 +11,7 @@ const APP_FOLDER = path.resolve(__dirname, "app-redux");
 
 // Todo update readme for spa
 // Todo make clear resources folder structure for js, icons ...
+// Todo remove web-inf static unused
 module.exports = (env = 'LOCAL') => {
   console.log(`Bundling with ${env} environment...`);
   // server will use this path to output bundled static content: localhost:3000/dist/spa.js;
@@ -77,9 +78,7 @@ module.exports = (env = 'LOCAL') => {
           test: /\.(png|jpg|gif)$/,
           loader: 'file-loader',
           options: {
-            name: '[name].[ext]',
-            outputPath: '../../icons/spa/',
-            publicPath: '../resources/icons/spa/'
+            name: 'static/images/[name].[ext]'
           },
         },
         {
