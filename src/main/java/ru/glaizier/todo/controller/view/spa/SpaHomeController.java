@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class SpaHomeController {
 
-    // Todo make comments about this hack
+    // To make spa static resources work we create these three routes to handle /spa, spa/login and spa/tasks/1 routes
+    // We can't make it spa/** because it will cover spa/static/** route for spa static content defined in ServletConfig
     @RequestMapping(value = {"/spa", "/spa/*", "/spa/*/*"})
     public String home() {
         return "spa";

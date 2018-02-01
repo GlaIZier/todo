@@ -58,9 +58,13 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // web application
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+
+        // spa application
         registry.addResourceHandler("/spa/static/**").addResourceLocations("/resources/js/spa/static/");
 
+        // swagger
         registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
