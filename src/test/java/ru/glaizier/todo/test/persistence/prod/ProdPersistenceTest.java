@@ -319,7 +319,7 @@ public class ProdPersistenceTest {
 
 
     @Test
-    // Todo check exception
+    // Todo check the exception
     public void deleteUser() {
         assertNotNull(p.findUser(dummyUser.getLogin()));
         p.deleteUser(dummyUser.getLogin());

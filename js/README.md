@@ -41,6 +41,16 @@ Install dependencies:
 npm install
 ```
 
+## Build the application
+1. To build the application with dev settings:
+```bash
+npm run build:dev
+```
+2. To build the application with prod settings:
+```bash
+npm run build:prod
+```
+
 ## Start the application
 
 There are different possibilities to start this application
@@ -57,13 +67,9 @@ npm run start:dev
 ```
 and go to http://localhost:3000/todo/spa or to https://localhost:3443/todo/spa
 
-3. To start application with Java backend and responses from the server in dev mode from js/ folder run
-```bash
-npm run build:dev
-```
-Start Java class src/main/java/com/wiley/contentclassifier/ContentClassifierApplication and go to localhost:8080
+3. To start the application with Java backend and dev settings:
 
-4. To start application with Java backend in prod mode from the project folder run
+4. To start application with Java backend and prod settings:
 ```bash
 gradle clean build && java -jar build/libs/ContentClassifier-0.0.1-SNAPSHOT.jar
 ```

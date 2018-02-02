@@ -77,7 +77,6 @@ app.get(/todo\/spa.*/, function (req, res) {
   res.sendFile(__dirname + '/app-redux/index.html')
 });
 
-// Todo fix it
 // app.use('/todo/resources', express.static(path.join(__dirname, '../src/main/webapp/resources')));
 // app.use('/static', express.static(path.join(__dirname, 'data')));
 

@@ -38,7 +38,6 @@ import ru.glaizier.todo.properties.PropertiesService;
 
 @RestController
 @RequestMapping(value = {"/api/v1/me/tasks", "/api/me/tasks"})
-// Todo create react spa
 // Ide shows error but this works
 @RequiredArgsConstructor(onConstructor_ = {
         @Autowired

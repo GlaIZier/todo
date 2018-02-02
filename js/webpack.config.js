@@ -9,8 +9,7 @@ const APP_ENTRY_POINT = './app-redux/index.js';
 const OUTPUT_PATH = path.join(__dirname, '../src/main/webapp/resources/js/spa');
 const APP_FOLDER = path.resolve(__dirname, "app-redux");
 
-// Todo update readme for spa
-// Todo make clear resources folder structure for js, icons ...
+// Todo update spa readme: add info about running with Java backend
 module.exports = (env = 'LOCAL') => {
   console.log(`Bundling with ${env} environment...`);
   // server will use this path to output bundled static content: localhost:3000/dist/spa.js;
