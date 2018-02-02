@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Todo</title>
+    <link rel="stylesheet"
+          type="text/css"
+          th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link rel="stylesheet"
+          type="text/css"
+          th:href="@{/resources/css/root.css}"/>
+    <link rel="shortcut icon" th:href="@{/resources/icons/favicon.ico}">
+</head>
+<body>
+<div class="jumbotron">
+    <div class="container">
+        <h1>Todo</h1>
+        <p>Choose the application</p>
+        <div class="todo-div-ul">
+            <ul class="todo-ul">
+                <li><a th:href="@{/web}" class="btn btn-primary btn-lg" role="button">Web application</a></li>
+                <li><a th:href="@{/spa}" class="btn btn-primary btn-lg" role="button">Single page application</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/resources/js/web/jquery/jquery.min.js}"></script>
+<script th:src="@{/resources/js/web/bootstrap/bootstrap.min.js}"></script>
+</body>

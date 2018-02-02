@@ -1,0 +1,13 @@
+.jumbotron {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.todo-div-ul {
+    margin: 0 auto;
+}
+
+.todo-ul li {
+    margin: 5px;
+    display: inline;
+}
