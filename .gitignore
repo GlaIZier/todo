@@ -24,4 +24,4 @@ docker/tomcat/7-jre8/app/
 docker/postgresql/
 
 #react
-node_modules/
+js/node_modules/
