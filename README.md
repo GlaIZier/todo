@@ -3,6 +3,31 @@
 # Todo
 Spring mvc todo list app
 
+## Dependencies
+
+### Without docker:
+1. Maven. In order to build it with it. Or just use maven wrapper: ./mvnw
+2. Postgresql. To run it with production profile.
+3. Tomcat 7. To deploy on it. Or just use maven tomcat plugin to run with it
+
+### With docker:
+1. Docker. To run it in container.
+
+### Both. Single page application (spa).
+1. Npm and node installed on your system globally in order to download dependencies and run scripts
+2. Webpack. To build the js application.
+For more information take a look at Readme file in /js folder
+
+## Build
+```
+mvn clean compile -P <memory/default/prod>
+```
+or just
+```
+mvn clean compile
+```
+to compile with default profile
+
 ## Tests
 ```
 mvn clean verify -P <memory/default/prod>
@@ -76,6 +101,12 @@ http://localhost:8443/todo/v2/api-docs
 
 
 ## Additional info
+
+### Js single page application (spa) build with maven
+To run the whole application in one command frontend maven plugin is used for spa build.
+If there are some problems with these plugin you always can build spa application manually using instructions
+from Readme in js folder. And then run backend.
+
 ### Knowing problems
 #### Possible build problems
 If there are some problems that mvn couldn't find some resources try first
@@ -119,7 +150,8 @@ embedded HSQL db; prod - external PostgreSql instance. So, in the first two case
 in the last - currently it is erased too when docker is used, but it's possible to make it constant. Also there is an
 additional profile 'prod-docker'. It's a prod profile which is used only in Makefile with docker-compose because
 tomcat docker container can't reach postgres on localhost. You don't need to use this profile separately without 
-docker-compose in most of the cases.
+docker-compose in most of the cases. Also, when memory or default profiles are used user 'u' and admin 'a' with 
+password 'p' are created with some tasks.  
 
 These three profiles are connected with Spring profiles to allow to instantiate certain beans depending on different
 profiles. All properties for these profiles are in the profiles folder under /resource. Maven filters these files, 

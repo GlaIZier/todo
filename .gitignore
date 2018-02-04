@@ -24,4 +24,6 @@ docker/tomcat/7-jre8/app/
 docker/postgresql/
 
 #react
-js/node_modules/
+node_modules/
+node/
+package-lock.json
