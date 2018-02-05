@@ -13,7 +13,7 @@ Spring mvc todo list app
 ### With docker:
 1. Docker. To run it in container.
 
-### Both. Single page application (spa).
+### Both: Single page application (spa).
 1. Npm and node installed on your system globally in order to download dependencies and run scripts
 2. Webpack. To build the js application.
 For more information take a look at Readme file in /js folder
@@ -47,28 +47,15 @@ mvn clean tomcat7:redeploy -P <memory/default/prod>
 In case of prod profile you need an external Postgres database
 
 ### Run Maven plugin's embedded tomcat
-#### Embedded db (HSQL) implementation
+#### Memory, Embedded db (HSQL), Postgresql implementation
 ```
-mvn tomcat7:run
+mvn clean tomcat7:run -P <memory/default/prod>
 ```
-or 
-```
-mvn tomcat7:run -P default
-```
-#### Memory db implementation
-```
-mvn clean tomcat7:run -P memory
-```
-
-#### Postgres production db implementation
-```
-mvn clean tomcat7:run -P prod
-```
-In this case you need an external Postgres database.
+In case of 'prod' you need an external Postgres database.
 
 ### Run application in docker container
 You need to install Docker locally to make this work, but you don't have to install the prod external database.
-Go to docker folder and run
+Go to docker/ folder and run
 ```
 make run profile=<memory/default/prod>
 ```

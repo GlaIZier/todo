@@ -67,11 +67,14 @@ npm run start:dev
 ```
 and go to http://localhost:3000/todo/spa or to https://localhost:3443/todo/spa
 
-3. To start the application with Java backend and dev settings:
+3. To start the application with Java backend and dev settings from project root folder run:
+```
+mvn tomcat7:run -P <memory/default>
+```
 
-4. To start application with Java backend and prod settings:
+4. To start application with Java backend and prod settings from project root folder run:
 ```bash
-gradle clean build && java -jar build/libs/ContentClassifier-0.0.1-SNAPSHOT.jar
+mvn tomcat7:run -P prod
 ```
 
 ## Additional info

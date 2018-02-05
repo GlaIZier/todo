@@ -25,6 +25,7 @@ import ru.glaizier.todo.properties.PropertiesService;
 import static ru.glaizier.todo.log.MdcConstants.TOKEN;
 
 /**
+ * Todo replace cookie with the header only
  * Important!
  * This is not necessary. I could send a header for authentication, not cookie. Hence, in this situation there would be
  * no CSRF attack at all. But I realized it late, when this functionality had been already done. So, I preserve Api

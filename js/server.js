@@ -92,7 +92,7 @@ httpServer.listen(port, function (error) {
   if (error) {
     console.error(error)
   } else {
-    console.info("HTTP ==> 🌎 Listening on port %s. Open up http://localhost:%s/ in your browser.", port, port)
+    console.info("HTTP ==> 🌎 Listening on port %s. Open up http://localhost:%s/todo/spa in your browser.", port, port)
   }
 });
 
@@ -100,7 +100,7 @@ httpsServer.listen(httpsPort, function (error) {
   if (error) {
     console.error(error)
   } else {
-    console.info("HTTPS ==> 🌎  Listening on port %s. Open up https://localhost:%s/ in your browser.", httpsPort, httpsPort)
+    console.info("HTTPS ==> 🌎  Listening on port %s. Open up https://localhost:%s/todo/spa in your browser.", httpsPort, httpsPort)
   }
 });
 
